@@ -1,6 +1,6 @@
 # Local GFX
 
-HTML Graphics with the control, server and renderer all on the same host. Primarily developed to support
+HTML Graphics with the control, server and renderer in a single app. Primarily developed to support
 the [Y'morzin Cup Final](https://ymorzincupfinal.com)'s first ever live
 broadcast.
 
