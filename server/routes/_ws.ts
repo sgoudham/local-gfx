@@ -4,7 +4,7 @@ import {
   Modes,
   OutputMessageSchema,
 } from "#shared/types/socket";
-import type { Message } from "crossws";
+import type { Message, Peer } from "crossws";
 import { ServerState } from "../state/index";
 
 let _serverState: ServerState | null = null;
@@ -52,54 +52,37 @@ export default defineWebSocketHandler({
         switch (parsed.msg.type) {
           case "session.register":
             peer.subscribe(Modes.Control);
+            const data = JSON.stringify({
+              type: "state.sync",
+              data: serverState.state,
+            });
+            peer.publish(Modes.Control, data);
+            peer.send(data);
             break;
           case Overlays.MatchScorecardTimerStart:
             serverState.matchScorecard.startTimer(() => {
-              peer.publish(
-                Modes.Output,
-                JSON.stringify({
-                  type: "state.sync",
-                  data: serverState.state,
-                }),
-              );
+              syncState([Modes.Output, Modes.Control], serverState, peer);
             });
             break;
           case Overlays.MatchScorecardTimerStop:
-            serverState.matchScorecard.stopTimer();
+            await serverState.matchScorecard.stopTimer();
+            syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
           case Overlays.MatchScorecardTimerReset:
-            serverState.matchScorecard.resetTimer();
-            peer.publish(
-              Modes.Output,
-              JSON.stringify({
-                type: "state.sync",
-                data: serverState.state,
-              }),
-            );
+            await serverState.matchScorecard.resetTimer();
+            syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
           case Overlays.MatchScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.matchScorecard.visible = true;
             });
-            peer.publish(
-              Modes.Output,
-              JSON.stringify({
-                type: "state.sync",
-                data: serverState.state,
-              }),
-            );
+            syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
           case Overlays.MatchScorecardHide:
             await serverState.patchState((s) => {
               s.graphics.matchScorecard.visible = false;
             });
-            peer.publish(
-              Modes.Output,
-              JSON.stringify({
-                type: "state.sync",
-                data: serverState.state,
-              }),
-            );
+            syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
         }
         break;
@@ -118,6 +101,17 @@ export default defineWebSocketHandler({
     console.error(`event=error id=${peer.id} error=${error}`);
   },
 });
+
+const syncState = (modes: Modes[], serverState: ServerState, peer: Peer) => {
+  const data = JSON.stringify({
+    type: "state.sync",
+    data: serverState.state,
+  });
+  for (const mode of modes) {
+    peer.publish(mode, data);
+  }
+  peer.send(data);
+};
 
 const parseMessage = (msg: Message) => {
   const json = msg.json();

@@ -1,45 +1,50 @@
-import { YcfState } from "~~/shared/types/ycf";
+import { MatchScorecardTimeData, YcfState } from "~~/shared/types/ycf";
 import { StateMutator } from "..";
 
 export class MatchScorecardState {
   private patchState;
   private readonly ONE_SECOND_MS = 1000;
-  private timerId: number | null = null;
+  private timerId: NodeJS.Timeout | null = null;
   private elapsedMs;
 
-  constructor(patchState: (mutate: StateMutator) => Promise<YcfState>, elapsedMs: number) {
+  constructor(
+    patchState: (mutate: StateMutator) => Promise<YcfState>,
+    matchTimeData: MatchScorecardTimeData,
+  ) {
     this.patchState = patchState;
-    this.elapsedMs = elapsedMs;
+    this.elapsedMs = matchTimeData.ms;
   }
 
   startTimer(onTick: () => void) {
     if (this.timerId) return;
     this.timerId = setInterval(async () => {
       this.elapsedMs += this.ONE_SECOND_MS;
-      await this.updateState();
+      await this.updateState(false);
       onTick();
     }, this.ONE_SECOND_MS);
   }
 
-  async updateState() {
+  async updateState(paused: boolean) {
     await this.patchState((s) => {
       s.graphics.matchScorecard.matchTime = {
+        paused,
         ms: this.elapsedMs,
         formatted: this.formatMatchTime(this.elapsedMs),
       };
     });
   }
 
-  stopTimer() {
+  async stopTimer() {
     if (!this.timerId) return;
     clearInterval(this.timerId);
     this.timerId = null;
+    await this.updateState(true);
   }
 
-  resetTimer() {
+  async resetTimer() {
     this.elapsedMs = 0;
-    this.stopTimer();
-    this.updateState();
+    await this.stopTimer();
+    await this.updateState(true);
   }
 
   formatMatchTime(ms: number) {

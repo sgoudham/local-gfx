@@ -15,12 +15,15 @@ export type Player = {
   position: string;
 };
 
+export type MatchScorecardTimeData = {
+  paused: boolean;
+  ms: number;
+  formatted: string;
+};
+
 export type MatchScorecardData = {
   visible: boolean;
-  matchTime: {
-    ms: number;
-    formatted: string;
-  };
+  matchTime: MatchScorecardTimeData;
   dunGoals: number;
   malGoals: number;
 };

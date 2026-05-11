@@ -13,7 +13,7 @@ export class ServerState {
     this._state = await this.initState();
     this.matchScorecard = new MatchScorecardState(
       this.patchState,
-      this._state.graphics.matchScorecard.matchTime.ms,
+      this._state.graphics.matchScorecard.matchTime,
     );
     return this;
   }
@@ -40,6 +40,7 @@ export class ServerState {
         matchScorecard: {
           visible: false,
           matchTime: {
+            paused: true,
             ms: 0,
             formatted: "00:00",
           },
