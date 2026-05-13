@@ -1,4 +1,4 @@
-import { YcfState } from "~~/shared/types/ycf";
+import { YcfState, YcfData, YcfDataSchema } from "../../shared/types/ycf";
 import { MatchScorecardState } from "./overlays/matchScorecard";
 
 export type StateMutator = (state: YcfState) => void;
@@ -13,7 +13,7 @@ export class ServerState {
     this._state = await this.initState();
     this.matchScorecard = new MatchScorecardState(
       this.patchState,
-      this._state.graphics.matchScorecard.matchTime,
+      this._state.matchTime,
     );
     return this;
   }
@@ -39,13 +39,18 @@ export class ServerState {
       graphics: {
         matchScorecard: {
           visible: false,
-          matchTime: {
-            paused: true,
-            ms: 0,
-            formatted: "00:00",
-          },
-          dunGoals: 0,
-          malGoals: 0,
+        },
+        penaltiesScorecard: {
+          visible: false,
+        },
+        bigMatchScorecard: {
+          visible: false,
+        },
+        teamFormation: {
+          visible: false,
+        },
+        substitution: {
+          visible: false,
         },
       },
     };
@@ -59,12 +64,11 @@ export class ServerState {
     await useStorage<YcfState>("fs").setItem("ycf", state);
   }
 
-  private async getData() {
-    const ycfData =
-      await useStorage<YcfData>("assets:server").getItem("ycf.json");
-    if (!ycfData) {
+  private async getData(): Promise<YcfData> {
+    const raw = await useStorage("assets:server").getItem("ycf.json");
+    if (!raw) {
       throw new Error("err=no_data msg='can't retrieve ycf.json'");
     }
-    return ycfData;
+    return YcfDataSchema.parse(raw);
   }
 }

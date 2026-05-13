@@ -1,35 +1,64 @@
-export type YcfData = {
-  name: string;
-  teams: Record<string, Team>;
-};
+import z from "zod";
 
-export type Team = {
-  name: string;
-  players: Player[];
-};
+export const PenaltyState = {
+  NONE: 0,
+  GOAL: 1,
+  MISS: 2,
+} as const;
+export type PenaltyState = (typeof PenaltyState)[keyof typeof PenaltyState];
 
-export type Player = {
-  forename: string;
-  surname: string;
-  number: number;
-  position: string;
-};
+export const PlayerSchema = z.object({
+  forename: z.string(),
+  surname: z.string(),
+  number: z.number(),
+  position: z.string(),
+});
+export type Player = z.infer<typeof PlayerSchema>;
 
-export type MatchScorecardTimeData = {
-  paused: boolean;
-  ms: number;
-  formatted: string;
-};
+export const GoalSchema = z.object({
+  minute: z.number(),
+  player: PlayerSchema,
+});
+export type Goal = z.infer<typeof GoalSchema>;
 
-export type MatchScorecardData = {
-  visible: boolean;
-  matchTime: MatchScorecardTimeData;
-  dunGoals: number;
-  malGoals: number;
-};
+export const MatchTimeSchema = z.object({
+  paused: z.boolean(),
+  ms: z.number(),
+  formatted: z.string(),
+});
+export type MatchTime = z.infer<typeof MatchTimeSchema>;
 
-export type YcfState = YcfData & {
-  graphics: {
-    matchScorecard: MatchScorecardData;
-  };
-};
+export const TeamSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  shortName: z.string(),
+  players: z.array(PlayerSchema),
+  substitutes: z.array(PlayerSchema),
+  goals: z.array(GoalSchema),
+  penalties: z.array(z.enum(PenaltyState)).length(5),
+});
+export type Team = z.infer<typeof TeamSchema>;
+
+export const YcfDataSchema = z.object({
+  name: z.string(),
+  matchTime: MatchTimeSchema,
+  home: TeamSchema,
+  away: TeamSchema,
+});
+export type YcfData = z.infer<typeof YcfDataSchema>;
+
+export const OverlaySchema = z.object({
+  visible: z.boolean(),
+});
+export type Overlay = z.infer<typeof OverlaySchema>;
+
+export const YcfStateSchema = YcfDataSchema.extend({
+  graphics: z.object({
+    matchScorecard: OverlaySchema,
+    bigMatchScorecard: OverlaySchema,
+    penaltiesScorecard: OverlaySchema,
+    teamFormation: OverlaySchema,
+    substitution: OverlaySchema,
+  }),
+});
+export type YcfState = z.infer<typeof YcfStateSchema>;

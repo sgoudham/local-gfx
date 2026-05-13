@@ -1,4 +1,3 @@
-import { Modes } from "~~/shared/types/socket";
 import { useSocketConnection } from "./useSocketConnection";
 
 export const useControlSocket = () => {

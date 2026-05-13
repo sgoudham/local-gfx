@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Overlays } from "~~/shared/types/socket";
+import { OverlayMessage } from "~~/shared/types/socket";
+
 const { state, publish } = useControlSocket();
 
 const isMatchScorecardVisible = computed(
@@ -8,19 +9,28 @@ const isMatchScorecardVisible = computed(
 function toggleMatchScorecard() {
   publish(
     isMatchScorecardVisible.value
-      ? Overlays.MatchScorecardHide
-      : Overlays.MatchScorecardShow,
+      ? OverlayMessage.MatchScorecardHide
+      : OverlayMessage.MatchScorecardShow,
   );
 }
 
-const hasMatchStarted = computed(
-  () => !state.value?.graphics?.matchScorecard?.matchTime.paused,
-);
+const hasMatchStarted = computed(() => !state.value?.matchTime.paused);
 function toggleMatchTimer() {
   publish(
     hasMatchStarted.value
-      ? Overlays.MatchScorecardTimerStop
-      : Overlays.MatchScorecardTimerStart,
+      ? OverlayMessage.MatchScorecardTimerStop
+      : OverlayMessage.MatchScorecardTimerStart,
+  );
+}
+
+const isPenaltiesScorecardVisible = computed(
+  () => state.value?.graphics?.penaltiesScorecard.visible,
+);
+function togglePenaltiesScorecard() {
+  publish(
+    isPenaltiesScorecardVisible.value
+      ? OverlayMessage.PenaltiesScorecardHide
+      : OverlayMessage.PenaltiesScorecardShow,
   );
 }
 </script>
@@ -43,6 +53,19 @@ function toggleMatchTimer() {
     <li class="overlay-list-item">
       <button
         class="overlay-toggle"
+        :class="isPenaltiesScorecardVisible ? 'hide' : 'show'"
+        @click="togglePenaltiesScorecard"
+      >
+        {{
+          isPenaltiesScorecardVisible
+            ? "Hide Penalties Scorecard"
+            : "Show Penalties Scorecard"
+        }}
+      </button>
+    </li>
+    <li class="overlay-list-item">
+      <button
+        class="overlay-toggle"
         :class="hasMatchStarted ? 'hide' : 'show'"
         @click="toggleMatchTimer"
       >
@@ -50,13 +73,13 @@ function toggleMatchTimer() {
       </button>
       <button
         class="overlay-toggle show"
-        @click="() => publish(Overlays.MatchScorecardTimerReset)"
+        @click="() => publish(OverlayMessage.MatchScorecardTimerReset)"
       >
         Reset
       </button>
       <button
         class="overlay-toggle show"
-        @click="() => publish(Overlays.MatchScorecardTimerStart)"
+        @click="() => publish(OverlayMessage.MatchScorecardTimerStart)"
       >
         Force Start
       </button>

@@ -1,10 +1,5 @@
-import {
-  ControlMessageSchema,
-  ModeEnvelopeSchema,
-  Modes,
-  OutputMessageSchema,
-} from "#shared/types/socket";
 import type { Message, Peer } from "crossws";
+import { ControlMessageSchema, ModeEnvelopeSchema, Modes, OutputMessageSchema, OverlayMessage } from "../../shared/types/socket";
 import { ServerState } from "../state/index";
 
 let _serverState: ServerState | null = null;
@@ -39,12 +34,7 @@ export default defineWebSocketHandler({
         switch (parsed.msg.type) {
           case "session.register":
             peer.subscribe(Modes.Output);
-            const data = JSON.stringify({
-              type: "state.sync",
-              data: serverState.state,
-            });
-            peer.publish(Modes.Output, data);
-            peer.send(data);
+            syncState([Modes.Output], serverState, peer);
             break;
         }
         break;
@@ -52,35 +42,45 @@ export default defineWebSocketHandler({
         switch (parsed.msg.type) {
           case "session.register":
             peer.subscribe(Modes.Control);
-            const data = JSON.stringify({
-              type: "state.sync",
-              data: serverState.state,
-            });
-            peer.publish(Modes.Control, data);
-            peer.send(data);
+            syncState([Modes.Control], serverState, peer);
             break;
-          case Overlays.MatchScorecardTimerStart:
+
+          case OverlayMessage.MatchScorecardTimerStart:
             serverState.matchScorecard.startTimer(() => {
               syncState([Modes.Output, Modes.Control], serverState, peer);
             });
             break;
-          case Overlays.MatchScorecardTimerStop:
+          case OverlayMessage.MatchScorecardTimerStop:
             await serverState.matchScorecard.stopTimer();
             syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
-          case Overlays.MatchScorecardTimerReset:
+          case OverlayMessage.MatchScorecardTimerReset:
             await serverState.matchScorecard.resetTimer();
             syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
-          case Overlays.MatchScorecardShow:
+          case OverlayMessage.MatchScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.matchScorecard.visible = true;
+              s.graphics.penaltiesScorecard.visible = false;
             });
             syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
-          case Overlays.MatchScorecardHide:
+          case OverlayMessage.MatchScorecardHide:
             await serverState.patchState((s) => {
               s.graphics.matchScorecard.visible = false;
+            });
+            syncState([Modes.Output, Modes.Control], serverState, peer);
+            break;
+
+          case OverlayMessage.PenaltiesScorecardShow:
+            await serverState.patchState((s) => {
+              s.graphics.penaltiesScorecard.visible = true;
+            });
+            syncState([Modes.Output, Modes.Control], serverState, peer);
+            break;
+          case OverlayMessage.PenaltiesScorecardHide:
+            await serverState.patchState((s) => {
+              s.graphics.penaltiesScorecard.visible = false;
             });
             syncState([Modes.Output, Modes.Control], serverState, peer);
             break;

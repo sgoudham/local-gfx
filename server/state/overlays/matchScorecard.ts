@@ -1,4 +1,4 @@
-import { MatchScorecardTimeData, YcfState } from "~~/shared/types/ycf";
+import { YcfState, MatchTime } from "~~/shared/types/ycf";
 import { StateMutator } from "..";
 
 export class MatchScorecardState {
@@ -9,7 +9,7 @@ export class MatchScorecardState {
 
   constructor(
     patchState: (mutate: StateMutator) => Promise<YcfState>,
-    matchTimeData: MatchScorecardTimeData,
+    matchTimeData: MatchTime,
   ) {
     this.patchState = patchState;
     this.elapsedMs = matchTimeData.ms;
@@ -26,7 +26,7 @@ export class MatchScorecardState {
 
   async updateState(paused: boolean) {
     await this.patchState((s) => {
-      s.graphics.matchScorecard.matchTime = {
+      s.matchTime = {
         paused,
         ms: this.elapsedMs,
         formatted: this.formatMatchTime(this.elapsedMs),

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import gsap from "gsap";
-import type { MatchScorecardData } from "~~/shared/types/ycf";
+import type { MatchScorecardProps } from "~/types";
 
-const props = defineProps<MatchScorecardData>();
+const props = defineProps<MatchScorecardProps>();
 
 const ribbonBox = useTemplateRef("ribbonBox");
 const homePanel = useTemplateRef("homePanel");
@@ -18,7 +18,7 @@ let timeline: gsap.core.Timeline | null = null;
 async function show() {
   rendered.value = true;
   nextTick(() => {
-    timeline?.kill()
+    timeline?.kill();
     timeline = gsap.timeline();
     animateRibbon(timeline);
     animateLeagueBadge(timeline);
@@ -179,10 +179,10 @@ function animateTimer(timeline: gsap.core.Timeline) {
             <div class="kit-swatch dun"></div>
             <div class="kit-swatch"></div>
           </div>
-          <span class="team-abbr">DUN</span>
+          <span class="team-abbr">{{ home.shortName }}</span>
           <div class="score-row">
             <div class="score home-score" ref="homeScore">
-              {{ dunGoals }}
+              {{ home.goals }}
             </div>
           </div>
         </div>
@@ -196,10 +196,10 @@ function animateTimer(timeline: gsap.core.Timeline) {
           <div class="team-away-background"></div>
           <div class="score-row">
             <div class="score away-score" ref="awayScore">
-              {{ malGoals }}
+              {{ away.goals }}
             </div>
           </div>
-          <span class="team-abbr">MAL</span>
+          <span class="team-abbr">{{ away.shortName }}</span>
           <div class="kit-swatches">
             <div class="kit-swatch mal"></div>
           </div>
@@ -208,7 +208,7 @@ function animateTimer(timeline: gsap.core.Timeline) {
 
       <!-- ── Timer box ── -->
       <div class="timer-box" ref="timerBox">
-        <span class="timer-text">{{ matchTime.formatted }}</span>
+        <span class="timer-text">{{ matchTime }}</span>
       </div>
     </div>
   </section>
@@ -224,7 +224,6 @@ function animateTimer(timeline: gsap.core.Timeline) {
 }
 
 .overlay {
-  min-height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
