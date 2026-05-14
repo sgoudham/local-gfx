@@ -1,7 +1,8 @@
-import { YcfState, MatchTime } from "~~/shared/types/ycf";
+import EventEmitter from "events";
+import { MatchTime, YcfState } from "~~/shared/types/ycf";
 import { StateMutator } from "..";
 
-export class MatchScorecardState {
+export class MatchScorecardState extends EventEmitter {
   private patchState;
   private readonly ONE_SECOND_MS = 1000;
   private timerId: NodeJS.Timeout | null = null;
@@ -11,16 +12,20 @@ export class MatchScorecardState {
     patchState: (mutate: StateMutator) => Promise<YcfState>,
     matchTimeData: MatchTime,
   ) {
+    super();
     this.patchState = patchState;
     this.elapsedMs = matchTimeData.ms;
+    if (!matchTimeData.paused) {
+      this.startTimer();
+    }
   }
 
-  startTimer(onTick: () => void) {
+  startTimer() {
     if (this.timerId) return;
     this.timerId = setInterval(async () => {
       this.elapsedMs += this.ONE_SECOND_MS;
       await this.updateState(false);
-      onTick();
+      this.emit("timer");
     }, this.ONE_SECOND_MS);
   }
 

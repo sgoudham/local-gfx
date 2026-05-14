@@ -13,6 +13,11 @@ export default defineNuxtConfig({
         base: "./_store",
       },
     },
+    esbuild: {
+      options: {
+        target: 'esnext'
+      }
+    }
   },
 
   vite: {

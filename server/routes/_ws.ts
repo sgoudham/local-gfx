@@ -1,27 +1,34 @@
 import type { Message, Peer } from "crossws";
-import { ControlMessageSchema, ModeEnvelopeSchema, Modes, OutputMessageSchema, OverlayMessage } from "../../shared/types/socket";
+import {
+  ControlMessageSchema,
+  ModeEnvelopeSchema,
+  Modes,
+  OutputMessageSchema,
+  OverlayMessage,
+} from "../../shared/types/socket";
 import { ServerState } from "../state/index";
 
-let _serverState: ServerState | null = null;
+const serverState = await new ServerState().init();
+const peers = new Set<Peer>();
 
-const getServerState = async () => {
-  if (!_serverState) {
-    _serverState = await new ServerState().init();
+const onTimer = () => {
+  for (const peer of peers) {
+    syncState([Modes.Output, Modes.Control], serverState, peer);
   }
-  return _serverState;
 };
+
+serverState.matchScorecard.on("timer", onTimer);
 
 export default defineWebSocketHandler({
   open(peer) {
     console.log(
       `event=open id=${peer.id} connected_clients=${peer.peers.size}`,
     );
+    peers.add(peer);
   },
 
   async message(peer, msg) {
     console.log(`message=${msg.text()}`);
-
-    const serverState = await getServerState();
 
     const parsed = parseMessage(msg);
     if (!parsed.ok) {
@@ -46,9 +53,7 @@ export default defineWebSocketHandler({
             break;
 
           case OverlayMessage.MatchScorecardTimerStart:
-            serverState.matchScorecard.startTimer(() => {
-              syncState([Modes.Output, Modes.Control], serverState, peer);
-            });
+            serverState.matchScorecard.startTimer();
             break;
           case OverlayMessage.MatchScorecardTimerStop:
             await serverState.matchScorecard.stopTimer();
@@ -75,6 +80,7 @@ export default defineWebSocketHandler({
           case OverlayMessage.PenaltiesScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.penaltiesScorecard.visible = true;
+              s.graphics.matchScorecard.visible = false;
             });
             syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
@@ -95,6 +101,7 @@ export default defineWebSocketHandler({
     );
     peer.unsubscribe(Modes.Control);
     peer.unsubscribe(Modes.Output);
+    peers.delete(peer);
   },
 
   error(peer, error) {

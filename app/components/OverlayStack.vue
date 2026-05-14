@@ -77,12 +77,6 @@ function togglePenaltiesScorecard() {
       >
         Reset
       </button>
-      <button
-        class="overlay-toggle show"
-        @click="() => publish(OverlayMessage.MatchScorecardTimerStart)"
-      >
-        Force Start
-      </button>
     </li>
   </ul>
 </template>
