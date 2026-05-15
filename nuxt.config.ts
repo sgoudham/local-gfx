@@ -1,3 +1,8 @@
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const baseDir = dirname(fileURLToPath(import.meta.url));
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
@@ -10,14 +15,14 @@ export default defineNuxtConfig({
     storage: {
       fs: {
         driver: "fs",
-        base: "./_store",
+        base: process.env.STORAGE_BASE ?? resolve(baseDir, "_store"),
       },
     },
     esbuild: {
       options: {
-        target: 'esnext'
-      }
-    }
+        target: "esnext",
+      },
+    },
   },
 
   vite: {

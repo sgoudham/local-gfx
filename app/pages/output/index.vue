@@ -22,7 +22,7 @@ const matchScorecardData = computed<MatchScorecardProps | null>(() => {
       shortName: state.value.away.shortName,
       goals: state.value.away.goals.length,
     },
-    matchTime: state.value.matchTime.formatted,
+    matchTime: state.value.matchTime,
   };
 });
 

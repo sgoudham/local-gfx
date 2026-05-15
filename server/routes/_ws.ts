@@ -1,11 +1,10 @@
+import { Mode, SocketMessage } from "#imports";
 import type { Message } from "crossws";
 import {
   ControlMessageSchema,
-  Mode,
   ModeEnvelopeSchema,
   OutputMessageSchema,
-  SocketMessage,
-} from "../../shared/types/socket";
+} from "../schema/socket";
 import { ServerState } from "../state/index";
 
 const serverState = await new ServerState().init();
@@ -58,6 +57,7 @@ export default defineWebSocketHandler({
             await serverState.patchState((s) => {
               s.graphics.matchScorecard.visible = true;
               s.graphics.penaltiesScorecard.visible = false;
+              s.graphics.teamFormation.visible = false;
             });
             break;
           case SocketMessage.MatchScorecardHide:

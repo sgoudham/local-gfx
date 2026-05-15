@@ -1,7 +1,8 @@
 import type { Peer } from "crossws";
 import { MatchData } from "~~/shared/types/data";
-import { Mode } from "~~/shared/types/socket";
-import { CompleteState, InitialState } from "~~/shared/types/state";
+import { Mode } from "~~/shared/utils/constants";
+import { matchDataSchema } from "../schema/data";
+import { initialStateSchema } from "../schema/state";
 import { MatchTimer } from "./matchTimer";
 
 export type StateMutator = (state: CompleteState) => void;
@@ -85,7 +86,7 @@ export class ServerState {
     if (!raw) {
       throw new Error("err=no_data msg='couldn't load data.json'");
     }
-    return MatchDataSchema.parse(raw);
+    return matchDataSchema.parse(raw);
   }
 
   private async getInitialState(): Promise<InitialState> {
@@ -93,6 +94,6 @@ export class ServerState {
     if (!raw) {
       throw new Error("err=no_state msg='couldn't load initialState.json'");
     }
-    return InitialStateSchema.parse(raw);
+    return initialStateSchema.parse(raw);
   }
 }

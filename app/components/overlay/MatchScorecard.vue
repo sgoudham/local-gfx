@@ -208,7 +208,7 @@ function animateTimer(timeline: gsap.core.Timeline) {
 
       <!-- ── Timer box ── -->
       <div class="timer-box" ref="timerBox">
-        <span class="timer-text">{{ matchTime }}</span>
+        <span class="timer-text">{{ matchTime.formatted }}</span>
       </div>
     </div>
   </section>

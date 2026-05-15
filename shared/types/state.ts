@@ -1,52 +1,44 @@
-import z from "zod";
+import type { FormationKey, PenaltyState } from "../utils/constants";
+import type { PlayerData, TeamData, MatchData } from "./data";
 
-export const PenaltyState = {
-  NONE: 0,
-  GOAL: 1,
-  MISS: 2,
-} as const;
-export type PenaltyState = (typeof PenaltyState)[keyof typeof PenaltyState];
+export type MatchTime = {
+  paused: boolean;
+  ms: number;
+  formatted: string;
+};
 
-export const Overlay = {
-  MatchScorecard: "matchScorecard",
-  BigMatchScorecard: "bigMatchScorecard",
-  PenaltiesScorecard: "penaltiesScorecard",
-  TeamFormation: "teamFormation",
-  Substitution: "substitution",
-} as const;
-export type Overlay = (typeof Overlay)[keyof typeof Overlay];
+export type TeamState = {
+  activeFormation: FormationKey;
+  goals: PlayerData[];
+  /** @minItems 5 @maxItems 5 */
+  penalties: [
+    PenaltyState,
+    PenaltyState,
+    PenaltyState,
+    PenaltyState,
+    PenaltyState,
+  ];
+};
 
-const MatchTimeSchema = z.object({
-  paused: z.boolean(),
-  ms: z.number(),
-  formatted: z.string(),
-});
-export type MatchTime = z.infer<typeof MatchTimeSchema>;
+export type OverlayState = {
+  visible: boolean;
+};
 
-const TeamStateSchema = z.object({
-  goals: z.array(PlayerDataSchema),
-  penalties: z.array(z.enum(PenaltyState)).length(5),
-});
+export type Graphics = {
+  matchScorecard: OverlayState;
+  penaltiesScorecard: OverlayState;
+  bigMatchScorecard: OverlayState;
+  teamFormation: OverlayState;
+  substitution: OverlayState;
+};
 
-const OverlaySchema = z.object({
-  visible: z.boolean(),
-});
+export type InitialState = {
+  matchTime: MatchTime;
+  home: TeamState;
+  away: TeamState;
+  graphics: Graphics;
+};
 
-const GraphicsSchema = z.object({
-  [Overlay.MatchScorecard]: OverlaySchema,
-  [Overlay.PenaltiesScorecard]: OverlaySchema,
-  [Overlay.BigMatchScorecard]: OverlaySchema,
-  [Overlay.TeamFormation]: OverlaySchema,
-  [Overlay.Substitution]: OverlaySchema,
-});
+export type TeamComplete = TeamData & TeamState;
 
-export const InitialStateSchema = z.object({
-  matchTime: MatchTimeSchema,
-  home: TeamStateSchema,
-  away: TeamStateSchema,
-  graphics: GraphicsSchema,
-});
-export type InitialState = z.infer<typeof InitialStateSchema>;
-
-export const CompleteStateSchema = z.intersection(MatchDataSchema, InitialStateSchema);
-export type CompleteState = z.infer<typeof CompleteStateSchema>;
+export type CompleteState = MatchData & InitialState;

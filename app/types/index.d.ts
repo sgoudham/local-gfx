@@ -1,30 +1,23 @@
-export type MatchScorecardProps = {
-  visible: boolean;
-  home: {
-    shortName: string;
-    goals: number;
-  };
-  away: {
-    shortName: string;
-    goals: number;
-  };
-  matchTime: string;
+import type {
+  OverlayState,
+  TeamState,
+  MatchTime,
+} from "../../shared/types/state";
+import type { TeamData } from "../../shared/types/data";
+
+export type MatchScorecardProps = OverlayState & {
+  home: Pick<TeamData, "shortName"> & { goals: number };
+  away: Pick<TeamData, "shortName"> & { goals: number };
+  matchTime: MatchTime;
 };
 
-export type PenaltiesScorecardProps = {
-  visible: boolean;
-  home: {
-    id: string;
-    shortName: string;
-    penalties: number[];
+export type PenaltiesScorecardProps = OverlayState & {
+  home: Pick<TeamData, "id" | "shortName"> & {
+    penalties: TeamState["penalties"];
   };
-  away: {
-    id: string;
-    shortName: string;
-    penalties: number[];
+  away: Pick<TeamData, "id" | "shortName"> & {
+    penalties: TeamState["penalties"];
   };
 };
 
-export type TeamFormationProps = {
-  visible: boolean
-}
+export type TeamFormationProps = OverlayState;

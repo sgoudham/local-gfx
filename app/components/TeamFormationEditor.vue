@@ -1,33 +1,46 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
+import type { FormationKey } from "~~/shared/utils/constants";
+
+const props = defineProps<TeamComplete>();
 
 const PITCH_W = 250;
 const PITCH_H = 400;
 const PITCH_HORIZONTAL_PADDING = 46;
 
-const FORMATIONS = {
-  "4-4-2": [1, 4, 4, 2],
-  "4-3-3": [1, 4, 3, 3],
-  "4-2-3-1": [1, 4, 2, 3, 1],
-  "3-5-2": [1, 3, 5, 2],
-  "5-3-2": [1, 5, 3, 2],
-  "4-1-4-1": [1, 4, 1, 4, 1],
+type PitchPlayer = {
+  id: number;
+  num: number;
+  x: number;
+  y: number;
+  subbed: boolean;
+};
+
+type BenchSub = {
+  id: number;
+  num: number;
+  used: boolean;
 };
 
 const SUB_COUNT = 8;
 
-const formationKeys = Object.keys(FORMATIONS);
-const activeFormation = ref("4-4-2");
-const players = reactive([]);
-const subs = reactive([]);
-const pitchEl = ref(null);
-const hoveredPlayerId = ref(null);
+const activeFormation = ref<FormationKey>(props.activeFormation);
+const activeFormationLines = computed(() => {
+  return [
+    1,
+    ...activeFormation.value.split("-").map((v) => new Number(v).valueOf()),
+  ];
+});
+const players = reactive<PitchPlayer[]>([]);
+const subs = reactive<BenchSub[]>([]);
+const pitchEl = ref<HTMLElement | null>(null);
+const hoveredPlayerId = ref<number | null>(null);
 
 // Unified drag state
 const drag = reactive({
-  id: null,
-  source: null,
-  sub: null,
+  id: null as number | null,
+  source: null as "pitch" | "bench" | null,
+  sub: null as BenchSub | null,
 });
 
 let dragOffsetX = 0;
@@ -37,8 +50,8 @@ const nextId = () => ++idCounter;
 
 // ── Formations ──────────────────────────────────────────────
 
-function buildPositions(lines) {
-  const positions = [];
+function buildPositions(lines: readonly number[]) {
+  const positions: { x: number; y: number }[] = [];
   const padTop = 42,
     padBottom = 120;
   const usableHeight = PITCH_H - padTop - padBottom;
@@ -61,9 +74,9 @@ function buildPositions(lines) {
   return positions;
 }
 
-function applyFormation(key) {
+function applyFormation(key: FormationKey) {
   activeFormation.value = key;
-  const newPositions = buildPositions(FORMATIONS[key]);
+  const newPositions = buildPositions(activeFormationLines.value);
 
   // Create players on first call, update positions on subsequent calls
   if (players.length === 0) {
@@ -79,9 +92,10 @@ function applyFormation(key) {
   } else {
     // Update positions while preserving num and subbed status
     newPositions.forEach((position, index) => {
-      if (index < players.length) {
-        players[index].x = position.x;
-        players[index].y = position.y;
+      const player = players[index];
+      if (player) {
+        player.x = position.x;
+        player.y = position.y;
       }
     });
   }
@@ -99,12 +113,18 @@ function initSubs() {
   }
 }
 
+function onFormationChange(e: Event) {
+  const value = (e.target as HTMLSelectElement).value as FormationKey;
+  applyFormation(value);
+}
+
 // ── Pitch drag ───────────────────────────────────────────────
 
-function startPitchDrag(e, player) {
+function startPitchDrag(e: MouseEvent, player: PitchPlayer) {
   drag.id = player.id;
   drag.source = "pitch";
   drag.sub = null;
+  if (!pitchEl.value) return;
   const rect = pitchEl.value.getBoundingClientRect();
   dragOffsetX = e.clientX - rect.left - player.x;
   dragOffsetY = e.clientY - rect.top - player.y;
@@ -112,7 +132,7 @@ function startPitchDrag(e, player) {
 
 // ── Bench drag ───────────────────────────────────────────────
 
-function startBenchDrag(e, sub) {
+function startBenchDrag(e: MouseEvent, sub: BenchSub) {
   drag.id = sub.id;
   drag.source = "bench";
   drag.sub = sub;
@@ -122,10 +142,11 @@ function startBenchDrag(e, sub) {
 
 // ── Shared mousemove (on .wrap) ──────────────────────────────
 
-function onMouseMove(e) {
+function onMouseMove(e: MouseEvent) {
   if (drag.source === "pitch") {
     const player = players.find((p) => p.id === drag.id);
     if (!player) return;
+    if (!pitchEl.value) return;
     const rect = pitchEl.value.getBoundingClientRect();
     player.x = Math.max(
       16,
@@ -142,7 +163,7 @@ function onMouseMove(e) {
   }
 }
 
-function stopDrag(e) {
+function stopDrag(_e: MouseEvent) {
   if (drag.source === "bench" && drag.sub) {
     // Check if dropped on a player
     const target =
@@ -163,7 +184,7 @@ function stopDrag(e) {
 
 // ── Substitution ─────────────────────────────────────────────
 
-function performSub(sub, outPlayer) {
+function performSub(sub: BenchSub, outPlayer: PitchPlayer) {
   const prevNum = outPlayer.num;
 
   outPlayer.num = sub.num;
@@ -183,13 +204,15 @@ onMounted(() => {
 
 <template>
   <div class="wrap" @mousemove="onMouseMove" @mouseup="stopDrag">
+    <p>{{ props.name }} ({{ props.shortName }})</p>
+
     <!-- Formation picker -->
     <select
       class="controls"
       :value="activeFormation"
-      @change="applyFormation($event.target.value)"
+      @change="onFormationChange"
     >
-      <option v-for="key in formationKeys" :key="key" :value="key">
+      <option v-for="key in Formation" :key="key" :value="key">
         {{ key }}
       </option>
     </select>
@@ -373,7 +396,7 @@ onMounted(() => {
 .wrap {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   user-select: none;
 }
 
@@ -463,8 +486,7 @@ onMounted(() => {
 .controls {
   border: 1px solid #ccc;
   border-radius: 4px;
-  color: #555;
-  font-size: 12px;
+  color: #000000;
   padding: 4px 8px;
   font-family: inherit;
   cursor: pointer;
@@ -484,8 +506,8 @@ onMounted(() => {
 
 .sub {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;

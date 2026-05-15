@@ -1,26 +1,22 @@
-import z from "zod";
+export type PlayerData = {
+  forename: string;
+  surname: string;
+  /** @minimum 1 */
+  /** @integer */
+  number: number;
+  position: string;
+};
 
-export const PlayerDataSchema = z.object({
-  forename: z.string(),
-  surname: z.string(),
-  number: z.number().int().positive(),
-  position: z.string(),
-});
-export type PlayerData = z.infer<typeof PlayerDataSchema>;
+export type TeamData = {
+  id: string;
+  name: string;
+  shortName: string;
+  players: PlayerData[];
+  substitutes: PlayerData[];
+};
 
-export const TeamDataSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  shortName: z.string(),
-  players: z.array(PlayerDataSchema),
-  substitutes: z.array(PlayerDataSchema),
-});
-export type TeamData = z.infer<typeof TeamDataSchema>;
-
-export const MatchDataSchema = z.object({
-  name: z.string(),
-  home: TeamDataSchema,
-  away: TeamDataSchema,
-});
-export type MatchData = z.infer<typeof MatchDataSchema>;
-
+export type MatchData = {
+  name: string;
+  home: TeamData;
+  away: TeamData;
+};

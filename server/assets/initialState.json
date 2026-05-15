@@ -5,10 +5,12 @@
     "formatted": "00:00"
   },
   "home": {
+    "activeFormation": "4-4-2",
     "goals": [],
     "penalties": [0, 0, 0, 0, 0]
   },
   "away": {
+    "activeFormation": "4-4-2",
     "goals": [],
     "penalties": [0, 0, 0, 0, 0]
   },
