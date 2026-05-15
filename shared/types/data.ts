@@ -1,18 +1,23 @@
-export type PlayerData = {
+export type TeamLocation = "home" | "away";
+
+export type Player = {
   forename: string;
   surname: string;
   /** @minimum 1 */
   /** @integer */
   number: number;
-  position: string;
+  x?: number;
+  y?: number;
 };
 
 export type TeamData = {
   id: string;
+  location: TeamLocation;
   name: string;
   shortName: string;
-  players: PlayerData[];
-  substitutes: PlayerData[];
+  badgeSrc: string;
+  players: Player[];
+  substitutes: Player[];
 };
 
 export type MatchData = {

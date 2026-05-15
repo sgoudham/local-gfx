@@ -1,26 +1,13 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 
+const { publish } = useControlSocket();
+
 const props = defineProps<TeamComplete>();
 
 const PITCH_W = 250;
 const PITCH_H = 400;
 const PITCH_HORIZONTAL_PADDING = 46;
-
-type PitchPlayer = {
-  id: number;
-  num: number;
-  x: number;
-  y: number;
-};
-
-type BenchSub = {
-  id: number;
-  num: number;
-  used: boolean;
-};
-
-const SUB_COUNT = 8;
 
 const activeFormation = ref<FormationKey>(props.activeFormation);
 const activeFormationLines = computed(() => {
@@ -29,8 +16,8 @@ const activeFormationLines = computed(() => {
     ...activeFormation.value.split("-").map((v) => new Number(v).valueOf()),
   ];
 });
-const players = reactive<PitchPlayer[]>([]);
-const subs = reactive<BenchSub[]>([]);
+const players = reactive<Player[]>(props.players);
+const subs = reactive<Player[]>(props.substitutes);
 const pitchEl = ref<HTMLElement | null>(null);
 const hoveredPlayerId = ref<number | null>(null);
 
@@ -38,13 +25,11 @@ const hoveredPlayerId = ref<number | null>(null);
 const drag = reactive({
   id: null as number | null,
   source: null as "pitch" | "bench" | null,
-  sub: null as BenchSub | null,
+  sub: null as Player | null,
 });
 
 let dragOffsetX = 0;
 let dragOffsetY = 0;
-let idCounter = 0;
-const nextId = () => ++idCounter;
 
 // ── Formations ──────────────────────────────────────────────
 
@@ -75,39 +60,13 @@ function buildPositions(lines: number[]) {
 function applyFormation(key: FormationKey) {
   activeFormation.value = key;
   const newPositions = buildPositions(activeFormationLines.value);
-
-  // Create players on first call, update positions on subsequent calls
-  if (players.length === 0) {
-    newPositions.forEach((p, i) => {
-      players.push({
-        id: nextId(),
-        num: i + 1,
-        x: p.x,
-        y: p.y,
-      });
-    });
-  } else {
-    // Update positions while preserving num and subbed status
-    newPositions.forEach((position, index) => {
-      const player = players[index];
-      if (player) {
-        player.x = position.x;
-        player.y = position.y;
-      }
-    });
-  }
-
-  // Reset subs used state
-  subs.forEach((s) => {
-    s.used = false;
+  newPositions.forEach((position, index) => {
+    const player = players[index];
+    if (player) {
+      player.x = position.x;
+      player.y = position.y;
+    }
   });
-}
-
-function initSubs() {
-  subs.length = 0;
-  for (let i = 0; i < SUB_COUNT; i++) {
-    subs.push({ id: nextId(), num: 12 + i, used: false });
-  }
 }
 
 function onFormationChange(e: Event) {
@@ -117,8 +76,8 @@ function onFormationChange(e: Event) {
 
 // ── Pitch drag ───────────────────────────────────────────────
 
-function startPitchDrag(e: MouseEvent, player: PitchPlayer) {
-  drag.id = player.id;
+function startPitchDrag(e: MouseEvent, player: Player) {
+  drag.id = player.number;
   drag.source = "pitch";
   drag.sub = null;
   if (!pitchEl.value) return;
@@ -129,8 +88,8 @@ function startPitchDrag(e: MouseEvent, player: PitchPlayer) {
 
 // ── Bench drag ───────────────────────────────────────────────
 
-function startBenchDrag(e: MouseEvent, sub: BenchSub) {
-  drag.id = sub.id;
+function startBenchDrag(e: MouseEvent, sub: Player) {
+  drag.id = sub.number;
   drag.source = "bench";
   drag.sub = sub;
   dragOffsetX = 16;
@@ -141,7 +100,7 @@ function startBenchDrag(e: MouseEvent, sub: BenchSub) {
 
 function onMouseMove(e: MouseEvent) {
   if (drag.source === "pitch") {
-    const player = players.find((p) => p.id === drag.id);
+    const player = players.find((p) => p.number === drag.id);
     if (!player) return;
     if (!pitchEl.value) return;
     const rect = pitchEl.value.getBoundingClientRect();
@@ -154,10 +113,6 @@ function onMouseMove(e: MouseEvent) {
       Math.min(PITCH_H - 16, e.clientY - rect.top - dragOffsetY),
     );
   }
-
-  if (drag.source === "bench") {
-    // Bench drag logic can be removed or kept for future use
-  }
 }
 
 function stopDrag(_e: MouseEvent) {
@@ -165,7 +120,7 @@ function stopDrag(_e: MouseEvent) {
     // Check if dropped on a player
     const target =
       hoveredPlayerId.value !== null
-        ? players.find((p) => p.id === hoveredPlayerId.value)
+        ? players.find((p) => p.number === hoveredPlayerId.value)
         : null;
 
     if (target) {
@@ -181,19 +136,24 @@ function stopDrag(_e: MouseEvent) {
 
 // ── Substitution ─────────────────────────────────────────────
 
-function performSub(sub: BenchSub, outPlayer: PitchPlayer) {
-  const prevNum = outPlayer.num;
-
-  outPlayer.num = sub.num;
-
-  sub.num = prevNum;
-  sub.used = false;
+function performSub(subIn: Player, playerOut: Player) {
+  // Server
+  publish(SocketMessage.SubstitutionShow, {
+    data: {
+      teamLocation: props.location,
+      subIn,
+      playerOut,
+    },
+  });
+  // Client
+  const prevNum = playerOut.number;
+  playerOut.number = subIn.number;
+  subIn.number = prevNum;
 }
 
 // ── Lifecycle ────────────────────────────────────────────────
 
 onMounted(() => {
-  initSubs();
   applyFormation(activeFormation.value);
 });
 </script>
@@ -345,19 +305,19 @@ onMounted(() => {
       <!-- On-pitch players -->
       <div
         v-for="player in players"
-        :key="player.id"
+        :key="player.number"
         class="player"
         :class="{
-          dragging: drag.id === player.id && drag.source === 'pitch',
+          dragging: drag.id === player.number && drag.source === 'pitch',
           'sub-target':
-            drag.source === 'bench' && hoveredPlayerId === player.id,
+            drag.source === 'bench' && hoveredPlayerId === player.number,
         }"
         :style="{ left: player.x + 'px', top: player.y + 'px' }"
         @mousedown.prevent="startPitchDrag($event, player)"
-        @mouseenter="hoveredPlayerId = player.id"
+        @mouseenter="hoveredPlayerId = player.number"
         @mouseleave="hoveredPlayerId = null"
       >
-        {{ player.num }}
+        {{ player.number }}
       </div>
     </div>
 
@@ -366,15 +326,14 @@ onMounted(() => {
       <div class="bench" ref="benchEl">
         <div
           v-for="sub in subs"
-          :key="sub.id"
+          :key="sub.number"
           class="sub"
           :class="{
-            dragging: drag.id === sub.id && drag.source === 'bench',
-            used: sub.used,
+            dragging: drag.id === sub.number && drag.source === 'bench',
           }"
-          @mousedown.prevent="!sub.used && startBenchDrag($event, sub)"
+          @mousedown.prevent="startBenchDrag($event, sub)"
         >
-          {{ sub.num }}
+          {{ sub.number }}
         </div>
       </div>
     </div>

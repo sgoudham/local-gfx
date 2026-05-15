@@ -3,10 +3,6 @@ import { useSocketConnection } from "./useSocketConnection";
 export const useControlSocket = () => {
   const { send, data } = useSocketConnection();
 
-  send(
-    JSON.stringify({ mode: Mode.Control, type: SocketMessage.SessionRegister }),
-  );
-
   const state = computed<CompleteState | null>(() => {
     if (!data.value) return null;
     try {

@@ -1,8 +1,10 @@
 import { Mode, SocketMessage } from "#imports";
 import type { Message } from "crossws";
 import {
+  ControlMessage,
   ControlMessageSchema,
   ModeEnvelopeSchema,
+  OutputMessage,
   OutputMessageSchema,
 } from "../schema/socket";
 import { ServerState } from "../state/index";
@@ -89,6 +91,37 @@ export default defineWebSocketHandler({
               s.graphics.teamFormation.visible = false;
             });
             break;
+
+          case SocketMessage.SubstitutionShow:
+            const data = parsed.msg.data;
+            await serverState.patchState((s) => {
+              const playerIndex = s[data.teamLocation].players.findIndex(
+                (p) => p.number === data.playerOut.number,
+              );
+              const subIndex = s[data.teamLocation].substitutes.findIndex(
+                (p) => p.number === data.subIn.number,
+              );
+              const player = s[data.teamLocation].players[playerIndex];
+              const sub = s[data.teamLocation].substitutes[subIndex];
+              if (sub) {
+                s[data.teamLocation].players[playerIndex] = sub;
+                s.graphics.substitution.subsIn.push(sub);
+              }
+              if (player) {
+                s[data.teamLocation].substitutes[subIndex] = player;
+                s.graphics.substitution.playersOut.push(player);
+              }
+              s.graphics.substitution.badgeSrc = s[data.teamLocation].badgeSrc;
+              s.graphics.substitution.visible = true;
+            });
+            await new Promise((resolve) => setTimeout(resolve, 3500));
+            await serverState.patchState(async (s) => {
+              s.graphics.substitution.visible = false;
+              await new Promise((resolve) => setTimeout(resolve, 200));
+              s.graphics.substitution.playersOut = [];
+              s.graphics.substitution.subsIn = [];
+            });
+            break;
         }
         break;
     }
@@ -107,7 +140,12 @@ export default defineWebSocketHandler({
   },
 });
 
-const parseMessage = (msg: Message) => {
+type ParsedMessage =
+  | { ok: false; error: string; issues: unknown[] }
+  | { ok: true; mode: typeof Mode.Control; msg: ControlMessage }
+  | { ok: true; mode: typeof Mode.Output; msg: OutputMessage };
+
+const parseMessage = (msg: Message): ParsedMessage => {
   const json = msg.json();
 
   const mode = ModeEnvelopeSchema.safeParse(json);
@@ -127,7 +165,7 @@ const parseMessage = (msg: Message) => {
         error: "invalid_control_message",
         issues: result.error.issues,
       };
-    return { ok: true, mode: Mode.Control, msg: result.data };
+    return { ok: true as const, mode: Mode.Control, msg: result.data } as const;
   }
 
   const result = OutputMessageSchema.safeParse(json);
@@ -137,5 +175,5 @@ const parseMessage = (msg: Message) => {
       error: "invalid_output_message",
       issues: result.error.issues,
     };
-  return { ok: true, mode: Mode.Output, msg: result.data };
+  return { ok: true as const, mode: Mode.Output, msg: result.data } as const;
 };

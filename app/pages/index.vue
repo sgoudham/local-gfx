@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { TeamComplete } from "~~/shared/types/state";
 
-const { state } = useControlSocket();
+const { state, publish } = useControlSocket();
+
+publish(SocketMessage.SessionRegister);
 
 const teamHomeData = computed<TeamComplete | null>(() => {
   if (!state.value) {

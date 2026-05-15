@@ -1,5 +1,5 @@
 import type { PenaltyState } from "../utils/constants";
-import type { PlayerData, TeamData, MatchData } from "./data";
+import type { Player, TeamData, MatchData, TeamLocation } from "./data";
 
 // ts-to-zod seemingly can't resolve these types if they are defined in another file
 // not happy about the duplication but unsure if there's a different way around this
@@ -26,7 +26,7 @@ export type MatchTime = {
 
 export type TeamState = {
   activeFormation: FormationKey;
-  goals: PlayerData[];
+  goals: Player[];
   /** @minItems 5 @maxItems 5 */
   penalties: [
     PenaltyState,
@@ -41,12 +41,18 @@ export type OverlayState = {
   visible: boolean;
 };
 
+export type SubstitutionData = OverlayState & {
+  badgeSrc: string;
+  playersOut: Player[];
+  subsIn: Player[];
+};
+
 export type Graphics = {
   matchScorecard: OverlayState;
   penaltiesScorecard: OverlayState;
   bigMatchScorecard: OverlayState;
   teamFormation: OverlayState;
-  substitution: OverlayState;
+  substitution: SubstitutionData;
 };
 
 export type InitialState = {

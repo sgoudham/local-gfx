@@ -2,6 +2,7 @@ import type {
   OverlayState,
   TeamState,
   MatchTime,
+  SubstitutionData,
 } from "../../shared/types/state";
 import type { TeamData } from "../../shared/types/data";
 
@@ -21,3 +22,5 @@ export type PenaltiesScorecardProps = OverlayState & {
 };
 
 export type TeamFormationProps = OverlayState;
+
+export type SubstitutionProps = SubstitutionData;

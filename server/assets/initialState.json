@@ -28,7 +28,10 @@
       "visible": false
     },
     "substitution": {
-      "visible": false
+      "visible": false,
+      "badgeSrc": "homeBadge.png",
+      "playersOut": [],
+      "subsIn": []
     }
   }
 }

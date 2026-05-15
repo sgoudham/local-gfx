@@ -1,7 +1,7 @@
-const overlayMsg = <A extends "show" | "hide">(
-  overlayKey: Overlay,
+const overlayMsg = <O extends Overlay, A extends "show" | "hide" | "update">(
+  overlayKey: O,
   action: A,
-) => `${overlayKey}.${action}` as const;
+): `${O}.${A}` => `${overlayKey}.${action}`;
 
 export const PenaltyState = {
   NONE: 0,
@@ -22,6 +22,11 @@ export const Formation = {
   "4-2-3-1": "4-2-3-1",
   "5-4-1": "5-4-1",
   "5-3-2": "5-3-2",
+} as const;
+
+export const TeamLocation = {
+  Home: "home",
+  Away: "away",
 } as const;
 
 export const Overlay = {

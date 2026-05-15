@@ -3,6 +3,7 @@ import { useOutputSocket } from "~/composables/useOutputSocket";
 import type {
   MatchScorecardProps,
   PenaltiesScorecardProps,
+  SubstitutionProps,
   TeamFormationProps,
 } from "~/types";
 
@@ -53,6 +54,13 @@ const teamFormationData = computed<TeamFormationProps | null>(() => {
     visible: state.value.graphics.teamFormation.visible,
   };
 });
+
+const substitutionData = computed<SubstitutionProps | null>(() => {
+  if (!state.value) {
+    return null;
+  }
+  return state.value.graphics.substitution;
+});
 </script>
 
 <template>
@@ -65,6 +73,7 @@ const teamFormationData = computed<TeamFormationProps | null>(() => {
     v-bind="penaltiesScorecardData"
   />
   <OverlayTeamFormation v-if="teamFormationData" v-bind="teamFormationData" />
+  <OverlaySubstitution v-if="substitutionData" v-bind="substitutionData" />
 </template>
 
 <style scoped></style>
