@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
-import type { FormationKey } from "~~/shared/utils/constants";
 
 const props = defineProps<TeamComplete>();
 
@@ -13,7 +12,6 @@ type PitchPlayer = {
   num: number;
   x: number;
   y: number;
-  subbed: boolean;
 };
 
 type BenchSub = {
@@ -50,7 +48,7 @@ const nextId = () => ++idCounter;
 
 // ── Formations ──────────────────────────────────────────────
 
-function buildPositions(lines: readonly number[]) {
+function buildPositions(lines: number[]) {
   const positions: { x: number; y: number }[] = [];
   const padTop = 42,
     padBottom = 120;
@@ -86,7 +84,6 @@ function applyFormation(key: FormationKey) {
         num: i + 1,
         x: p.x,
         y: p.y,
-        subbed: false,
       });
     });
   } else {
@@ -188,7 +185,6 @@ function performSub(sub: BenchSub, outPlayer: PitchPlayer) {
   const prevNum = outPlayer.num;
 
   outPlayer.num = sub.num;
-  outPlayer.subbed = true;
 
   sub.num = prevNum;
   sub.used = false;
@@ -204,7 +200,7 @@ onMounted(() => {
 
 <template>
   <div class="wrap" @mousemove="onMouseMove" @mouseup="stopDrag">
-    <p>{{ props.name }} ({{ props.shortName }})</p>
+    <div>{{ props.name }} ({{ props.shortName }})</div>
 
     <!-- Formation picker -->
     <select
@@ -362,8 +358,6 @@ onMounted(() => {
         @mouseleave="hoveredPlayerId = null"
       >
         {{ player.num }}
-        <!-- Sub arrow badge -->
-        <span v-if="player.subbed" class="sub-badge">↕</span>
       </div>
     </div>
 
@@ -381,7 +375,6 @@ onMounted(() => {
           @mousedown.prevent="!sub.used && startBenchDrag($event, sub)"
         >
           {{ sub.num }}
-          <span v-if="sub.used" class="used-tick">✓</span>
         </div>
       </div>
     </div>
@@ -524,24 +517,5 @@ onMounted(() => {
 .sub.dragging {
   opacity: 0.4;
   cursor: grabbing;
-}
-.sub.used {
-  opacity: 0.3;
-  cursor: default;
-}
-
-.used-tick {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: #4caf50;
-  color: #fff;
-  border-radius: 50%;
-  width: 14px;
-  height: 14px;
-  font-size: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 </style>

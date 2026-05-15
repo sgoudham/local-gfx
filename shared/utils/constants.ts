@@ -8,7 +8,6 @@ export const PenaltyState = {
   GOAL: 1,
   MISS: 2,
 } as const;
-export type PenaltyState = 0 | 1 | 2;
 
 export const Formation = {
   "3-4-3": "3-4-3",
@@ -24,19 +23,6 @@ export const Formation = {
   "5-4-1": "5-4-1",
   "5-3-2": "5-3-2",
 } as const;
-export type FormationKey =
-  | "3-4-3"
-  | "3-5-2"
-  | "3-4-2-1"
-  | "3-6-1"
-  | "4-3-3"
-  | "4-4-2"
-  | "4-5-1"
-  | "4-4-1-1"
-  | "4-3-2-1"
-  | "4-2-3-1"
-  | "5-4-1"
-  | "5-3-2";
 
 export const Overlay = {
   MatchScorecard: "matchScorecard",
