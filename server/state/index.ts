@@ -1,74 +1,98 @@
-import { YcfState, YcfData, YcfDataSchema } from "../../shared/types/ycf";
-import { MatchScorecardState } from "./overlays/matchScorecard";
+import type { Peer } from "crossws";
+import { MatchData } from "~~/shared/types/data";
+import { Mode } from "~~/shared/types/socket";
+import { CompleteState, InitialState } from "~~/shared/types/state";
+import { MatchTimer } from "./matchTimer";
 
-export type StateMutator = (state: YcfState) => void;
+export type StateMutator = (state: CompleteState) => void;
+
+export type PatchState = (mutate: StateMutator) => Promise<CompleteState>;
 
 export class ServerState {
-  _state!: YcfState;
-  matchScorecard!: MatchScorecardState;
+  private _state!: CompleteState;
+  private peer: Peer | undefined;
+  matchTimer!: MatchTimer;
 
   constructor() {}
 
   async init() {
     this._state = await this.initState();
-    this.matchScorecard = new MatchScorecardState(
-      this.patchState,
-      this._state.matchTime,
-    );
+    this.matchTimer = new MatchTimer(this.patchState, this._state.matchTime);
     return this;
   }
 
-  get state(): Readonly<YcfState> {
-    return this._state;
+  setPeer(peer: Peer): void {
+    this.peer = peer;
   }
 
-  patchState = async (mutate: StateMutator) => {
+  clearPeer(): void {
+    this.peer = undefined;
+  }
+
+  patchState = async (mutate: StateMutator): Promise<CompleteState> => {
     mutate(this._state);
     await this.persistState(this._state);
+    await this.syncState([Mode.Control, Mode.Output]);
     return this._state;
   };
 
+  async syncState(modes: Mode[]) {
+    if (!this.peer) return;
+    const data = JSON.stringify({
+      type: SocketMessage.SessionStateSync,
+      data: this._state,
+    });
+    for (const mode of modes) {
+      this.peer.publish(mode, data);
+    }
+    this.peer.send(data);
+  }
+
   private async initState() {
-    let ycfState = await useStorage<YcfState>("fs").getItem("ycf");
-    if (ycfState) {
-      return ycfState;
+    let state = await useStorage<CompleteState>("fs").getItem("state");
+    if (state) {
+      return state;
     }
 
-    ycfState = {
-      ...(await this.getData()),
-      graphics: {
-        matchScorecard: {
-          visible: false,
-        },
-        penaltiesScorecard: {
-          visible: false,
-        },
-        bigMatchScorecard: {
-          visible: false,
-        },
-        teamFormation: {
-          visible: false,
-        },
-        substitution: {
-          visible: false,
-        },
+    const data = await this.getData();
+    const initial = await this.getInitialState();
+
+    state = {
+      name: data.name,
+      matchTime: initial.matchTime,
+      graphics: initial.graphics,
+      home: {
+        ...data.home,
+        ...initial.home,
+      },
+      away: {
+        ...data.away,
+        ...initial.away,
       },
     };
 
-    await this.persistState(ycfState);
+    await this.persistState(state);
 
-    return ycfState;
+    return state;
   }
 
-  private async persistState(state: YcfState) {
-    await useStorage<YcfState>("fs").setItem("ycf", state);
+  private async persistState(state: CompleteState) {
+    await useStorage<CompleteState>("fs").setItem("state", state);
   }
 
-  private async getData(): Promise<YcfData> {
-    const raw = await useStorage("assets:server").getItem("ycf.json");
+  private async getData(): Promise<MatchData> {
+    const raw = await useStorage("assets:server").getItem("data.json");
     if (!raw) {
-      throw new Error("err=no_data msg='can't retrieve ycf.json'");
+      throw new Error("err=no_data msg='couldn't load data.json'");
     }
-    return YcfDataSchema.parse(raw);
+    return MatchDataSchema.parse(raw);
+  }
+
+  private async getInitialState(): Promise<InitialState> {
+    const raw = await useStorage("assets:server").getItem("initialState.json");
+    if (!raw) {
+      throw new Error("err=no_state msg='couldn't load initialState.json'");
+    }
+    return InitialStateSchema.parse(raw);
   }
 }

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useOutputSocket } from "~/composables/useOutputSocket";
-import type { MatchScorecardProps, PenaltiesScorecardProps } from "~/types";
+import type {
+  MatchScorecardProps,
+  PenaltiesScorecardProps,
+  TeamFormationProps,
+} from "~/types";
 
 const { state } = useOutputSocket();
 
@@ -40,6 +44,15 @@ const penaltiesScorecardData = computed<PenaltiesScorecardProps | null>(() => {
     },
   };
 });
+
+const teamFormationData = computed<TeamFormationProps | null>(() => {
+  if (!state.value) {
+    return null;
+  }
+  return {
+    visible: state.value.graphics.teamFormation.visible,
+  };
+});
 </script>
 
 <template>
@@ -51,6 +64,7 @@ const penaltiesScorecardData = computed<PenaltiesScorecardProps | null>(() => {
     v-if="penaltiesScorecardData"
     v-bind="penaltiesScorecardData"
   />
+  <OverlayTeamFormation v-if="teamFormationData" v-bind="teamFormationData" />
 </template>
 
 <style scoped></style>

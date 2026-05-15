@@ -1,30 +1,20 @@
-import type { Message, Peer } from "crossws";
+import type { Message } from "crossws";
 import {
   ControlMessageSchema,
+  Mode,
   ModeEnvelopeSchema,
-  Modes,
   OutputMessageSchema,
-  OverlayMessage,
+  SocketMessage,
 } from "../../shared/types/socket";
 import { ServerState } from "../state/index";
 
 const serverState = await new ServerState().init();
-const peers = new Set<Peer>();
-
-const onTimer = () => {
-  for (const peer of peers) {
-    syncState([Modes.Output, Modes.Control], serverState, peer);
-  }
-};
-
-serverState.matchScorecard.on("timer", onTimer);
 
 export default defineWebSocketHandler({
   open(peer) {
     console.log(
       `event=open id=${peer.id} connected_clients=${peer.peers.size}`,
     );
-    peers.add(peer);
   },
 
   async message(peer, msg) {
@@ -36,59 +26,68 @@ export default defineWebSocketHandler({
       return;
     }
 
+    serverState.setPeer(peer);
+
     switch (parsed.mode) {
-      case Modes.Output:
+      case Mode.Output:
         switch (parsed.msg.type) {
-          case "session.register":
-            peer.subscribe(Modes.Output);
-            syncState([Modes.Output], serverState, peer);
+          case SocketMessage.SessionRegister:
+            peer.subscribe(Mode.Output);
+            serverState.syncState([Mode.Output]);
             break;
         }
         break;
-      case Modes.Control:
+      case Mode.Control:
         switch (parsed.msg.type) {
-          case "session.register":
-            peer.subscribe(Modes.Control);
-            syncState([Modes.Control], serverState, peer);
+          case SocketMessage.SessionRegister:
+            peer.subscribe(Mode.Control);
+            serverState.syncState([Mode.Control]);
             break;
 
-          case OverlayMessage.MatchScorecardTimerStart:
-            serverState.matchScorecard.startTimer();
+          case SocketMessage.MatchTimerStart:
+            serverState.matchTimer.start();
             break;
-          case OverlayMessage.MatchScorecardTimerStop:
-            await serverState.matchScorecard.stopTimer();
-            syncState([Modes.Output, Modes.Control], serverState, peer);
+          case SocketMessage.MatchTimerStop:
+            await serverState.matchTimer.stop();
             break;
-          case OverlayMessage.MatchScorecardTimerReset:
-            await serverState.matchScorecard.resetTimer();
-            syncState([Modes.Output, Modes.Control], serverState, peer);
+          case SocketMessage.MatchTimerReset:
+            await serverState.matchTimer.reset();
             break;
-          case OverlayMessage.MatchScorecardShow:
+
+          case SocketMessage.MatchScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.matchScorecard.visible = true;
               s.graphics.penaltiesScorecard.visible = false;
             });
-            syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
-          case OverlayMessage.MatchScorecardHide:
+          case SocketMessage.MatchScorecardHide:
             await serverState.patchState((s) => {
               s.graphics.matchScorecard.visible = false;
             });
-            syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
 
-          case OverlayMessage.PenaltiesScorecardShow:
+          case SocketMessage.PenaltiesScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.penaltiesScorecard.visible = true;
               s.graphics.matchScorecard.visible = false;
             });
-            syncState([Modes.Output, Modes.Control], serverState, peer);
             break;
-          case OverlayMessage.PenaltiesScorecardHide:
+          case SocketMessage.PenaltiesScorecardHide:
             await serverState.patchState((s) => {
               s.graphics.penaltiesScorecard.visible = false;
             });
-            syncState([Modes.Output, Modes.Control], serverState, peer);
+            break;
+
+          case SocketMessage.TeamFormationShow:
+            await serverState.patchState((s) => {
+              s.graphics.teamFormation.visible = true;
+              s.graphics.matchScorecard.visible = false;
+            });
+            break;
+          case SocketMessage.TeamFormationHide:
+            await serverState.patchState((s) => {
+              s.graphics.teamFormation.visible = false;
+            });
             break;
         }
         break;
@@ -99,26 +98,14 @@ export default defineWebSocketHandler({
     console.log(
       `event=close id=${peer.id} code=${code} connected_clients=${peer.peers.size}`,
     );
-    peer.unsubscribe(Modes.Control);
-    peer.unsubscribe(Modes.Output);
-    peers.delete(peer);
+    peer.unsubscribe(Mode.Control);
+    peer.unsubscribe(Mode.Output);
   },
 
   error(peer, error) {
     console.error(`event=error id=${peer.id} error=${error}`);
   },
 });
-
-const syncState = (modes: Modes[], serverState: ServerState, peer: Peer) => {
-  const data = JSON.stringify({
-    type: "state.sync",
-    data: serverState.state,
-  });
-  for (const mode of modes) {
-    peer.publish(mode, data);
-  }
-  peer.send(data);
-};
 
 const parseMessage = (msg: Message) => {
   const json = msg.json();
@@ -132,7 +119,7 @@ const parseMessage = (msg: Message) => {
     };
   }
 
-  if (mode.data.mode === Modes.Control) {
+  if (mode.data.mode === Mode.Control) {
     const result = ControlMessageSchema.safeParse(json);
     if (!result.success)
       return {
@@ -140,7 +127,7 @@ const parseMessage = (msg: Message) => {
         error: "invalid_control_message",
         issues: result.error.issues,
       };
-    return { ok: true, mode: Modes.Control, msg: result.data };
+    return { ok: true, mode: Mode.Control, msg: result.data };
   }
 
   const result = OutputMessageSchema.safeParse(json);
@@ -150,5 +137,5 @@ const parseMessage = (msg: Message) => {
       error: "invalid_output_message",
       issues: result.error.issues,
     };
-  return { ok: true, mode: Modes.Output, msg: result.data };
+  return { ok: true, mode: Mode.Output, msg: result.data };
 };

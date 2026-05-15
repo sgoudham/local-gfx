@@ -24,3 +24,7 @@ export type PenaltiesScorecardProps = {
     penalties: number[];
   };
 };
+
+export type TeamFormationProps = {
+  visible: boolean
+}

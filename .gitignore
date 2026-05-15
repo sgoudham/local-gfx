@@ -2,3 +2,4 @@ _store
 .nuxt
 .data
 .output
+data.json

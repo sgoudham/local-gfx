@@ -1,68 +1,75 @@
 <script setup lang="ts">
-import { OverlayMessage } from "~~/shared/types/socket";
+import { SocketMessage, Overlay } from "#imports";
 
 const { state, publish } = useControlSocket();
 
-const isMatchScorecardVisible = computed(
-  () => state.value?.graphics?.matchScorecard?.visible,
-);
-function toggleMatchScorecard() {
+type OverlayToggleConfig = {
+  key: Overlay;
+  label: string;
+  showMessage: string;
+  hideMessage: string;
+};
+
+const overlayToggles: OverlayToggleConfig[] = [
+  {
+    key: Overlay.MatchScorecard,
+    label: "Match Scorecard",
+    showMessage: SocketMessage.MatchScorecardShow,
+    hideMessage: SocketMessage.MatchScorecardHide,
+  },
+  {
+    key: Overlay.TeamFormation,
+    label: "Team Formation",
+    showMessage: SocketMessage.TeamFormationShow,
+    hideMessage: SocketMessage.TeamFormationHide,
+  },
+  {
+    key: Overlay.PenaltiesScorecard,
+    label: "Penalties Scorecard",
+    showMessage: SocketMessage.PenaltiesScorecardShow,
+    hideMessage: SocketMessage.PenaltiesScorecardHide,
+  },
+];
+
+const isOverlayVisible = (key: Overlay) =>
+  !!state.value?.graphics?.[key]?.visible;
+
+const toggleOverlay = (config: OverlayToggleConfig) => {
   publish(
-    isMatchScorecardVisible.value
-      ? OverlayMessage.MatchScorecardHide
-      : OverlayMessage.MatchScorecardShow,
+    isOverlayVisible(config.key) ? config.hideMessage : config.showMessage,
   );
-}
+};
 
 const hasMatchStarted = computed(() => !state.value?.matchTime.paused);
-function toggleMatchTimer() {
+const toggleMatchTimer = () => {
   publish(
     hasMatchStarted.value
-      ? OverlayMessage.MatchScorecardTimerStop
-      : OverlayMessage.MatchScorecardTimerStart,
+      ? SocketMessage.MatchTimerStop
+      : SocketMessage.MatchTimerStart,
   );
-}
-
-const isPenaltiesScorecardVisible = computed(
-  () => state.value?.graphics?.penaltiesScorecard.visible,
-);
-function togglePenaltiesScorecard() {
-  publish(
-    isPenaltiesScorecardVisible.value
-      ? OverlayMessage.PenaltiesScorecardHide
-      : OverlayMessage.PenaltiesScorecardShow,
-  );
-}
+};
 </script>
 
 <template>
   <ul class="overlay-list">
-    <li class="overlay-list-item">
+    <li
+      v-for="overlay in overlayToggles"
+      :key="overlay.key"
+      class="overlay-list-item"
+    >
       <button
         class="overlay-toggle"
-        :class="isMatchScorecardVisible ? 'hide' : 'show'"
-        @click="toggleMatchScorecard"
+        :class="isOverlayVisible(overlay.key) ? 'hide' : 'show'"
+        @click="toggleOverlay(overlay)"
       >
         {{
-          isMatchScorecardVisible
-            ? "Hide Match Scorecard"
-            : "Show Match Scorecard"
+          isOverlayVisible(overlay.key)
+            ? `Hide ${overlay.label}`
+            : `Show ${overlay.label}`
         }}
       </button>
     </li>
-    <li class="overlay-list-item">
-      <button
-        class="overlay-toggle"
-        :class="isPenaltiesScorecardVisible ? 'hide' : 'show'"
-        @click="togglePenaltiesScorecard"
-      >
-        {{
-          isPenaltiesScorecardVisible
-            ? "Hide Penalties Scorecard"
-            : "Show Penalties Scorecard"
-        }}
-      </button>
-    </li>
+
     <li class="overlay-list-item">
       <button
         class="overlay-toggle"
@@ -73,7 +80,7 @@ function togglePenaltiesScorecard() {
       </button>
       <button
         class="overlay-toggle show"
-        @click="() => publish(OverlayMessage.MatchScorecardTimerReset)"
+        @click="publish(SocketMessage.MatchTimerReset)"
       >
         Reset
       </button>

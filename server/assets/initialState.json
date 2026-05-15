@@ -1,0 +1,32 @@
+{
+  "matchTime": {
+    "paused": true,
+    "ms": 0,
+    "formatted": "00:00"
+  },
+  "home": {
+    "goals": [],
+    "penalties": [0, 0, 0, 0, 0]
+  },
+  "away": {
+    "goals": [],
+    "penalties": [0, 0, 0, 0, 0]
+  },
+  "graphics": {
+    "matchScorecard": {
+      "visible": false
+    },
+    "penaltiesScorecard": {
+      "visible": false
+    },
+    "bigMatchScorecard": {
+      "visible": false
+    },
+    "teamFormation": {
+      "visible": false
+    },
+    "substitution": {
+      "visible": false
+    }
+  }
+}
