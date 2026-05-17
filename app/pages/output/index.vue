@@ -11,6 +11,7 @@ const { state } = useOutputSocket();
 
 const matchScorecardData = computed<MatchScorecardProps>(() => {
   return {
+    name: state.value.graphics.matchScorecard.name,
     visible: state.value.graphics.matchScorecard.visible,
     home: {
       shortName: state.value.home.shortName,
@@ -26,6 +27,7 @@ const matchScorecardData = computed<MatchScorecardProps>(() => {
 
 const penaltiesScorecardData = computed<PenaltiesScorecardProps>(() => {
   return {
+    name: state.value.graphics.penaltiesScorecard.name,
     visible: state.value.graphics.penaltiesScorecard.visible,
     home: {
       id: state.value.home.id,
@@ -42,6 +44,7 @@ const penaltiesScorecardData = computed<PenaltiesScorecardProps>(() => {
 
 const teamFormationData = computed<TeamFormationProps>(() => {
   return {
+    name: state.value.graphics.teamFormation.name,
     visible: state.value.graphics.teamFormation.visible,
   };
 });

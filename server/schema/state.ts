@@ -20,6 +20,7 @@ export const teamStateSchema = z.object({
 });
 
 export const overlayStateSchema = z.object({
+    name: z.string(),
     visible: z.boolean()
 });
 

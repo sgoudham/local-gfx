@@ -16,18 +16,23 @@
   },
   "graphics": {
     "matchScorecard": {
+      "name": "Match Scorecard",
       "visible": false
     },
     "penaltiesScorecard": {
+      "name": "Penalties Scorecard",
       "visible": false
     },
     "bigMatchScorecard": {
+      "name": "Big Match Scorecard",
       "visible": false
     },
     "teamFormation": {
+      "name": "Team Formation",
       "visible": false
     },
     "substitution": {
+      "name": "Substitution",
       "visible": false,
       "badgeSrc": "homeBadge.png",
       "playersOut": [],

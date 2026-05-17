@@ -38,6 +38,7 @@ export type TeamState = {
 };
 
 export type OverlayState = {
+  name: string;
   visible: boolean;
 };
 
