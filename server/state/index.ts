@@ -22,6 +22,10 @@ export class ServerState {
     return this;
   }
 
+  state(): CompleteState {
+    return this._state;
+  }
+
   setPeer(peer: Peer): void {
     this.peer = peer;
   }

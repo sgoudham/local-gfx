@@ -7,9 +7,6 @@ import {
   OutputMessage,
   OutputMessageSchema,
 } from "../schema/socket";
-import { ServerState } from "../state/index";
-
-const serverState = await new ServerState().init();
 
 export default defineWebSocketHandler({
   open(peer) {
@@ -20,6 +17,8 @@ export default defineWebSocketHandler({
 
   async message(peer, msg) {
     console.log(`message=${msg.text()}`);
+
+    const { serverState } = useNitroApp();
 
     const parsed = parseMessage(msg);
     if (!parsed.ok) {

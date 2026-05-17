@@ -1,30 +1,13 @@
 <script setup lang="ts">
-import type { TeamComplete } from "~~/shared/types/state";
-
 const { state, publish } = useControlSocket();
-
 publish(SocketMessage.SessionRegister);
-
-const teamHomeData = computed<TeamComplete | null>(() => {
-  if (!state.value) {
-    return null;
-  }
-  return state.value.home;
-});
-
-const teamAwayData = computed<TeamComplete | null>(() => {
-  if (!state.value) {
-    return null;
-  }
-  return state.value.away;
-});
 </script>
 
 <template>
   <div class="control">
-    <TeamFormationEditor v-if="teamHomeData" v-bind="teamHomeData" />
+    <TeamFormationEditor v-bind="state.home" />
     <OverlayStack />
-    <TeamFormationEditor v-if="teamAwayData" v-bind="teamAwayData" />
+    <TeamFormationEditor v-bind="state.away" />
   </div>
   <WindowFrame title="LIVE" src="/output" />
 </template>

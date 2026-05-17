@@ -9,10 +9,7 @@ import type {
 
 const { state } = useOutputSocket();
 
-const matchScorecardData = computed<MatchScorecardProps | null>(() => {
-  if (!state.value) {
-    return null;
-  }
+const matchScorecardData = computed<MatchScorecardProps>(() => {
   return {
     visible: state.value.graphics.matchScorecard.visible,
     home: {
@@ -27,10 +24,7 @@ const matchScorecardData = computed<MatchScorecardProps | null>(() => {
   };
 });
 
-const penaltiesScorecardData = computed<PenaltiesScorecardProps | null>(() => {
-  if (!state.value) {
-    return null;
-  }
+const penaltiesScorecardData = computed<PenaltiesScorecardProps>(() => {
   return {
     visible: state.value.graphics.penaltiesScorecard.visible,
     home: {
@@ -46,19 +40,13 @@ const penaltiesScorecardData = computed<PenaltiesScorecardProps | null>(() => {
   };
 });
 
-const teamFormationData = computed<TeamFormationProps | null>(() => {
-  if (!state.value) {
-    return null;
-  }
+const teamFormationData = computed<TeamFormationProps>(() => {
   return {
     visible: state.value.graphics.teamFormation.visible,
   };
 });
 
-const substitutionData = computed<SubstitutionProps | null>(() => {
-  if (!state.value) {
-    return null;
-  }
+const substitutionData = computed<SubstitutionProps>(() => {
   return state.value.graphics.substitution;
 });
 </script>

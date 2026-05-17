@@ -1,3 +1,24 @@
+<script setup lang="ts">
+const { data } = useSocketConnection();
+const state = useState<CompleteState>("state");
+
+await callOnce("socket:init", async () => {
+  state.value = await $fetch("/api/state");
+});
+
+watch(data, (raw) => {
+  if (!raw) return;
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed.type === SocketMessage.SessionStateSync) {
+      state.value = parsed.data;
+    }
+  } catch {
+    // ignore malformed messages
+  }
+});
+</script>
+
 <template>
   <NuxtPage />
 </template>

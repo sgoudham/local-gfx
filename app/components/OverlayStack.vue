@@ -31,8 +31,7 @@ const overlayToggles: OverlayToggleConfig[] = [
   },
 ];
 
-const isOverlayVisible = (key: Overlay) =>
-  !!state.value?.graphics?.[key]?.visible;
+const isOverlayVisible = (key: Overlay) => state.value.graphics[key].visible;
 
 const toggleOverlay = (config: OverlayToggleConfig) => {
   publish(
@@ -40,7 +39,7 @@ const toggleOverlay = (config: OverlayToggleConfig) => {
   );
 };
 
-const hasMatchStarted = computed(() => !state.value?.matchTime.paused);
+const hasMatchStarted = computed(() => state.value.matchTime.paused);
 const toggleMatchTimer = () => {
   publish(
     hasMatchStarted.value

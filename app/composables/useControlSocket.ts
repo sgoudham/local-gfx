@@ -1,19 +1,8 @@
 import { useSocketConnection } from "./useSocketConnection";
 
 export const useControlSocket = () => {
-  const { send, data } = useSocketConnection();
-
-  const state = computed<CompleteState | null>(() => {
-    if (!data.value) return null;
-    try {
-      const parsed = JSON.parse(data.value);
-      return parsed.type === SocketMessage.SessionStateSync
-        ? parsed.data
-        : null;
-    } catch {
-      return null;
-    }
-  });
+  const state = useState<CompleteState>("state");
+  const { send } = useSocketConnection();
 
   const publish = (type: string, data?: Record<string, unknown>) => {
     send(JSON.stringify({ mode: Mode.Control, type, ...data }));
