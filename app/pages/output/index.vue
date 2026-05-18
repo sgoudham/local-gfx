@@ -7,7 +7,9 @@ import type {
   TeamFormationProps,
 } from "~/types";
 
-const { state } = useOutputSocket();
+const { state, publish } = useOutputSocket();
+
+publish(SocketMessage.SessionRegister);
 
 const matchScorecardData = computed<MatchScorecardProps>(() => {
   return {

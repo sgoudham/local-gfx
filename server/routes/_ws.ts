@@ -94,26 +94,26 @@ export default defineWebSocketHandler({
           case SocketMessage.SubstitutionShow:
             const data = parsed.msg.data;
             await serverState.patchState((s) => {
-              const playerIndex = s[data.teamLocation].players.findIndex(
+              const playerIndex = s[data.location].players.findIndex(
                 (p) => p.number === data.playerOut.number,
               );
-              const subIndex = s[data.teamLocation].substitutes.findIndex(
+              const subIndex = s[data.location].substitutes.findIndex(
                 (p) => p.number === data.subIn.number,
               );
-              const player = s[data.teamLocation].players[playerIndex];
-              const sub = s[data.teamLocation].substitutes[subIndex];
+              const player = s[data.location].players[playerIndex];
+              const sub = s[data.location].substitutes[subIndex];
               if (sub) {
-                s[data.teamLocation].players[playerIndex] = sub;
+                s[data.location].players[playerIndex] = sub;
                 s.graphics.substitution.subsIn.push(sub);
               }
               if (player) {
-                s[data.teamLocation].substitutes[subIndex] = player;
+                s[data.location].substitutes[subIndex] = player;
                 s.graphics.substitution.playersOut.push(player);
               }
-              s.graphics.substitution.badgeSrc = s[data.teamLocation].badgeSrc;
+              s.graphics.substitution.location = data.location;
               s.graphics.substitution.visible = true;
             });
-            await new Promise((resolve) => setTimeout(resolve, 3500));
+            await new Promise((resolve) => setTimeout(resolve, 4000));
             await serverState.patchState(async (s) => {
               s.graphics.substitution.visible = false;
               await new Promise((resolve) => setTimeout(resolve, 200));

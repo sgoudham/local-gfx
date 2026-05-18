@@ -12,12 +12,6 @@ const overlayToggles = [
     hideMessage: SocketMessage.MatchScorecardHide,
   },
   {
-    val: Overlay.TeamFormation,
-    name: state.value.graphics.teamFormation.name,
-    showMessage: SocketMessage.TeamFormationShow,
-    hideMessage: SocketMessage.TeamFormationHide,
-  },
-  {
     val: Overlay.PenaltiesScorecard,
     name: state.value.graphics.penaltiesScorecard.name,
     showMessage: SocketMessage.PenaltiesScorecardShow,

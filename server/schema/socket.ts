@@ -30,7 +30,7 @@ export type OutputMessage = z.infer<typeof OutputMessageSchema>;
 // TODO: Potentially remove in favour of the generated object if we make the
 // control panel send an array of subbed in/out players.
 const SubstitutionUpdateSchema = z.object({
-  teamLocation: teamLocationSchema,
+  location: teamLocationSchema,
   playerOut: playerSchema,
   subIn: playerSchema,
 });

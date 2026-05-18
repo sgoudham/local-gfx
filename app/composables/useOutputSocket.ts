@@ -4,9 +4,9 @@ export const useOutputSocket = () => {
   const state = useState<CompleteState>("state");
   const { send } = useSocketConnection();
 
-  send(
-    JSON.stringify({ mode: Mode.Output, type: SocketMessage.SessionRegister }),
-  );
+  const publish = (type: string, data?: Record<string, unknown>) => {
+    send(JSON.stringify({ mode: Mode.Output, type, ...data }));
+  };
 
-  return { state };
+  return { state, publish };
 };

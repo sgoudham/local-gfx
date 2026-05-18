@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 
-const { publish } = useControlSocket();
+const { state, publish } = useControlSocket();
 
 const props = defineProps<TeamComplete>();
 
@@ -140,7 +140,7 @@ function performSub(subIn: Player, playerOut: Player) {
   // Server
   publish(SocketMessage.SubstitutionShow, {
     data: {
-      teamLocation: props.location,
+      location: props.location,
       subIn,
       playerOut,
     },
@@ -162,7 +162,7 @@ onMounted(() => {
   <div class="wrap" @mousemove="onMouseMove" @mouseup="stopDrag">
     <div>{{ props.name }} ({{ props.shortName }})</div>
 
-    <!-- Formation picker -->
+    <!-- Controls -->
     <select
       class="controls"
       :value="activeFormation"
@@ -172,6 +172,14 @@ onMounted(() => {
         {{ key }}
       </option>
     </select>
+    <ToggleOverlayButton
+      v-bind="{
+        val: Overlay.TeamFormation,
+        name: state.graphics.teamFormation.name,
+        showMessage: SocketMessage.TeamFormationShow,
+        hideMessage: SocketMessage.TeamFormationHide,
+      }"
+    />
 
     <!-- Pitch -->
     <div class="pitch" ref="pitchEl">

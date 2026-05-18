@@ -5,26 +5,61 @@ import type { SubstitutionProps } from "~/types";
 const props = defineProps<SubstitutionProps>();
 
 const overlay = useTemplateRef("overlay");
+const playersOffGroup = useTemplateRef("playersOffGroup");
+const playersOnGroup = useTemplateRef("playersOnGroup");
 const rendered = ref(false);
-
-const getImageUrl = (path: string) => {
-  return new URL(`../../assets/${path}`, import.meta.url).href;
-};
+const imageUrl = computed(
+  () =>
+    new URL(
+      `../../assets/${props.location === "home" ? "homeBadge.png" : "awayBadge.png"}`,
+      import.meta.url,
+    ).href,
+);
 
 async function show() {
   rendered.value = true;
   nextTick(() => {
-    if (overlay.value) {
-      gsap.fromTo(
-        overlay.value,
-        { opacity: 0, y: -10 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          ease: "power2.out",
-        },
-      );
+    if (!overlay.value) return;
+    const timeline = gsap.timeline();
+
+    // Animate In
+    timeline.fromTo(
+      overlay.value,
+      { opacity: 0, y: -10 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        ease: "power2.out",
+      },
+    );
+
+    // Swap
+    if (playersOffGroup.value && playersOnGroup.value) {
+      const offHeight = playersOffGroup.value.offsetHeight;
+      const onHeight = playersOnGroup.value.offsetHeight;
+      const swapDelay = 1.5;
+      timeline
+        .to(
+          playersOffGroup.value,
+          {
+            y: onHeight,
+            duration: 0.6,
+            ease: "power2.out",
+            delay: swapDelay,
+          },
+          0,
+        )
+        .to(
+          playersOnGroup.value,
+          {
+            y: -offHeight,
+            duration: 0.6,
+            ease: "power2.out",
+            delay: swapDelay,
+          },
+          0,
+        );
     }
   });
 }
@@ -69,10 +104,13 @@ watch(
 );
 </script>
 
-<!-- TODO: Support different ribbon colours for AC Malones -->
-
 <template>
-  <section class="overlay" ref="overlay" v-if="rendered">
+  <section
+    class="overlay"
+    ref="overlay"
+    v-if="rendered"
+    :data-location="props.location"
+  >
     <div class="broadcast">
       <div class="ribbon-box">
         <div class="ribbon"></div>
@@ -81,39 +119,43 @@ watch(
 
       <div class="scorecard">
         <div class="substitute-boxes">
-          <div
-            v-for="player in props.playersOut"
-            :key="`out-${player.number}-${player.forename}-${player.surname}`"
-            class="panel player-off"
-          >
-            <div class="player-off-background"></div>
-            <span class="sub-name"
-              >{{ player.number }}. {{ player.forename }}
-              {{ player.surname }}</span
+          <div ref="playersOffGroup" class="panel-group panel-group-off">
+            <div
+              v-for="player in props.playersOut"
+              :key="`out-${player.number}-${player.forename}-${player.surname}`"
+              class="panel player-off"
             >
-            <div class="sub-arrow-row">
-              <div class="sub-arrow player-off-arrow">▼</div>
+              <div class="player-off-background"></div>
+              <span class="sub-name"
+                >{{ player.number }}. {{ player.forename }}
+                {{ player.surname }}</span
+              >
+              <div class="sub-arrow-row">
+                <div class="sub-arrow player-off-arrow">▼</div>
+              </div>
             </div>
           </div>
-          <div
-            v-for="player in props.subsIn"
-            :key="`in-${player.number}-${player.forename}-${player.surname}`"
-            class="panel player-on"
-          >
-            <div class="player-on-background"></div>
-            <span class="sub-name"
-              >{{ player.number }}. {{ player.forename }}
-              {{ player.surname }}</span
+          <div ref="playersOnGroup" class="panel-group panel-group-on">
+            <div
+              v-for="player in props.subsIn"
+              :key="`in-${player.number}-${player.forename}-${player.surname}`"
+              class="panel player-on"
             >
-            <div class="sub-arrow-row">
-              <div class="sub-arrow player-on-arrow">▲</div>
+              <div class="player-on-background"></div>
+              <span class="sub-name"
+                >{{ player.number }}. {{ player.forename }}
+                {{ player.surname }}</span
+              >
+              <div class="sub-arrow-row">
+                <div class="sub-arrow player-on-arrow">▲</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="team-badge">
-        <img :src="getImageUrl(badgeSrc)" alt="Team Badge" />
+        <img :src="imageUrl" alt="Team Badge" />
       </div>
     </div>
   </section>
@@ -129,6 +171,15 @@ watch(
   overflow: visible;
   position: absolute;
   bottom: 0px;
+}
+
+.overlay[data-location="home"] {
+  --team-colour-1: var(--home-colour-1);
+  --team-colour-2: var(--home-colour-2);
+}
+.overlay[data-location="away"] {
+  --team-colour-1: var(--away-colour-1);
+  --team-colour-2: var(--away-colour-2);
 }
 
 .overlay,
@@ -198,7 +249,7 @@ watch(
 }
 
 .panel:not(:last-child) {
-  border-bottom: 1px solid var(--home-colour-1);
+  border-bottom: 1px solid var(--team-colour-1);
 }
 
 .substitute-boxes {
@@ -206,16 +257,21 @@ watch(
   flex-direction: column;
 }
 
+.panel-group {
+  display: flex;
+  flex-direction: column;
+}
+
 /* ── Player on panel ── */
 .player-on {
   position: relative;
-  color: var(--home-colour-1);
+  color: var(--team-colour-1);
 }
 
 .player-on-background {
   position: absolute;
   inset: 0;
-  background: var(--home-colour-2);
+  background: var(--team-colour-2);
   z-index: 0;
 }
 
@@ -232,13 +288,13 @@ watch(
 /* ── Player off panel ── */
 .player-off {
   position: relative;
-  color: var(--home-colour-2);
+  color: var(--team-colour-2);
 }
 
 .player-off-background {
   position: absolute;
   inset: 0;
-  background: var(--home-colour-1);
+  background: var(--team-colour-1);
   z-index: 0;
 }
 

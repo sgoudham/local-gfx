@@ -43,7 +43,7 @@ export type OverlayState = {
 };
 
 export type SubstitutionData = OverlayState & {
-  badgeSrc: string;
+  location: TeamLocation;
   playersOut: Player[];
   subsIn: Player[];
 };
