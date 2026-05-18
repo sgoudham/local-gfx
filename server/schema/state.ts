@@ -25,7 +25,7 @@ export const overlayStateSchema = z.object({
 });
 
 export const substitutionDataSchema = overlayStateSchema.and(z.object({
-    location: teamLocationSchema,
+    location: teamLocationSchema.optional(),
     playersOut: z.array(playerSchema),
     subsIn: z.array(playerSchema)
 }));

@@ -16,7 +16,6 @@ export const teamDataSchema = z.object({
     location: teamLocationSchema,
     name: z.string(),
     shortName: z.string(),
-    badgeSrc: z.string(),
     players: z.array(playerSchema),
     substitutes: z.array(playerSchema)
 });

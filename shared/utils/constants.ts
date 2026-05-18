@@ -50,6 +50,7 @@ export const SocketMessage = {
   MatchTimerStart: "matchTimer.start",
   MatchTimerStop: "matchTimer.stop",
   MatchTimerReset: "matchTimer.reset",
+  ActiveFormationUpdate: "activeFormation.update",
   MatchScorecardShow: overlayMsg(Overlay.MatchScorecard, "show"),
   MatchScorecardHide: overlayMsg(Overlay.MatchScorecard, "hide"),
   BigMatchScorecardShow: overlayMsg(Overlay.BigMatchScorecard, "show"),

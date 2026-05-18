@@ -15,7 +15,6 @@ export type TeamData = {
   location: TeamLocation;
   name: string;
   shortName: string;
-  badgeSrc: string;
   players: Player[];
   substitutes: Player[];
 };

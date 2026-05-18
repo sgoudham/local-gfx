@@ -2,6 +2,7 @@
 import { ref, reactive, onMounted } from "vue";
 
 const { state, publish } = useControlSocket();
+const { selectedPlayer } = useClientState();
 
 const props = defineProps<TeamComplete>();
 
@@ -16,24 +17,8 @@ const activeFormationLines = computed(() => {
     ...activeFormation.value.split("-").map((v) => new Number(v).valueOf()),
   ];
 });
-const players = reactive<Player[]>(props.players);
-const subs = reactive<Player[]>(props.substitutes);
-const pitchEl = ref<HTMLElement | null>(null);
-const hoveredPlayerId = ref<number | null>(null);
-
-// Unified drag state
-const drag = reactive({
-  id: null as number | null,
-  source: null as "pitch" | "bench" | null,
-  sub: null as Player | null,
-});
-
-let dragOffsetX = 0;
-let dragOffsetY = 0;
-
-// ── Formations ──────────────────────────────────────────────
-
-function buildPositions(lines: number[]) {
+const formationPositions = computed(() => {
+  const lines = activeFormationLines.value;
   const positions: { x: number; y: number }[] = [];
   const padTop = 42,
     padBottom = 120;
@@ -55,23 +40,39 @@ function buildPositions(lines: number[]) {
   });
 
   return positions;
-}
+});
+const players = reactive<Player[]>(props.players);
+const subs = reactive<Player[]>(props.substitutes);
+const pitchEl = ref<HTMLElement | null>(null);
+const hoveredPlayerId = ref<number | null>(null);
+
+// Unified drag state
+const drag = reactive({
+  id: null as number | null,
+  source: null as "pitch" | "bench" | null,
+  sub: null as Player | null,
+});
+
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+// ── Formations ──────────────────────────────────────────────
 
 function applyFormation(key: FormationKey) {
   activeFormation.value = key;
-  const newPositions = buildPositions(activeFormationLines.value);
-  newPositions.forEach((position, index) => {
+  formationPositions.value.forEach((position, index) => {
     const player = players[index];
     if (player) {
       player.x = position.x;
       player.y = position.y;
     }
   });
-}
-
-function onFormationChange(e: Event) {
-  const value = (e.target as HTMLSelectElement).value as FormationKey;
-  applyFormation(value);
+  publish(SocketMessage.ActiveFormationUpdate, {
+    data: {
+      location: props.location,
+      activeFormation: key,
+    },
+  });
 }
 
 // ── Pitch drag ───────────────────────────────────────────────
@@ -146,9 +147,9 @@ function performSub(subIn: Player, playerOut: Player) {
     },
   });
   // Client
-  const prevNum = playerOut.number;
-  playerOut.number = subIn.number;
-  subIn.number = prevNum;
+  const temp = { ...playerOut };
+  Object.assign(playerOut, subIn);
+  Object.assign(subIn, temp);
 }
 
 // ── Lifecycle ────────────────────────────────────────────────
@@ -166,7 +167,7 @@ onMounted(() => {
     <select
       class="controls"
       :value="activeFormation"
-      @change="onFormationChange"
+      @change="applyFormation($event.target.value)"
     >
       <option v-for="key in Formation" :key="key" :value="key">
         {{ key }}
@@ -311,7 +312,7 @@ onMounted(() => {
       </svg>
 
       <!-- On-pitch players -->
-      <div
+      <button
         v-for="player in players"
         :key="player.number"
         class="player"
@@ -324,9 +325,10 @@ onMounted(() => {
         @mousedown.prevent="startPitchDrag($event, player)"
         @mouseenter="hoveredPlayerId = player.number"
         @mouseleave="hoveredPlayerId = null"
+        @click="() => (selectedPlayer = player)"
       >
         {{ player.number }}
-      </div>
+      </button>
     </div>
 
     <!-- Bench -->

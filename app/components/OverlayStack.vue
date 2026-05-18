@@ -3,6 +3,7 @@ import { SocketMessage, Overlay } from "#imports";
 import ToggleOverlayButton from "./ToggleOverlayButton.vue";
 
 const { state, publish } = useControlSocket();
+const { selectedPlayer } = useClientState();
 
 const overlayToggles = [
   {
@@ -31,21 +32,41 @@ const toggleMatchTimer = () => {
 
 <template>
   <ul class="overlay-list">
+    <li class="overlay-list-item">
+      <Button
+        @click="toggleMatchTimer"
+        :class="[hasMatchStarted ? 'hide' : 'show', 'item', 'action']"
+        :label="hasMatchStarted ? 'Stop Match Timer' : 'Start Match Timer'"
+      />
+      <Button
+        @click="publish(SocketMessage.MatchTimerReset)"
+        label="Reset"
+        class="item action"
+      />
+    </li>
     <li
       v-for="overlay in overlayToggles"
       :key="overlay.val"
       class="overlay-list-item"
     >
-      <ToggleOverlayButton v-bind="overlay" />
+      <ToggleOverlayButton v-bind="overlay" class="item" />
     </li>
-    <li class="overlay-list-item">
-      <Button
-        @click="toggleMatchTimer"
-        :class="hasMatchStarted ? 'hide' : 'show'"
-        :label="hasMatchStarted ? 'Stop Match Timer' : 'Start Match Timer'"
-      />
-      <Button @click="publish(SocketMessage.MatchTimerReset)" label="Reset" />
-    </li>
+    <template v-if="selectedPlayer">
+      <li class="overlay-list-item">
+        <div class="item">Selected Player:</div>
+        <div class="item">
+          <p>
+            {{ selectedPlayer.number }}. {{ selectedPlayer.forename }}
+            {{ selectedPlayer.surname }}
+          </p>
+        </div>
+      </li>
+      <li class="overlay-list-item">
+        <Button label="Add Goal" class="item action" />
+        <Button label="Yellow Card" class="item action" />
+        <Button label="Red Card" class="item action" />
+      </li>
+    </template>
   </ul>
 </template>
 
@@ -54,11 +75,23 @@ const toggleMatchTimer = () => {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: flex;
+  width: 300px;
+  flex-direction: column;
+  gap: 2px;
 }
 .overlay-list-item {
-  margin: 2px 0px;
-  button {
-    margin: 0px 0px 0px 2px;
-  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 2px;
+}
+.item {
+  flex-grow: 1;
+  gap: 2px;
+}
+.action {
+  background-color: #1e66f5;
 }
 </style>

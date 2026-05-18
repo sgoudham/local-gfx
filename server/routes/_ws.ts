@@ -54,6 +54,14 @@ export default defineWebSocketHandler({
             await serverState.matchTimer.reset();
             break;
 
+          case SocketMessage.ActiveFormationUpdate:
+            const formationData = parsed.msg.data;
+            await serverState.patchState((s) => {
+              s[formationData.location].activeFormation =
+                formationData.activeFormation;
+            });
+            break;
+
           case SocketMessage.MatchScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.matchScorecard.visible = true;

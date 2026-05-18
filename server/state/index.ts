@@ -60,19 +60,19 @@ export class ServerState {
     }
 
     const data = await this.getData();
-    const initial = await this.getInitialState();
+    const initialState = await this.getInitialState();
 
     state = {
       name: data.name,
-      matchTime: initial.matchTime,
-      graphics: initial.graphics,
+      matchTime: initialState.matchTime,
+      graphics: initialState.graphics,
       home: {
         ...data.home,
-        ...initial.home,
+        ...initialState.home,
       },
       away: {
         ...data.away,
-        ...initial.away,
+        ...initialState.away,
       },
     };
 

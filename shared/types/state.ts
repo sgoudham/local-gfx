@@ -43,7 +43,7 @@ export type OverlayState = {
 };
 
 export type SubstitutionData = OverlayState & {
-  location: TeamLocation;
+  location?: TeamLocation;
   playersOut: Player[];
   subsIn: Player[];
 };

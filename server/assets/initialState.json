@@ -34,7 +34,6 @@
     "substitution": {
       "name": "Substitution",
       "visible": false,
-      "badgeSrc": "homeBadge.png",
       "playersOut": [],
       "subsIn": []
     }
