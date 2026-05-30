@@ -9,7 +9,7 @@ publish(SocketMessage.SessionRegister);
     <OverlayStack />
     <TeamFormationEditor v-bind="state.away" />
   </div>
-  <WindowFrame title="LIVE" src="/output" />
+  <WindowFrame title="" src="/output" />
 </template>
 
 <style scoped>

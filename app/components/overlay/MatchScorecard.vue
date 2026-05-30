@@ -4,6 +4,7 @@ import type { MatchScorecardProps } from "~/types";
 
 const props = defineProps<MatchScorecardProps>();
 
+const overlay = useTemplateRef("overlay");
 const ribbonBox = useTemplateRef("ribbonBox");
 const homePanel = useTemplateRef("homePanel");
 const awayPanel = useTemplateRef("awayPanel");
@@ -19,7 +20,11 @@ async function show() {
   rendered.value = true;
   nextTick(() => {
     timeline?.kill();
-    timeline = gsap.timeline();
+    timeline = gsap.timeline({
+      onStart: () => {
+        if (overlay.value) overlay.value.style.visibility = "visible";
+      },
+    });
     animateRibbon(timeline);
     animateLeagueBadge(timeline);
     animateHomePanel(timeline);
@@ -160,10 +165,27 @@ function animateTimer(timeline: gsap.core.Timeline) {
     );
   }
 }
+
+onMounted(async () => {
+  rendered.value = false;
+  if (props.visible) {
+    await show();
+  }
+});
+
+onUnmounted(() => {
+  timeline?.kill();
+  timeline = null;
+});
 </script>
 
 <template>
-  <section class="overlay" ref="overlay" v-if="rendered">
+  <section
+    class="overlay"
+    ref="overlay"
+    v-if="rendered"
+    style="visibility: hidden"
+  >
     <div class="broadcast">
       <div class="ribbon-box" ref="ribbonBox">
         <div class="ribbon"></div>
