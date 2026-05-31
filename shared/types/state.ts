@@ -24,9 +24,14 @@ export type MatchTime = {
   formatted: string;
 };
 
+export type Goal = {
+  player: Player
+  matchTime: MatchTime
+}
+
 export type TeamState = {
   activeFormation: FormationKey;
-  goals: Player[];
+  goals: Goal[];
   /** @minItems 5 @maxItems 5 */
   penalties: [
     PenaltyState,

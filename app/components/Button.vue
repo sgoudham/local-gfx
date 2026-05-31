@@ -34,4 +34,7 @@ const props = defineProps<{
 .button.hide {
   background: #6b7280;
 }
+.action {
+  background-color: #1e66f5;
+}
 </style>

@@ -13,9 +13,14 @@ export const matchTimeSchema = z.object({
     formatted: z.string()
 });
 
+export const goalSchema = z.object({
+    player: playerSchema,
+    matchTime: matchTimeSchema
+});
+
 export const teamStateSchema = z.object({
     activeFormation: formationKeySchema,
-    goals: z.array(playerSchema),
+    goals: z.array(goalSchema),
     penalties: z.tuple([penaltyStateSchema, penaltyStateSchema, penaltyStateSchema, penaltyStateSchema, penaltyStateSchema])
 });
 

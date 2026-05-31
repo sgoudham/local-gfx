@@ -39,7 +39,7 @@ const toggleMatchTimer = () => {
         :label="hasMatchStarted ? 'Stop Match Timer' : 'Start Match Timer'"
       />
       <Button
-        @click="publish(SocketMessage.MatchTimerReset)"
+        @click="publish(SocketMessage.MatchReset)"
         label="Reset"
         class="item action"
       />
@@ -53,16 +53,27 @@ const toggleMatchTimer = () => {
     </li>
     <template v-if="selectedPlayer">
       <li class="overlay-list-item">
-        <div class="item">Selected Player:</div>
+        <div class="item">Selected {{ state[selectedPlayer.location].shortName }} Player:</div>
         <div class="item">
           <p>
-            {{ selectedPlayer.number }}. {{ selectedPlayer.forename }}
+            {{ selectedPlayer.number }}' {{ selectedPlayer.forename }}
             {{ selectedPlayer.surname }}
           </p>
         </div>
       </li>
       <li class="overlay-list-item">
-        <Button label="Add Goal" class="item action" />
+        <Button
+          @click="
+            publish(SocketMessage.MatchGoalScored, {
+              data: {
+                player: selectedPlayer,
+                matchTime: state.matchTime,
+              },
+            })
+          "
+          label="Add Goal"
+          class="item action"
+        />
         <Button label="Yellow Card" class="item action" />
         <Button label="Red Card" class="item action" />
       </li>
@@ -90,8 +101,5 @@ const toggleMatchTimer = () => {
 .item {
   flex-grow: 1;
   gap: 2px;
-}
-.action {
-  background-color: #1e66f5;
 }
 </style>

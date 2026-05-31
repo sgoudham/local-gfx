@@ -411,17 +411,17 @@ onUnmounted(() => {
   font-size: 82px;
   font-style: italic;
   color: var(--text-color);
-  min-width: 32px;
+  min-width: 2ch;
   text-align: center;
 }
 
 .home-score {
   margin-left: 100px;
-  margin-right: 70px;
+  margin-right: 45px;
 }
 
 .away-score {
-  margin-left: 70px;
+  margin-left: 60px;
   margin-right: 100px;
 }
 

@@ -6,6 +6,7 @@ export type Player = {
   /** @minimum 1 */
   /** @integer */
   number: number;
+  location: TeamLocation;
   x?: number;
   y?: number;
 };

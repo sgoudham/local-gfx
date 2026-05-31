@@ -1,7 +1,7 @@
 import z from "zod";
 import { Mode, SocketMessage } from "~~/shared/utils/constants";
 import { teamLocationSchema, playerSchema } from "./data";
-import { formationKeySchema } from "./state";
+import { formationKeySchema, goalSchema } from "./state";
 
 function socketMsg<M extends Mode, T extends string>(
   mode: M,
@@ -45,7 +45,10 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.SessionRegister),
   socketMsg(Mode.Control, SocketMessage.MatchTimerStart),
   socketMsg(Mode.Control, SocketMessage.MatchTimerStop),
-  socketMsg(Mode.Control, SocketMessage.MatchTimerReset),
+  socketMsg(Mode.Control, SocketMessage.MatchReset),
+  socketMsg(Mode.Control, SocketMessage.MatchGoalScored, {
+    data: goalSchema,
+  }),
   socketMsg(Mode.Control, SocketMessage.ActiveFormationUpdate, {
     data: ActiveFormationUpdateSchema,
   }),

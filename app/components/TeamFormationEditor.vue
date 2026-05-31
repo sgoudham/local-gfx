@@ -10,13 +10,18 @@ const PITCH_W = 250;
 const PITCH_H = 400;
 const PITCH_HORIZONTAL_PADDING = 46;
 
-const activeFormation = ref<FormationKey>(props.activeFormation);
+const players = reactive<Player[]>(props.players);
+const subs = reactive<Player[]>(props.substitutes);
+const pitchEl = ref<HTMLElement | null>(null);
+const hoveredPlayerId = ref<number | null>(null);
+const activeFormation = computed(() => props.activeFormation);
 const activeFormationLines = computed(() => {
   return [
     1,
     ...activeFormation.value.split("-").map((v) => new Number(v).valueOf()),
   ];
 });
+
 const formationPositions = computed(() => {
   const lines = activeFormationLines.value;
   const positions: { x: number; y: number }[] = [];
@@ -41,10 +46,11 @@ const formationPositions = computed(() => {
 
   return positions;
 });
-const players = reactive<Player[]>(props.players);
-const subs = reactive<Player[]>(props.substitutes);
-const pitchEl = ref<HTMLElement | null>(null);
-const hoveredPlayerId = ref<number | null>(null);
+
+watch(activeFormation, () => updatePlayerPositions(), {
+  deep: true,
+  immediate: true,
+});
 
 // Unified drag state
 const drag = reactive({
@@ -58,8 +64,7 @@ let dragOffsetY = 0;
 
 // ── Formations ──────────────────────────────────────────────
 
-function applyFormation(key: FormationKey) {
-  activeFormation.value = key;
+function updatePlayerPositions() {
   formationPositions.value.forEach((position, index) => {
     const player = players[index];
     if (player) {
@@ -67,6 +72,10 @@ function applyFormation(key: FormationKey) {
       player.y = position.y;
     }
   });
+}
+
+function applyFormation(key: FormationKey) {
+  updatePlayerPositions();
   publish(SocketMessage.ActiveFormationUpdate, {
     data: {
       location: props.location,
@@ -151,12 +160,6 @@ function performSub(subIn: Player, playerOut: Player) {
   Object.assign(playerOut, subIn);
   Object.assign(subIn, temp);
 }
-
-// ── Lifecycle ────────────────────────────────────────────────
-
-onMounted(() => {
-  applyFormation(activeFormation.value);
-});
 </script>
 
 <template>
@@ -164,15 +167,18 @@ onMounted(() => {
     <div>{{ props.name }} ({{ props.shortName }})</div>
 
     <!-- Controls -->
-    <select
-      class="controls"
-      :value="activeFormation"
-      @change="applyFormation($event.target.value)"
-    >
-      <option v-for="key in Formation" :key="key" :value="key">
-        {{ key }}
-      </option>
-    </select>
+    <div class="wrap row">
+      <select
+        class="controls"
+        :value="activeFormation"
+        @change="applyFormation($event.target.value)"
+      >
+        <option v-for="key in Formation" :key="key" :value="key">
+          {{ key }}
+        </option>
+      </select>
+      <Button label="Edit Players" class="action" />
+    </div>
     <ToggleOverlayButton
       v-bind="{
         val: Overlay.TeamFormation,
@@ -360,6 +366,10 @@ onMounted(() => {
   flex-direction: column;
   gap: 5px;
   user-select: none;
+  .row {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 
 .pitch {

@@ -47,9 +47,10 @@ export type Mode = (typeof Mode)[keyof typeof Mode];
 export const SocketMessage = {
   SessionRegister: "session.register",
   SessionStateSync: "session.state.sync",
-  MatchTimerStart: "matchTimer.start",
-  MatchTimerStop: "matchTimer.stop",
-  MatchTimerReset: "matchTimer.reset",
+  MatchTimerStart: "match.timer.start",
+  MatchTimerStop: "match.timer.stop",
+  MatchReset: "match.reset",
+  MatchGoalScored: "match.goalScored",
   ActiveFormationUpdate: "activeFormation.update",
   MatchScorecardShow: overlayMsg(Overlay.MatchScorecard, "show"),
   MatchScorecardHide: overlayMsg(Overlay.MatchScorecard, "hide"),

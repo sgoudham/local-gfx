@@ -100,4 +100,11 @@ export class ServerState {
     }
     return initialStateSchema.parse(raw);
   }
+
+  public async clear() {
+    await this.matchTimer.reset();
+    await useStorage<CompleteState>("fs").removeItem("state");
+    this._state = await this.initState();
+    await this.syncState([Mode.Control, Mode.Output]);
+  }
 }

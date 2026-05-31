@@ -50,8 +50,14 @@ export default defineWebSocketHandler({
           case SocketMessage.MatchTimerStop:
             await serverState.matchTimer.stop();
             break;
-          case SocketMessage.MatchTimerReset:
-            await serverState.matchTimer.reset();
+          case SocketMessage.MatchReset:
+            await serverState.clear();
+            break;
+          case SocketMessage.MatchGoalScored:
+            const goalScoredData = parsed.msg.data;
+            await serverState.patchState((s) => {
+              s[goalScoredData.player.location].goals.push(goalScoredData);
+            });
             break;
 
           case SocketMessage.ActiveFormationUpdate:
@@ -102,20 +108,21 @@ export default defineWebSocketHandler({
           case SocketMessage.SubstitutionShow:
             const data = parsed.msg.data;
             await serverState.patchState((s) => {
-              const playerIndex = s[data.location].players.findIndex(
+              const location = data.playerOut.location;
+              const playerIndex = s[location].players.findIndex(
                 (p) => p.number === data.playerOut.number,
               );
-              const subIndex = s[data.location].substitutes.findIndex(
+              const subIndex = s[location].substitutes.findIndex(
                 (p) => p.number === data.subIn.number,
               );
-              const player = s[data.location].players[playerIndex];
-              const sub = s[data.location].substitutes[subIndex];
+              const player = s[location].players[playerIndex];
+              const sub = s[location].substitutes[subIndex];
               if (sub) {
-                s[data.location].players[playerIndex] = sub;
+                s[location].players[playerIndex] = sub;
                 s.graphics.substitution.subsIn.push(sub);
               }
               if (player) {
-                s[data.location].substitutes[subIndex] = player;
+                s[location].substitutes[subIndex] = player;
                 s.graphics.substitution.playersOut.push(player);
               }
               s.graphics.substitution.location = data.location;

@@ -4,7 +4,7 @@ import type {
   MatchTime,
   SubstitutionData,
 } from "../../shared/types/state";
-import type { TeamData } from "../../shared/types/data";
+import type { Player, TeamData, TeamLocation } from "../../shared/types/data";
 
 export type MatchScorecardProps = OverlayState & {
   home: Pick<TeamData, "shortName"> & { goals: number };
