@@ -71,6 +71,7 @@ export default defineWebSocketHandler({
           case SocketMessage.MatchScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.matchScorecard.visible = true;
+              s.graphics.bigMatchScorecard.visible = false;
               s.graphics.penaltiesScorecard.visible = false;
               s.graphics.teamFormation.visible = false;
             });
@@ -81,10 +82,26 @@ export default defineWebSocketHandler({
             });
             break;
 
+          case SocketMessage.BigMatchScorecardShow:
+            await serverState.patchState((s) => {
+              s.graphics.bigMatchScorecard.visible = true;
+              s.graphics.matchScorecard.visible = false;
+              s.graphics.penaltiesScorecard.visible = false;
+              s.graphics.teamFormation.visible = false;
+            });
+            break;
+          case SocketMessage.BigMatchScorecardHide:
+            await serverState.patchState((s) => {
+              s.graphics.bigMatchScorecard.visible = false;
+            });
+            break;
+
           case SocketMessage.PenaltiesScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.penaltiesScorecard.visible = true;
               s.graphics.matchScorecard.visible = false;
+              s.graphics.bigMatchScorecard.visible = false;
+              s.graphics.teamFormation.visible = false;
             });
             break;
           case SocketMessage.PenaltiesScorecardHide:
@@ -97,6 +114,8 @@ export default defineWebSocketHandler({
             await serverState.patchState((s) => {
               s.graphics.teamFormation.visible = true;
               s.graphics.matchScorecard.visible = false;
+              s.graphics.bigMatchScorecard.visible = false;
+              s.graphics.penaltiesScorecard.visible = false;
             });
             break;
           case SocketMessage.TeamFormationHide:

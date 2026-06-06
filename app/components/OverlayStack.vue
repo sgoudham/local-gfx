@@ -13,6 +13,12 @@ const overlayToggles = [
     hideMessage: SocketMessage.MatchScorecardHide,
   },
   {
+    val: Overlay.BigMatchScorecard,
+    name: state.value.graphics.bigMatchScorecard.name,
+    showMessage: SocketMessage.BigMatchScorecardShow,
+    hideMessage: SocketMessage.BigMatchScorecardHide,
+  },
+  {
     val: Overlay.PenaltiesScorecard,
     name: state.value.graphics.penaltiesScorecard.name,
     showMessage: SocketMessage.PenaltiesScorecardShow,
@@ -53,7 +59,9 @@ const toggleMatchTimer = () => {
     </li>
     <template v-if="selectedPlayer">
       <li class="overlay-list-item">
-        <div class="item">Selected {{ state[selectedPlayer.location].shortName }} Player:</div>
+        <div class="item">
+          Selected {{ state[selectedPlayer.location].shortName }} Player:
+        </div>
         <div class="item">
           <p>
             {{ selectedPlayer.number }}' {{ selectedPlayer.forename }}

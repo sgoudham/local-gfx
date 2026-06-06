@@ -12,6 +12,18 @@ export type MatchScorecardProps = OverlayState & {
   matchTime: MatchTime;
 };
 
+type BigMatchScorecardTeam = {
+  name: TeamData["name"];
+  shortName: TeamData["shortName"];
+  goals: TeamState["goals"];
+};
+
+export type BigMatchScorecardProps = OverlayState & {
+  home: BigMatchScorecardTeam;
+  away: BigMatchScorecardTeam;
+  matchTime: MatchTime;
+};
+
 export type PenaltiesScorecardProps = OverlayState & {
   home: Pick<TeamData, "id" | "shortName"> & {
     penalties: TeamState["penalties"];

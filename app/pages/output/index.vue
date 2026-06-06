@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useOutputSocket } from "~/composables/useOutputSocket";
 import type {
+  BigMatchScorecardProps,
   MatchScorecardProps,
   PenaltiesScorecardProps,
   SubstitutionProps,
@@ -22,6 +23,24 @@ const matchScorecardData = computed<MatchScorecardProps>(() => {
     away: {
       shortName: state.value.away.shortName,
       goals: state.value.away.goals.length,
+    },
+    matchTime: state.value.matchTime,
+  };
+});
+
+const bigMatchScorecardData = computed<BigMatchScorecardProps>(() => {
+  return {
+    name: state.value.graphics.bigMatchScorecard.name,
+    visible: state.value.graphics.bigMatchScorecard.visible,
+    home: {
+      name: state.value.home.name,
+      shortName: state.value.home.shortName,
+      goals: state.value.home.goals,
+    },
+    away: {
+      name: state.value.away.name,
+      shortName: state.value.away.shortName,
+      goals: state.value.away.goals,
     },
     matchTime: state.value.matchTime,
   };
@@ -60,6 +79,10 @@ const substitutionData = computed<SubstitutionProps>(() => {
   <OverlayMatchScorecard
     v-if="matchScorecardData"
     v-bind="matchScorecardData"
+  />
+  <OverlayBigMatchScorecard
+    v-if="bigMatchScorecardData"
+    v-bind="bigMatchScorecardData"
   />
   <OverlayPenaltiesScorecard
     v-if="penaltiesScorecardData"

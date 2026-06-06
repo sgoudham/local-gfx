@@ -54,6 +54,8 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   }),
   socketMsg(Mode.Control, SocketMessage.MatchScorecardShow),
   socketMsg(Mode.Control, SocketMessage.MatchScorecardHide),
+  socketMsg(Mode.Control, SocketMessage.BigMatchScorecardShow),
+  socketMsg(Mode.Control, SocketMessage.BigMatchScorecardHide),
   socketMsg(Mode.Control, SocketMessage.PenaltiesScorecardShow),
   socketMsg(Mode.Control, SocketMessage.PenaltiesScorecardHide),
   socketMsg(Mode.Control, SocketMessage.TeamFormationShow),
