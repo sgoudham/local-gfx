@@ -262,7 +262,7 @@ onUnmounted(() => {
   justify-content: center;
   gap: 15px;
   transform-origin: top left;
-  transform: translateX(20px) scale(var(--ui-scale, 1));
+  transform: translateX(20px) scale(var(--ui-scale));
   position: relative;
   overflow: visible;
   padding-inline: 40px;
@@ -416,13 +416,13 @@ onUnmounted(() => {
 }
 
 .home-score {
-  margin-left: 100px;
+  margin-left: 45px;
   margin-right: 45px;
 }
 
 .away-score {
-  margin-left: 60px;
-  margin-right: 100px;
+  margin-left: 45px;
+  margin-right: 45px;
 }
 
 /* ── Timer box (separate brown block) ── */

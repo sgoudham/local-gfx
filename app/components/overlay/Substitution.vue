@@ -197,7 +197,7 @@ watch(
   justify-content: center;
   gap: 15px;
   transform-origin: bottom left;
-  transform: translateX(20px) scale(1.1);
+  transform: translateX(20px) scale(0.9);
   position: relative;
   overflow: visible;
   padding-inline: 40px;

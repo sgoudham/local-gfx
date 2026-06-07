@@ -161,7 +161,7 @@ watch(
   justify-content: center;
   gap: 15px;
   transform-origin: top left;
-  transform: translateX(20px) scale(1.25);
+  transform: translateX(20px) scale(var(--ui-scale));
   position: relative;
   overflow: visible;
   padding-inline: 40px;

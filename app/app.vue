@@ -38,6 +38,6 @@ watch(data, (raw) => {
   --pen-scored: #1aa11a;
   --pen-missed: #f53e3e;
   --large-scoreboard-x-padding: 40px;
-  --ui-scale: 1;
+  --ui-scale: 0.75;
 }
 </style>

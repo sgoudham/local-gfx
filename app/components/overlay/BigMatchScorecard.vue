@@ -86,7 +86,7 @@ watch(
                 class="scorer"
               >
                 {{ goal.player.number }}: {{ goal.player.forename }}
-                {{ goal.player.surname }} ({{ goal.matchTime.formatted }}')
+                {{ goal.player.surname }} ({{ goal.matchTime.formatted.split(":")[0] }}')
               </div>
             </div>
             <div class="team-name team-name-home">{{ home.name }}</div>
@@ -120,7 +120,7 @@ watch(
                 class="scorer"
               >
                 {{ goal.player.number }}: {{ goal.player.forename }}
-                {{ goal.player.surname }} ({{ goal.matchTime.formatted }}')
+                {{ goal.player.surname }} ({{ goal.matchTime.formatted.split(":")[0] }}')
               </div>
             </div>
             <div class="team-name team-name-away">{{ away.name }}</div>
@@ -164,7 +164,7 @@ watch(
   padding-inline: 90px;
   z-index: 5;
   transform-origin: bottom center;
-  transform: scale(1.35);
+  transform: scale(0.8);
 }
 
 .ribbon-box {
@@ -209,7 +209,7 @@ watch(
 }
 
 .large-panel {
-  width: 28vw;
+  width: 52vw;
   overflow: visible;
   align-items: flex-end;
   padding-bottom: 2px;
@@ -311,7 +311,7 @@ watch(
 }
 
 .scorers {
-  font-size: 20px;
+  font-size: 28px;
   font-style: italic;
   width: 100%;
   max-height: 87px;
