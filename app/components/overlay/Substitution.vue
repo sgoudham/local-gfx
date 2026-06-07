@@ -38,13 +38,13 @@ async function show() {
     if (playersOffGroup.value && playersOnGroup.value) {
       const offHeight = playersOffGroup.value.offsetHeight;
       const onHeight = playersOnGroup.value.offsetHeight;
-      const swapDelay = 1.5;
+      const swapDelay = 2.75;
       timeline
         .to(
           playersOffGroup.value,
           {
             y: onHeight,
-            duration: 0.6,
+            duration: 1,
             ease: "power2.out",
             delay: swapDelay,
           },
@@ -54,7 +54,7 @@ async function show() {
           playersOnGroup.value,
           {
             y: -offHeight,
-            duration: 0.6,
+            duration: 1,
             ease: "power2.out",
             delay: swapDelay,
           },
@@ -121,7 +121,7 @@ watch(
         <div class="substitute-boxes">
           <div ref="playersOffGroup" class="panel-group panel-group-off">
             <div
-              v-for="player in props.playersOut"
+              v-for="player in props.subs.map((s) => s[1])"
               :key="`out-${player.number}-${player.forename}-${player.surname}`"
               class="panel player-off"
             >
@@ -137,7 +137,7 @@ watch(
           </div>
           <div ref="playersOnGroup" class="panel-group panel-group-on">
             <div
-              v-for="player in props.subsIn"
+              v-for="player in props.subs.map((s) => s[0])"
               :key="`in-${player.number}-${player.forename}-${player.surname}`"
               class="panel player-on"
             >
@@ -197,7 +197,7 @@ watch(
   justify-content: center;
   gap: 15px;
   transform-origin: bottom left;
-  transform: translateX(20px) scale(1.7);
+  transform: translateX(20px) scale(1.1);
   position: relative;
   overflow: visible;
   padding-inline: 40px;

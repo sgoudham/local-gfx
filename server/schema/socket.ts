@@ -1,7 +1,13 @@
 import z from "zod";
 import { Mode, SocketMessage } from "~~/shared/utils/constants";
 import { teamLocationSchema, playerSchema } from "./data";
-import { formationKeySchema, goalSchema } from "./state";
+import {
+  formationKeySchema,
+  goalSchema,
+  pendingSubSchema,
+  substitutionDataSchema,
+  substitutionDataUpdateSchema,
+} from "./state";
 
 function socketMsg<M extends Mode, T extends string>(
   mode: M,
@@ -28,14 +34,6 @@ export const OutputMessageSchema = z.discriminatedUnion("type", [
 ]);
 export type OutputMessage = z.infer<typeof OutputMessageSchema>;
 
-// TODO: Potentially remove in favour of the generated object if we make the
-// control panel send an array of subbed in/out players.
-const SubstitutionUpdateSchema = z.object({
-  location: teamLocationSchema,
-  playerOut: playerSchema,
-  subIn: playerSchema,
-});
-
 const ActiveFormationUpdateSchema = z.object({
   activeFormation: formationKeySchema,
   location: teamLocationSchema,
@@ -61,7 +59,7 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.TeamFormationShow),
   socketMsg(Mode.Control, SocketMessage.TeamFormationHide),
   socketMsg(Mode.Control, SocketMessage.SubstitutionShow, {
-    data: SubstitutionUpdateSchema,
+    data: substitutionDataUpdateSchema,
   }),
   socketMsg(Mode.Control, SocketMessage.SubstitutionHide),
 ]);

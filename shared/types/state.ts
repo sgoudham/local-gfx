@@ -25,9 +25,9 @@ export type MatchTime = {
 };
 
 export type Goal = {
-  player: Player
-  matchTime: MatchTime
-}
+  player: Player;
+  matchTime: MatchTime;
+};
 
 export type TeamState = {
   activeFormation: FormationKey;
@@ -47,11 +47,14 @@ export type OverlayState = {
   visible: boolean;
 };
 
-export type SubstitutionData = OverlayState & {
-  location?: TeamLocation;
-  playersOut: Player[];
-  subsIn: Player[];
+export type PendingSub = [Player, Player];
+
+export type SubstitutionDataUpdate = {
+  location: TeamLocation;
+  subs: PendingSub[];
 };
+
+export type SubstitutionData = OverlayState & SubstitutionDataUpdate;
 
 export type Graphics = {
   matchScorecard: OverlayState;

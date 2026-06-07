@@ -4,15 +4,22 @@ publish(SocketMessage.SessionRegister);
 </script>
 
 <template>
-  <div class="control">
-    <TeamFormationEditor v-bind="state.home" />
-    <OverlayStack />
-    <TeamFormationEditor v-bind="state.away" />
+  <div class="layout">
+    <div class="control">
+      <TeamFormationEditor v-bind="state.home" />
+      <OverlayStack />
+      <TeamFormationEditor v-bind="state.away" />
+    </div>
+    <WindowFrame title="" src="/output" />
   </div>
-  <WindowFrame title="" src="/output" />
 </template>
 
 <style scoped>
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .control {
   display: flex;
   flex-direction: row;

@@ -29,11 +29,14 @@ export const overlayStateSchema = z.object({
     visible: z.boolean()
 });
 
-export const substitutionDataSchema = overlayStateSchema.and(z.object({
-    location: teamLocationSchema.optional(),
-    playersOut: z.array(playerSchema),
-    subsIn: z.array(playerSchema)
-}));
+export const pendingSubSchema = z.tuple([playerSchema, playerSchema]);
+
+export const substitutionDataUpdateSchema = z.object({
+    location: teamLocationSchema,
+    subs: z.array(pendingSubSchema)
+});
+
+export const substitutionDataSchema = overlayStateSchema.and(substitutionDataUpdateSchema);
 
 export const graphicsSchema = z.object({
     matchScorecard: overlayStateSchema,

@@ -34,8 +34,8 @@
     "substitution": {
       "name": "Substitution",
       "visible": false,
-      "playersOut": [],
-      "subsIn": []
+      "subs": [],
+      "location": "home"
     }
   }
 }

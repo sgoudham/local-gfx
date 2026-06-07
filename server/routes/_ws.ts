@@ -127,32 +127,31 @@ export default defineWebSocketHandler({
           case SocketMessage.SubstitutionShow:
             const data = parsed.msg.data;
             await serverState.patchState((s) => {
-              const location = data.playerOut.location;
-              const playerIndex = s[location].players.findIndex(
-                (p) => p.number === data.playerOut.number,
-              );
-              const subIndex = s[location].substitutes.findIndex(
-                (p) => p.number === data.subIn.number,
-              );
-              const player = s[location].players[playerIndex];
-              const sub = s[location].substitutes[subIndex];
-              if (sub) {
-                s[location].players[playerIndex] = sub;
-                s.graphics.substitution.subsIn.push(sub);
+              for (const [subIn, playerOut] of data.subs) {
+                const playerIndex = s[data.location].players.findIndex(
+                  (p) => p.number === playerOut.number,
+                );
+                const subIndex = s[data.location].substitutes.findIndex(
+                  (p) => p.number === subIn.number,
+                );
+                const player = s[data.location].players[playerIndex];
+                const sub = s[data.location].substitutes[subIndex];
+                if (sub) {
+                  s[data.location].players[playerIndex] = sub;
+                }
+                if (player) {
+                  s[data.location].substitutes[subIndex] = player;
+                }
               }
-              if (player) {
-                s[location].substitutes[subIndex] = player;
-                s.graphics.substitution.playersOut.push(player);
-              }
+              s.graphics.substitution.subs = data.subs;
               s.graphics.substitution.location = data.location;
               s.graphics.substitution.visible = true;
             });
-            await new Promise((resolve) => setTimeout(resolve, 4000));
+            await new Promise((resolve) => setTimeout(resolve, 6500));
             await serverState.patchState(async (s) => {
               s.graphics.substitution.visible = false;
               await new Promise((resolve) => setTimeout(resolve, 200));
-              s.graphics.substitution.playersOut = [];
-              s.graphics.substitution.subsIn = [];
+              s.graphics.substitution.subs = [];
             });
             break;
         }
