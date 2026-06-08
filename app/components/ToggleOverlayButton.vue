@@ -17,6 +17,7 @@ const isOverlayVisible = (key: Overlay) => state.value.graphics[key].visible;
   <Button
     :class="isOverlayVisible(val) ? 'hide' : 'show'"
     @click="publish(isOverlayVisible(val) ? hideMessage : showMessage)"
-    :label="isOverlayVisible(val) ? `Hide ${name}` : `Show ${name}`"
-  />
+  >
+    {{ isOverlayVisible(val) ? `Hide ${name}` : `Show ${name}` }}
+  </Button>
 </template>

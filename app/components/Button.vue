@@ -1,13 +1,17 @@
 <script setup lang="ts">
 const props = defineProps<{
-  label: string;
   onClick?: () => void;
+  disabled?: boolean;
 }>();
 </script>
 
 <template>
-  <button class="button" @click="onClick">
-    {{ label }}
+  <button
+    :class="['button', { disabled: disabled }]"
+    @click="onClick"
+    :disabled
+  >
+    <slot />
   </button>
 </template>
 
@@ -32,7 +36,11 @@ const props = defineProps<{
   transform: translateY(1px);
 }
 .button.hide {
-  background: #6b7280;
+  background: #11111b;
+}
+.button.disabled {
+  background-color: #929292;
+  cursor: not-allowed;
 }
 .action {
   background-color: #1e66f5;

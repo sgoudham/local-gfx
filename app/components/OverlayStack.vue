@@ -42,13 +42,12 @@ const toggleMatchTimer = () => {
       <Button
         @click="toggleMatchTimer"
         :class="[hasMatchStarted ? 'hide' : 'show', 'item', 'action']"
-        :label="hasMatchStarted ? 'Stop Match Timer' : 'Start Match Timer'"
-      />
-      <Button
-        @click="publish(SocketMessage.MatchReset)"
-        label="Reset"
-        class="item action"
-      />
+      >
+        {{ hasMatchStarted ? "Stop Match Timer" : "Start Match Timer" }}
+      </Button>
+      <Button @click="publish(SocketMessage.MatchReset)" class="item action">
+        Reset
+      </Button>
     </li>
     <li
       v-for="overlay in overlayToggles"
@@ -79,11 +78,12 @@ const toggleMatchTimer = () => {
               },
             })
           "
-          label="Add Goal"
           class="item action"
-        />
-        <Button label="Yellow Card" class="item action" />
-        <Button label="Red Card" class="item action" />
+        >
+          Add Goal
+        </Button>
+        <Button class="item action">Yellow Card</Button>
+        <Button class="item action">Red Card</Button>
       </li>
     </template>
   </ul>

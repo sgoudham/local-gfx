@@ -15,6 +15,7 @@ const subs = reactive<Player[]>(props.substitutes);
 const pendingSubs = ref<PendingSub[]>([]);
 const pitchEl = ref<HTMLElement | null>(null);
 const hoveredPlayerId = ref<number | null>(null);
+const hasPendingSubs = computed(() => pendingSubs.value.length === 0);
 const activeFormation = computed(() => props.activeFormation);
 const activeFormationLines = computed(() => {
   return [
@@ -216,7 +217,7 @@ function performSub() {
           {{ key }}
         </option>
       </select>
-      <Button label="Edit Players" class="action" />
+      <Button class="action">Edit Players</Button>
     </div>
     <ToggleOverlayButton
       v-bind="{
@@ -226,11 +227,9 @@ function performSub() {
         hideMessage: SocketMessage.TeamFormationHide,
       }"
     />
-    <Button
-      label="Apply Substitutions"
-      class="action"
-      v-on:click="performSub"
-    />
+    <Button :disabled="hasPendingSubs" class="action" v-on:click="performSub">
+      Apply Substitutions
+    </Button>
 
     <!-- Pitch -->
     <div class="pitch" ref="pitchEl">
@@ -393,11 +392,9 @@ function performSub() {
               {{ item[0].surname }} -> {{ item[1].number }}:
               {{ item[1].forename }} {{ item[1].surname }}
             </span>
-            <Button
-              label="Cancel"
-              class="pending-cancel"
-              v-on:click="cancelPendingSub(index)"
-            />
+            <Button class="pending-cancel" v-on:click="cancelPendingSub(index)">
+              Cancel
+            </Button>
           </li>
         </ul>
       </div>
