@@ -57,6 +57,7 @@ export type SubstitutionDataUpdate = {
 export type SubstitutionData = OverlayState & SubstitutionDataUpdate;
 
 export type Graphics = {
+  startingSoon: OverlayState;
   matchScorecard: OverlayState;
   penaltiesScorecard: OverlayState;
   bigMatchScorecard: OverlayState;

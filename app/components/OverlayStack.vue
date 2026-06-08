@@ -7,6 +7,12 @@ const { selectedPlayer } = useClientState();
 
 const overlayToggles = [
   {
+    val: Overlay.StartingSoon,
+    name: state.value.graphics.startingSoon.name,
+    showMessage: SocketMessage.StartingSoonShow,
+    hideMessage: SocketMessage.StartingSoonHide,
+},
+  {
     val: Overlay.MatchScorecard,
     name: state.value.graphics.matchScorecard.name,
     showMessage: SocketMessage.MatchScorecardShow,

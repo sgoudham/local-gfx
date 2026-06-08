@@ -4,6 +4,7 @@ import type {
   BigMatchScorecardProps,
   MatchScorecardProps,
   PenaltiesScorecardProps,
+  StartingSoonProps,
   SubstitutionProps,
   TeamFormationProps,
 } from "~/types";
@@ -46,6 +47,13 @@ const bigMatchScorecardData = computed<BigMatchScorecardProps>(() => {
   };
 });
 
+const startingSoonData = computed<StartingSoonProps>(() => {
+  return {
+    name: state.value.graphics.startingSoon.name,
+    visible: state.value.graphics.startingSoon.visible,
+  };
+});
+
 const penaltiesScorecardData = computed<PenaltiesScorecardProps>(() => {
   return {
     name: state.value.graphics.penaltiesScorecard.name,
@@ -83,6 +91,10 @@ const substitutionData = computed<SubstitutionProps>(() => {
   <OverlayBigMatchScorecard
     v-if="bigMatchScorecardData"
     v-bind="bigMatchScorecardData"
+  />
+  <OverlayStartingSoon
+    v-if="startingSoonData"
+    v-bind="startingSoonData"
   />
   <OverlayPenaltiesScorecard
     v-if="penaltiesScorecardData"

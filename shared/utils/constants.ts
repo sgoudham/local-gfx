@@ -30,6 +30,7 @@ export const TeamLocation = {
 } as const;
 
 export const Overlay = {
+  StartingSoon: "startingSoon",
   MatchScorecard: "matchScorecard",
   BigMatchScorecard: "bigMatchScorecard",
   PenaltiesScorecard: "penaltiesScorecard",
@@ -52,6 +53,8 @@ export const SocketMessage = {
   MatchReset: "match.reset",
   MatchGoalScored: "match.goalScored",
   ActiveFormationUpdate: "activeFormation.update",
+  StartingSoonShow: overlayMsg(Overlay.StartingSoon, "show"),
+  StartingSoonHide: overlayMsg(Overlay.StartingSoon, "hide"),
   MatchScorecardShow: overlayMsg(Overlay.MatchScorecard, "show"),
   MatchScorecardHide: overlayMsg(Overlay.MatchScorecard, "hide"),
   BigMatchScorecardShow: overlayMsg(Overlay.BigMatchScorecard, "show"),

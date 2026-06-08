@@ -35,4 +35,9 @@ export type PenaltiesScorecardProps = OverlayState & {
 
 export type TeamFormationProps = OverlayState;
 
+export type StartingSoonProps = {
+  name: string;
+  visible: boolean;
+};
+
 export type SubstitutionProps = SubstitutionData;

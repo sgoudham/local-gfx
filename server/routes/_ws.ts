@@ -68,9 +68,25 @@ export default defineWebSocketHandler({
             });
             break;
 
+          case SocketMessage.StartingSoonShow:
+            await serverState.patchState((s) => {
+              s.graphics.startingSoon.visible = true;
+              s.graphics.matchScorecard.visible = false;
+              s.graphics.bigMatchScorecard.visible = false;
+              s.graphics.penaltiesScorecard.visible = false;
+              s.graphics.teamFormation.visible = false;
+            });
+            break;
+          case SocketMessage.StartingSoonHide:
+            await serverState.patchState((s) => {
+              s.graphics.startingSoon.visible = false;
+            });
+            break;
+
           case SocketMessage.MatchScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.matchScorecard.visible = true;
+              s.graphics.startingSoon.visible = false;
               s.graphics.bigMatchScorecard.visible = false;
               s.graphics.penaltiesScorecard.visible = false;
               s.graphics.teamFormation.visible = false;
@@ -85,6 +101,7 @@ export default defineWebSocketHandler({
           case SocketMessage.BigMatchScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.bigMatchScorecard.visible = true;
+              s.graphics.startingSoon.visible = false;
               s.graphics.matchScorecard.visible = false;
               s.graphics.penaltiesScorecard.visible = false;
               s.graphics.teamFormation.visible = false;
@@ -99,6 +116,7 @@ export default defineWebSocketHandler({
           case SocketMessage.PenaltiesScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.penaltiesScorecard.visible = true;
+              s.graphics.startingSoon.visible = false;
               s.graphics.matchScorecard.visible = false;
               s.graphics.bigMatchScorecard.visible = false;
               s.graphics.teamFormation.visible = false;
@@ -113,6 +131,7 @@ export default defineWebSocketHandler({
           case SocketMessage.TeamFormationShow:
             await serverState.patchState((s) => {
               s.graphics.teamFormation.visible = true;
+              s.graphics.startingSoon.visible = false;
               s.graphics.matchScorecard.visible = false;
               s.graphics.bigMatchScorecard.visible = false;
               s.graphics.penaltiesScorecard.visible = false;

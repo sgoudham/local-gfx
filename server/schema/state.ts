@@ -39,6 +39,7 @@ export const substitutionDataUpdateSchema = z.object({
 export const substitutionDataSchema = overlayStateSchema.and(substitutionDataUpdateSchema);
 
 export const graphicsSchema = z.object({
+    startingSoon: overlayStateSchema,
     matchScorecard: overlayStateSchema,
     penaltiesScorecard: overlayStateSchema,
     bigMatchScorecard: overlayStateSchema,
