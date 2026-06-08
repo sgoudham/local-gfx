@@ -174,8 +174,6 @@ function onPlayerMouseEnter(player: Player) {
 }
 
 function performSub() {
-  if (pendingSubs.value.length === 0) return;
-
   // Server
   publish(SocketMessage.SubstitutionShow, {
     data: {

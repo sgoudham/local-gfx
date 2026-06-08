@@ -76,20 +76,11 @@ const substitutionData = computed<SubstitutionProps>(() => {
 </script>
 
 <template>
-  <OverlayMatchScorecard
-    v-if="matchScorecardData"
-    v-bind="matchScorecardData"
-  />
-  <OverlayBigMatchScorecard
-    v-if="bigMatchScorecardData"
-    v-bind="bigMatchScorecardData"
-  />
-  <OverlayPenaltiesScorecard
-    v-if="penaltiesScorecardData"
-    v-bind="penaltiesScorecardData"
-  />
-  <OverlayTeamFormation v-if="teamFormationData" v-bind="teamFormationData" />
-  <OverlaySubstitution v-if="substitutionData" v-bind="substitutionData" />
+  <OverlayMatchScorecard v-bind="matchScorecardData" />
+  <OverlayBigMatchScorecard v-bind="bigMatchScorecardData" />
+  <OverlayPenaltiesScorecard v-bind="penaltiesScorecardData" />
+  <OverlayTeamFormation v-bind="teamFormationData" />
+  <OverlaySubstitution v-bind="substitutionData" />
 </template>
 
 <style scoped></style>
