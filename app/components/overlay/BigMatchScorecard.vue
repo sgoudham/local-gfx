@@ -7,6 +7,37 @@ const props = defineProps<BigMatchScorecardProps>();
 const overlay = useTemplateRef("overlay");
 const rendered = ref(false);
 
+function dedupeGoals(goals: TeamState["goals"]) {
+  const groupedGoals = new Map<
+    string,
+    { player: Player; minuteLabels: string[] }
+  >();
+
+  for (const goal of goals) {
+    const minuteLabel = `'${goal.matchTime.formatted.split(":")[0]}`;
+    const key = `${goal.player.forename}-${goal.player.surname}-${goal.player.number}`;
+    const groupedGoal = groupedGoals.get(key);
+
+    if (groupedGoal) {
+      groupedGoal.minuteLabels.push(minuteLabel);
+    } else {
+      groupedGoals.set(key, {
+        player: goal.player,
+        minuteLabels: [minuteLabel],
+      });
+    }
+  }
+
+  return Array.from(groupedGoals.values());
+}
+
+const dedupedGoals = computed(() => {
+  return {
+    home: dedupeGoals(props.home.goals),
+    away: dedupeGoals(props.away.goals),
+  };
+});
+
 async function show() {
   rendered.value = true;
   nextTick(() => {
@@ -81,12 +112,12 @@ watch(
           <div class="team-details-row home-details">
             <div class="scorers">
               <div
-                v-for="goal in props.home.goals"
-                :key="`${goal.player.forename}-${goal.player.surname}-${goal.player.number}-${goal.matchTime.ms}`"
+                v-for="(goal) in dedupedGoals.home"
+                :key="`${goal.player.forename}-${goal.player.surname}-${goal.player.number}`"
                 class="scorer"
               >
                 {{ goal.player.number }}: {{ goal.player.forename }}
-                {{ goal.player.surname }} ({{ goal.matchTime.formatted.split(":")[0] }}')
+                {{ goal.player.surname }} ({{ goal.minuteLabels.join(", ") }})
               </div>
             </div>
             <div class="team-name team-name-home">{{ home.name }}</div>
@@ -115,12 +146,12 @@ watch(
           <div class="team-details-row away-details">
             <div class="scorers">
               <div
-                v-for="goal in props.away.goals"
-                :key="`${goal.player.forename}-${goal.player.surname}-${goal.player.number}-${goal.matchTime.ms}`"
+                v-for="goal in dedupedGoals.away"
+                :key="`${goal.player.forename}-${goal.player.surname}-${goal.player.number}`"
                 class="scorer"
               >
                 {{ goal.player.number }}: {{ goal.player.forename }}
-                {{ goal.player.surname }} ({{ goal.matchTime.formatted.split(":")[0] }}')
+                {{ goal.player.surname }} ({{ goal.minuteLabels.join(", ") }})
               </div>
             </div>
             <div class="team-name team-name-away">{{ away.name }}</div>
