@@ -64,9 +64,18 @@ const penaltiesScorecardData = computed<PenaltiesScorecardProps>(() => {
 });
 
 const teamFormationData = computed<TeamFormationProps>(() => {
+  const location = state.value.graphics.teamFormation.location;
   return {
     name: state.value.graphics.teamFormation.name,
     visible: state.value.graphics.teamFormation.visible,
+    team: {
+      location,
+      name: state.value[location].name,
+      shortName: state.value[location].shortName,
+      manager: state.value[location].manager,
+      players: state.value[location].players,
+      substitutes: state.value[location].substitutes,
+    },
   };
 });
 

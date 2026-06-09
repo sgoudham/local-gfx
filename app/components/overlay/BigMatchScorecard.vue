@@ -131,7 +131,7 @@ watch(
         </div>
 
         <div class="league-badge-large">
-          <img src="../../assets/jmBall.png" alt="League Badge" />
+          <img src="/jmBall.png" alt="League Badge" />
         </div>
 
         <div class="panel large-panel team-away">

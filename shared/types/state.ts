@@ -53,14 +53,18 @@ export type SubstitutionDataUpdate = {
   location: TeamLocation;
   subs: PendingSub[];
 };
-
 export type SubstitutionData = OverlayState & SubstitutionDataUpdate;
+
+type TeamFormationDataUpdate = {
+  location: TeamLocation;
+};
+export type TeamFormationData = OverlayState & TeamFormationDataUpdate;
 
 export type Graphics = {
   matchScorecard: OverlayState;
   penaltiesScorecard: OverlayState;
   bigMatchScorecard: OverlayState;
-  teamFormation: OverlayState;
+  teamFormation: TeamFormationData;
   substitution: SubstitutionData;
 };
 

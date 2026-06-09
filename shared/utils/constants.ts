@@ -29,6 +29,12 @@ export const TeamLocation = {
   Away: "away",
 } as const;
 
+export const TeamFormationPitch = {
+  Width: 250,
+  Height: 400,
+  HorizontalPadding: 46,
+} as const;
+
 export const Overlay = {
   MatchScorecard: "matchScorecard",
   BigMatchScorecard: "bigMatchScorecard",

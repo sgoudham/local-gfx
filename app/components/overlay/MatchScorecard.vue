@@ -210,7 +210,7 @@ onUnmounted(() => {
         </div>
 
         <div class="league-badge" ref="leagueBadge">
-          <img src="../../assets/jmBall.png" alt="League Badge" />
+          <img src="/jmBall.png" alt="League Badge" />
         </div>
 
         <!-- Away: AC Malones -->

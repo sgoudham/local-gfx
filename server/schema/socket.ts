@@ -1,11 +1,9 @@
 import z from "zod";
 import { Mode, SocketMessage } from "~~/shared/utils/constants";
-import { teamLocationSchema, playerSchema } from "./data";
+import { playerSchema, teamLocationSchema } from "./data";
 import {
   formationKeySchema,
   goalSchema,
-  pendingSubSchema,
-  substitutionDataSchema,
   substitutionDataUpdateSchema,
 } from "./state";
 
@@ -37,6 +35,11 @@ export type OutputMessage = z.infer<typeof OutputMessageSchema>;
 const ActiveFormationUpdateSchema = z.object({
   activeFormation: formationKeySchema,
   location: teamLocationSchema,
+  players: z.array(playerSchema),
+});
+
+const TeamFormationShowSchema = z.object({
+  location: teamLocationSchema,
 });
 
 export const ControlMessageSchema = z.discriminatedUnion("type", [
@@ -56,7 +59,9 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.BigMatchScorecardHide),
   socketMsg(Mode.Control, SocketMessage.PenaltiesScorecardShow),
   socketMsg(Mode.Control, SocketMessage.PenaltiesScorecardHide),
-  socketMsg(Mode.Control, SocketMessage.TeamFormationShow),
+  socketMsg(Mode.Control, SocketMessage.TeamFormationShow, {
+    data: TeamFormationShowSchema,
+  }),
   socketMsg(Mode.Control, SocketMessage.TeamFormationHide),
   socketMsg(Mode.Control, SocketMessage.SubstitutionShow, {
     data: substitutionDataUpdateSchema,

@@ -65,6 +65,7 @@ export default defineWebSocketHandler({
             await serverState.patchState((s) => {
               s[formationData.location].activeFormation =
                 formationData.activeFormation;
+              s[formationData.location].players = formationData.players;
             });
             break;
 
@@ -111,8 +112,11 @@ export default defineWebSocketHandler({
             break;
 
           case SocketMessage.TeamFormationShow:
+            const formation = parsed.msg.data;
             await serverState.patchState((s) => {
+              s.graphics.teamFormation.location = formation.location;
               s.graphics.teamFormation.visible = true;
+
               s.graphics.matchScorecard.visible = false;
               s.graphics.bigMatchScorecard.visible = false;
               s.graphics.penaltiesScorecard.visible = false;
