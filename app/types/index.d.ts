@@ -1,10 +1,11 @@
+import type { TeamData } from "../../shared/types/data";
 import type {
-  OverlayState,
-  TeamState,
   MatchTime,
+  OverlayState,
   SubstitutionData,
+  TeamFormationData,
+  TeamState,
 } from "../../shared/types/state";
-import type { Player, TeamData, TeamLocation } from "../../shared/types/data";
 
 export type MatchScorecardProps = OverlayState & {
   home: Pick<TeamData, "shortName"> & { goals: number };
@@ -33,7 +34,16 @@ export type PenaltiesScorecardProps = OverlayState & {
   };
 };
 
-export type TeamFormationProps = OverlayState;
+export type TeamFormationProps = OverlayState & {
+  team: {
+    location: TeamData["location"];
+    name: TeamData["name"];
+    shortName: TeamData["shortName"];
+    manager: TeamData["manager"]
+    players: TeamData["players"];
+    substitutes: TeamData["substitutes"];
+  };
+};
 
 export type StartingSoonProps = {
   name: string;

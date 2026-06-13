@@ -38,6 +38,7 @@ watch(data, (raw) => {
   --ribbon-colour: #b1303a;
   --pen-scored: #1aa11a;
   --pen-missed: #f53e3e;
+  --pitch-colour: #2d7a3a;
   --large-scoreboard-x-padding: 40px;
   --ui-scale: 0.75;
 }

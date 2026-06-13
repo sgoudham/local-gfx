@@ -8,12 +8,8 @@ const overlay = useTemplateRef("overlay");
 const playersOffGroup = useTemplateRef("playersOffGroup");
 const playersOnGroup = useTemplateRef("playersOnGroup");
 const rendered = ref(false);
-const imageUrl = computed(
-  () =>
-    new URL(
-      `../../assets/${props.location === "home" ? "homeBadge.png" : "awayBadge.png"}`,
-      import.meta.url,
-    ).href,
+const imageUrl = computed(() =>
+  props.location === "home" ? "/homeBadge.png" : "/awayBadge.png",
 );
 
 async function show() {

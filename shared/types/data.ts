@@ -18,6 +18,7 @@ export type TeamData = {
   shortName: string;
   players: Player[];
   substitutes: Player[];
+  manager: string;
 };
 
 export type MatchData = {

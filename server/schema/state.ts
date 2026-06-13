@@ -38,12 +38,18 @@ export const substitutionDataUpdateSchema = z.object({
 
 export const substitutionDataSchema = overlayStateSchema.and(substitutionDataUpdateSchema);
 
+const teamFormationDataUpdateSchema = z.object({
+    location: teamLocationSchema
+});
+
+export const teamFormationDataSchema = overlayStateSchema.and(teamFormationDataUpdateSchema);
+
 export const graphicsSchema = z.object({
     startingSoon: overlayStateSchema,
     matchScorecard: overlayStateSchema,
     penaltiesScorecard: overlayStateSchema,
     bigMatchScorecard: overlayStateSchema,
-    teamFormation: overlayStateSchema,
+    teamFormation: teamFormationDataSchema,
     substitution: substitutionDataSchema
 });
 

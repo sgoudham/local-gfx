@@ -33,7 +33,8 @@
     },
     "teamFormation": {
       "name": "Team Formation",
-      "visible": false
+      "visible": false,
+      "location": "home"
     },
     "substitution": {
       "name": "Substitution",

@@ -8,6 +8,7 @@ const props = defineProps<{
   name: string;
   showMessage: SocketMessage;
   hideMessage: SocketMessage;
+  data?: Record<string, unknown>
 }>();
 
 const isOverlayVisible = (key: Overlay) => state.value.graphics[key].visible;
@@ -16,7 +17,8 @@ const isOverlayVisible = (key: Overlay) => state.value.graphics[key].visible;
 <template>
   <Button
     :class="isOverlayVisible(val) ? 'hide' : 'show'"
-    @click="publish(isOverlayVisible(val) ? hideMessage : showMessage)"
-    :label="isOverlayVisible(val) ? `Hide ${name}` : `Show ${name}`"
-  />
+    @click="publish(isOverlayVisible(val) ? hideMessage : showMessage, data)"
+  >
+    {{ isOverlayVisible(val) ? `Hide ${name}` : `Show ${name}` }}
+  </Button>
 </template>

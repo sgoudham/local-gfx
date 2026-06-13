@@ -72,9 +72,18 @@ const penaltiesScorecardData = computed<PenaltiesScorecardProps>(() => {
 });
 
 const teamFormationData = computed<TeamFormationProps>(() => {
+  const location = state.value.graphics.teamFormation.location;
   return {
     name: state.value.graphics.teamFormation.name,
     visible: state.value.graphics.teamFormation.visible,
+    team: {
+      location,
+      name: state.value[location].name,
+      shortName: state.value[location].shortName,
+      manager: state.value[location].manager,
+      players: state.value[location].players,
+      substitutes: state.value[location].substitutes,
+    },
   };
 });
 
@@ -84,24 +93,12 @@ const substitutionData = computed<SubstitutionProps>(() => {
 </script>
 
 <template>
-  <OverlayMatchScorecard
-    v-if="matchScorecardData"
-    v-bind="matchScorecardData"
-  />
-  <OverlayBigMatchScorecard
-    v-if="bigMatchScorecardData"
-    v-bind="bigMatchScorecardData"
-  />
-  <OverlayStartingSoon
-    v-if="startingSoonData"
-    v-bind="startingSoonData"
-  />
-  <OverlayPenaltiesScorecard
-    v-if="penaltiesScorecardData"
-    v-bind="penaltiesScorecardData"
-  />
-  <OverlayTeamFormation v-if="teamFormationData" v-bind="teamFormationData" />
-  <OverlaySubstitution v-if="substitutionData" v-bind="substitutionData" />
+  <OverlayMatchScorecard v-bind="matchScorecardData" />
+  <OverlayBigMatchScorecard v-bind="bigMatchScorecardData" />
+  <OverlayStartingSoon v-bind="startingSoonData"/>
+  <OverlayPenaltiesScorecard v-bind="penaltiesScorecardData" />
+  <OverlayTeamFormation v-bind="teamFormationData" />
+  <OverlaySubstitution v-bind="substitutionData" />
 </template>
 
 <style scoped></style>

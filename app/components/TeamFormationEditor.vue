@@ -1,52 +1,27 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
+import { TeamFormationPitch } from "~~/shared/utils/constants";
 
 const { state, publish } = useControlSocket();
 const { selectedPlayer } = useClientState();
 
 const props = defineProps<TeamComplete>();
 
-const PITCH_W = 250;
-const PITCH_H = 400;
-const PITCH_HORIZONTAL_PADDING = 46;
+const PITCH_W = TeamFormationPitch.Width;
+const PITCH_H = TeamFormationPitch.Height;
+const PITCH_HORIZONTAL_PADDING = TeamFormationPitch.HorizontalPadding;
 
 const players = reactive<Player[]>(props.players);
 const subs = reactive<Player[]>(props.substitutes);
 const pendingSubs = ref<PendingSub[]>([]);
 const pitchEl = ref<HTMLElement | null>(null);
 const hoveredPlayerId = ref<number | null>(null);
+const hasPendingSubs = computed(() => pendingSubs.value.length === 0);
 const activeFormation = computed(() => props.activeFormation);
-const activeFormationLines = computed(() => {
-  return [
-    1,
-    ...activeFormation.value.split("-").map((v) => new Number(v).valueOf()),
-  ];
-});
-
-const formationPositions = computed(() => {
-  const lines = activeFormationLines.value;
-  const positions: { x: number; y: number }[] = [];
-  const padTop = 42,
-    padBottom = 120;
-  const usableHeight = PITCH_H - padTop - padBottom;
-  const numLines = lines.length;
-
-  lines.forEach((playersPerLine, lineIndex) => {
-    const lineProgress = numLines === 1 ? 0.5 : lineIndex / (numLines - 1);
-    const y = padTop + lineProgress * usableHeight;
-
-    for (let playerIndex = 0; playerIndex < playersPerLine; playerIndex++) {
-      const playerProgress =
-        playersPerLine === 1 ? 0.5 : playerIndex / (playersPerLine - 1);
-      const x =
-        PITCH_HORIZONTAL_PADDING +
-        playerProgress * (PITCH_W - 2 * PITCH_HORIZONTAL_PADDING);
-      positions.push({ x, y });
-    }
-  });
-
-  return positions;
-});
+const layoutVars = computed(() => ({
+  "--pitch-width": `${PITCH_W}px`,
+  "--pitch-height": `${PITCH_H}px`,
+}));
 
 watch(activeFormation, () => updatePlayerPositions(), {
   deep: true,
@@ -72,8 +47,29 @@ function isPendingLocked(playerNumber: number) {
 
 // ── Formations ──────────────────────────────────────────────
 
-function updatePlayerPositions() {
-  formationPositions.value.forEach((position, index) => {
+function updatePlayerPositions(formation: FormationKey = activeFormation.value) {
+  const lines = [1, ...formation.split("-").map((v) => Number(v))];
+  const positions: { x: number; y: number }[] = [];
+  const padTop = 42,
+    padBottom = 120;
+  const usableHeight = PITCH_H - padTop - padBottom;
+  const numLines = lines.length;
+
+  lines.forEach((playersPerLine, lineIndex) => {
+    const lineProgress = numLines === 1 ? 0.5 : lineIndex / (numLines - 1);
+    const y = padTop + lineProgress * usableHeight;
+
+    for (let playerIndex = 0; playerIndex < playersPerLine; playerIndex++) {
+      const playerProgress =
+        playersPerLine === 1 ? 0.5 : playerIndex / (playersPerLine - 1);
+      const x =
+        PITCH_HORIZONTAL_PADDING +
+        playerProgress * (PITCH_W - 2 * PITCH_HORIZONTAL_PADDING);
+      positions.push({ x, y });
+    }
+  });
+
+  positions.forEach((position, index) => {
     const player = players[index];
     if (player) {
       player.x = position.x;
@@ -83,11 +79,13 @@ function updatePlayerPositions() {
 }
 
 function applyFormation(key: FormationKey) {
-  updatePlayerPositions();
+  updatePlayerPositions(key);
+
   publish(SocketMessage.ActiveFormationUpdate, {
     data: {
       location: props.location,
       activeFormation: key,
+      players,
     },
   });
 }
@@ -100,8 +98,8 @@ function startPitchDrag(e: MouseEvent, player: Player) {
   drag.sub = null;
   if (!pitchEl.value) return;
   const rect = pitchEl.value.getBoundingClientRect();
-  dragOffsetX = e.clientX - rect.left - player.x;
-  dragOffsetY = e.clientY - rect.top - player.y;
+  dragOffsetX = e.clientX - rect.left - (player.x ?? 0);
+  dragOffsetY = e.clientY - rect.top - (player.y ?? 0);
 }
 
 // ── Bench drag ───────────────────────────────────────────────
@@ -173,8 +171,6 @@ function onPlayerMouseEnter(player: Player) {
 }
 
 function performSub() {
-  if (pendingSubs.value.length === 0) return;
-
   // Server
   publish(SocketMessage.SubstitutionShow, {
     data: {
@@ -202,7 +198,12 @@ function performSub() {
 </script>
 
 <template>
-  <div class="wrap" @mousemove="onMouseMove" @mouseup="stopDrag">
+  <div
+    class="wrap"
+    :style="layoutVars"
+    @mousemove="onMouseMove"
+    @mouseup="stopDrag"
+  >
     <div>{{ props.name }} ({{ props.shortName }})</div>
 
     <!-- Controls -->
@@ -216,7 +217,7 @@ function performSub() {
           {{ key }}
         </option>
       </select>
-      <Button label="Edit Players" class="action" />
+      <Button class="action">Edit Players</Button>
     </div>
     <ToggleOverlayButton
       v-bind="{
@@ -224,13 +225,16 @@ function performSub() {
         name: state.graphics.teamFormation.name,
         showMessage: SocketMessage.TeamFormationShow,
         hideMessage: SocketMessage.TeamFormationHide,
+        data: {
+          data: {
+            location: props.location,
+          },
+        },
       }"
     />
-    <Button
-      label="Apply Substitutions"
-      class="action"
-      v-on:click="performSub"
-    />
+    <Button :disabled="hasPendingSubs" class="action" v-on:click="performSub">
+      Apply Substitutions
+    </Button>
 
     <!-- Pitch -->
     <div class="pitch" ref="pitchEl">
@@ -393,11 +397,9 @@ function performSub() {
               {{ item[0].surname }} -> {{ item[1].number }}:
               {{ item[1].forename }} {{ item[1].surname }}
             </span>
-            <Button
-              label="Cancel"
-              class="pending-cancel"
-              v-on:click="cancelPendingSub(index)"
-            />
+            <Button class="pending-cancel" v-on:click="cancelPendingSub(index)">
+              Cancel
+            </Button>
           </li>
         </ul>
       </div>
@@ -433,8 +435,8 @@ function performSub() {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: 250px;
-  max-width: 250px;
+  width: var(--pitch-width);
+  max-width: var(--pitch-width);
   user-select: none;
 
   .row {
@@ -445,9 +447,9 @@ function performSub() {
 
 .pitch {
   position: relative;
-  width: 250px;
-  height: 400px;
-  background: #2d7a3a;
+  width: var(--pitch-width);
+  height: var(--pitch-height);
+  background: var(--pitch-colour);
   overflow: hidden;
   border: 2px solid #1a2e1a;
 }
@@ -537,7 +539,7 @@ function performSub() {
 }
 
 .bench-wrap {
-  width: 250px;
+  width: var(--pitch-width);
   overflow-x: auto;
 }
 
