@@ -262,7 +262,7 @@ onUnmounted(() => {
 
 <style scoped>
 .overlay {
-  --large-scoreboard-x-padding: 40px;
+  --large-scoreboard-x-padding: 20px;
   position: fixed;
   inset: 0;
   display: flex;
@@ -284,7 +284,7 @@ onUnmounted(() => {
   margin: 0;
   width: max-content;
   overflow: visible;
-  padding-inline: 90px;
+  padding-inline: 60px;
   z-index: 5;
   transform-origin: bottom center;
   transform: scale(0.8);
@@ -332,7 +332,7 @@ onUnmounted(() => {
 }
 
 .large-panel {
-  width: 52vw;
+  width: 55vw;
   overflow: visible;
   align-items: flex-end;
   padding-bottom: 2px;
@@ -393,9 +393,19 @@ onUnmounted(() => {
   z-index: 2;
 }
 
+.team-home > .score-row,
+.team-away > .score-row {
+  z-index: 9;
+}
+
+.team-home > .team-details-row,
+.team-away > .team-details-row {
+  z-index: 1;
+}
+
 .team-abbr-large {
   line-height: 1;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
   z-index: 1;
   font-family: var(--font-secondary);
   font-size: 170px;
@@ -403,7 +413,7 @@ onUnmounted(() => {
 
 .team-details-row {
   align-content: end;
-  width: 50%;
+  width: 45%;
 }
 
 .home-details {
@@ -465,11 +475,16 @@ onUnmounted(() => {
   position: relative;
   display: flex;
   align-items: center;
+  z-index: 100;
 }
 
-.score-large {
+.score-large {  
+  position: relative;
+  z-index: 11;  
   font-size: 76px;
   font-style: italic;
+  letter-spacing: -0.1em;
+  text-indent: -0.07em;
   color: var(--text-color);
   min-width: 32px;
   text-align: center;
@@ -480,11 +495,11 @@ onUnmounted(() => {
 }
 
 .home-score-large {
-  margin-left: 10px;
+  margin-left: 80px;
 }
 
 .away-score-large {
-  margin-right: 10px;
+  margin-right: 80px;
 }
 
 .league-badge-large {
