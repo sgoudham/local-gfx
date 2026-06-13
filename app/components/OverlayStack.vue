@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { SocketMessage, Overlay } from "#imports";
 import ToggleOverlayButton from "./ToggleOverlayButton.vue";
+import SelectedPlayer from "./SelectedPlayer.vue";
 
 const { state, publish } = useControlSocket();
-const { selectedPlayer } = useClientState();
 
 const overlayToggles = [
   {
@@ -62,36 +62,9 @@ const toggleMatchTimer = () => {
     >
       <ToggleOverlayButton v-bind="overlay" class="item" />
     </li>
-    <template v-if="selectedPlayer">
-      <li class="overlay-list-item">
-        <div class="item">
-          Selected {{ state[selectedPlayer.location].shortName }} Player:
-        </div>
-        <div class="item">
-          <p>
-            {{ selectedPlayer.number }}' {{ selectedPlayer.forename }}
-            {{ selectedPlayer.surname }}
-          </p>
-        </div>
-      </li>
-      <li class="overlay-list-item">
-        <Button
-          @click="
-            publish(SocketMessage.MatchGoalScored, {
-              data: {
-                player: selectedPlayer,
-                matchTime: state.matchTime,
-              },
-            })
-          "
-          class="item action"
-        >
-          Add Goal
-        </Button>
-        <Button class="item action">Yellow Card</Button>
-        <Button class="item action">Red Card</Button>
-      </li>
-    </template>
+    <li class="overlay-list-item" style="margin-top: 8px;">
+      <SelectedPlayer />
+    </li>
   </ul>
 </template>
 
@@ -101,7 +74,7 @@ const toggleMatchTimer = () => {
   margin: 0;
   padding: 0;
   display: flex;
-  width: 300px;
+  width: 100%;
   flex-direction: column;
   gap: 2px;
 }

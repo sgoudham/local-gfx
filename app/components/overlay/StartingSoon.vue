@@ -145,7 +145,7 @@ const tickerItems = [
           <div class="starting-soon-team">
             <div class="starting-soon-team-badge">
               <img
-                src="../../assets/homeBadge.png"
+                src="/homeBadge.png"
                 alt="Dunterlie Dynamos Badge"
                 style="width: 100%; height: 100%; object-fit: contain"
               />
@@ -156,7 +156,7 @@ const tickerItems = [
           <div class="starting-soon-team">
             <div class="starting-soon-team-badge">
               <img
-                src="../../assets/awayBadge.png"
+                src="/awayBadge.png"
                 alt="AC Malones Badge"
                 style="width: 100%; height: 100%; object-fit: contain"
               />
@@ -351,10 +351,6 @@ const tickerItems = [
 .starting-soon-team-badge {
   width: 200px;
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.5));
-}
-
-.starting-soon-team-name {
-
 }
 
 .starting-soon-vs {

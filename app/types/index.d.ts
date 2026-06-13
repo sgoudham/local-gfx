@@ -45,9 +45,6 @@ export type TeamFormationProps = OverlayState & {
   };
 };
 
-export type StartingSoonProps = {
-  name: string;
-  visible: boolean;
-};
+export type StartingSoonProps = OverlayState;
 
 export type SubstitutionProps = SubstitutionData;
