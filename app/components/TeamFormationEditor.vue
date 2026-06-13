@@ -459,7 +459,7 @@ function performSub() {
   position: relative;
   width: var(--pitch-width);
   height: var(--pitch-height);
-  background: var(--pitch-colour);
+  background: var(--pitch-editor);
   overflow: hidden;
   border: 2px solid #1a2e1a;
 }

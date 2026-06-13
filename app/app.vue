@@ -43,6 +43,7 @@ watch(data, (raw) => {
   --pen-scored: #1aa11a;
   --pen-missed: #f53e3e;
   --pitch-colour: #e9e9e9;
+  --pitch-editor: #40a02b;
   --large-scoreboard-x-padding: 40px;
   --ui-scale: 0.75;
 }
