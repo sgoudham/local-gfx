@@ -5,7 +5,63 @@ import type { BigMatchScorecardProps } from "~/types";
 const props = defineProps<BigMatchScorecardProps>();
 
 const overlay = useTemplateRef("overlay");
+const homeScorersRef = useTemplateRef<HTMLElement>("homeScorersRef");
+const awayScorersRef = useTemplateRef<HTMLElement>("awayScorersRef");
 const rendered = ref(false);
+
+const AUTO_SCROLL_PX_PER_SEC = 15;
+const HOLD_AT_TOP_SEC = 1.2;
+const HOLD_AT_BOTTOM_SEC = 1.5;
+const RESET_FADE_SEC = 0.4;
+const autoScrollTweens: gsap.core.Timeline[] = [];
+
+function startAutoScrollFor(trackEl: HTMLElement | null) {
+  if (!trackEl) return;
+
+  gsap.set(trackEl, { y: 0, opacity: 1 });
+
+  const viewportEl = trackEl.parentElement;
+  if (!viewportEl) return;
+
+  const contentHeight = trackEl.scrollHeight;
+  const maxOffset = contentHeight - viewportEl.clientHeight;
+  if (maxOffset <= 0) return;
+
+  const timeline = gsap.timeline({ repeat: -1 });
+  timeline.to({}, { duration: HOLD_AT_TOP_SEC });
+  timeline.to(trackEl, {
+    y: -maxOffset,
+    duration: maxOffset / AUTO_SCROLL_PX_PER_SEC,
+    ease: "none",
+  });
+  timeline.to({}, { duration: HOLD_AT_BOTTOM_SEC });
+  timeline.to(trackEl, {
+    opacity: 0,
+    duration: RESET_FADE_SEC,
+    ease: "power1.in",
+  });
+  timeline.set(trackEl, { y: 0 });
+  timeline.to(trackEl, {
+    opacity: 1,
+    duration: RESET_FADE_SEC,
+    ease: "power1.out",
+  });
+
+  autoScrollTweens.push(timeline);
+}
+
+function startAutoScroll() {
+  stopAutoScroll();
+  startAutoScrollFor(homeScorersRef.value);
+  startAutoScrollFor(awayScorersRef.value);
+}
+
+function stopAutoScroll() {
+  for (const tween of autoScrollTweens) {
+    tween.kill();
+  }
+  autoScrollTweens.length = 0;
+}
 
 function dedupeGoals(goals: TeamState["goals"]) {
   const groupedGoals = new Map<
@@ -31,32 +87,42 @@ function dedupeGoals(goals: TeamState["goals"]) {
   return Array.from(groupedGoals.values());
 }
 
-const dedupedGoals = computed(() => {
-  return {
-    home: dedupeGoals(props.home.goals),
-    away: dedupeGoals(props.away.goals),
-  };
-});
+function goalsSignature(goals: TeamState["goals"]) {
+  return goals
+    .map(
+      (goal) =>
+        `${goal.player.number}-${goal.player.forename}-${goal.player.surname}-${goal.matchTime.formatted}`,
+    )
+    .join("|");
+}
+
+const goals = computed(() => ({
+  home: dedupeGoals(props.home.goals),
+  away: dedupeGoals(props.away.goals),
+  signature: `${goalsSignature(props.home.goals)}::${goalsSignature(props.away.goals)}`,
+}));
 
 async function show() {
   rendered.value = true;
   nextTick(() => {
-    if (overlay.value) {
-      gsap.fromTo(
-        overlay.value,
-        { opacity: 0, y: -10 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          ease: "power2.out",
-        },
-      );
-    }
+    startAutoScroll();
+    if (!overlay.value) return;
+    gsap.fromTo(
+      overlay.value,
+      { opacity: 0, y: -10 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        ease: "power2.out",
+      },
+    );
   });
 }
 
 async function hide() {
+  stopAutoScroll();
+
   return new Promise<void>((resolve) => {
     nextTick(() => {
       if (!overlay.value) {
@@ -94,6 +160,28 @@ watch(
   },
   { immediate: true },
 );
+
+watch(
+  () => goals.value.signature,
+  () => {
+    if (!props.visible || !rendered.value) return;
+    nextTick(() => {
+      startAutoScroll();
+    });
+  },
+  { immediate: false },
+);
+
+onMounted(() => {
+  if (!props.visible) return;
+  nextTick(() => {
+    startAutoScroll();
+  });
+});
+
+onUnmounted(() => {
+  stopAutoScroll();
+});
 </script>
 
 <template>
@@ -111,13 +199,15 @@ watch(
 
           <div class="team-details-row home-details">
             <div class="scorers">
-              <div
-                v-for="(goal) in dedupedGoals.home"
-                :key="`${goal.player.forename}-${goal.player.surname}-${goal.player.number}`"
-                class="scorer"
-              >
-                {{ goal.player.number }}: {{ goal.player.forename }}
-                {{ goal.player.surname }} ({{ goal.minuteLabels.join(", ") }})
+              <div class="scorers-track" ref="homeScorersRef">
+                <div
+                  v-for="goal in goals.home"
+                  :key="`home-${goal.player.forename}-${goal.player.surname}-${goal.player.number}`"
+                  class="scorer"
+                >
+                  {{ goal.player.number }}: {{ goal.player.forename }}
+                  {{ goal.player.surname }} ({{ goal.minuteLabels.join(", ") }})
+                </div>
               </div>
             </div>
             <div class="team-name team-name-home">{{ home.name }}</div>
@@ -145,13 +235,15 @@ watch(
 
           <div class="team-details-row away-details">
             <div class="scorers">
-              <div
-                v-for="goal in dedupedGoals.away"
-                :key="`${goal.player.forename}-${goal.player.surname}-${goal.player.number}`"
-                class="scorer"
-              >
-                {{ goal.player.number }}: {{ goal.player.forename }}
-                {{ goal.player.surname }} ({{ goal.minuteLabels.join(", ") }})
+              <div class="scorers-track" ref="awayScorersRef">
+                <div
+                  v-for="goal in goals.away"
+                  :key="`away-${goal.player.forename}-${goal.player.surname}-${goal.player.number}`"
+                  class="scorer"
+                >
+                  {{ goal.player.number }}: {{ goal.player.forename }}
+                  {{ goal.player.surname }} ({{ goal.minuteLabels.join(", ") }})
+                </div>
               </div>
             </div>
             <div class="team-name team-name-away">{{ away.name }}</div>
@@ -346,9 +438,8 @@ watch(
   font-style: italic;
   width: 100%;
   max-height: 87px;
-  overflow-y: scroll;
+  overflow: hidden;
   text-overflow: clip;
-  scrollbar-width: none;
   align-content: flex-end;
   mask-image: linear-gradient(
     to bottom,
@@ -357,6 +448,13 @@ watch(
     rgba(0, 0, 0, 1) 85%,
     rgba(0, 0, 0, 0)
   );
+}
+
+.scorers-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
 .scorer {
