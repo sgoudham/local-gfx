@@ -12,17 +12,23 @@ const rendered = ref(false);
 const EDITOR_PITCH_W = TeamFormationPitch.Width;
 const EDITOR_PITCH_H = TeamFormationPitch.Height;
 
+const sortedSubs = computed(() =>
+  props.team.substitutes.sort((a, b) => a.number - b.number),
+);
+
 const images = computed(() => {
   return {
     badge: props.team.location === "home" ? "/homeBadge.png" : "/awayBadge.png",
-    manager: props.team.location === "home" ? "/homeManager.png" : "/awayManager.jpg",
+    manager:
+      props.team.location === "home" ? "/homeManager.png" : "/awayManager.jpg",
   };
 });
 
 const surnameCounts = computed(() => {
   const counts = new Map<string, number>();
+  const players = [...props.team.players, ...props.team.substitutes];
 
-  for (const player of props.team.players) {
+  for (const player of players) {
     counts.set(player.surname, (counts.get(player.surname) ?? 0) + 1);
   }
 
@@ -283,21 +289,14 @@ watch(
             <div class="subs">
               <div class="subs-heading">SUBS</div>
               <ol class="subs-list">
-                <li
-                  v-for="sub in team.substitutes"
-                  :key="sub.number"
-                  class="sub"
-                >
+                <li v-for="sub in sortedSubs" :key="sub.number" class="sub">
                   {{ sub.number }}: {{ sub.forename }} {{ sub.surname }}
                 </li>
               </ol>
             </div>
 
             <div class="sponsor">
-              <img
-                src="/refuweegeeLogoWhite.png"
-                alt="sponsor logo"
-              />
+              <img src="/refuweegeeLogoWhite.png" alt="sponsor logo" />
             </div>
           </div>
         </div>
