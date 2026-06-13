@@ -13,6 +13,7 @@ const PITCH_HORIZONTAL_PADDING = TeamFormationPitch.HorizontalPadding;
 
 const players = reactive<Player[]>(props.players);
 const subs = reactive<Player[]>(props.substitutes);
+const sortedSubs = computed(() => [...subs].sort((a, b) => a.number - b.number));
 const pendingSubs = ref<PendingSub[]>([]);
 const pitchEl = ref<HTMLElement | null>(null);
 const hoveredPlayerId = ref<number | null>(null);
@@ -193,7 +194,16 @@ function performSub() {
     subs[subIndex] = player;
   }
   updatePlayerPositions();
-  pendingSubs.value = [];
+  pendingSubs.value = []
+  // FIXME: Ideally shouldn't have to republish ActiveFormationUpdate, but this
+  // allows for the player positions to be sent to the server for now
+  publish(SocketMessage.ActiveFormationUpdate, {
+    data: {
+      location: props.location,
+      activeFormation: activeFormation.value,
+      players,
+    },
+  });
 }
 </script>
 
@@ -409,7 +419,7 @@ function performSub() {
     <div class="bench-wrap">
       <div class="bench" ref="benchEl">
         <div
-          v-for="sub in subs.sort((a, b) => a.number - b.number)"
+          v-for="sub in sortedSubs"
           :key="sub.number"
           :title="`${sub.forename} ${sub.surname}`"
           class="sub"
