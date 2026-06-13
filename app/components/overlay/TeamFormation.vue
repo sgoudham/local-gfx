@@ -44,13 +44,20 @@ function shirtName(player: { forename: string; surname: string }) {
   return player.surname;
 }
 
+const DYNAMOS_NAME = "Dunterlie Dynamos";
+
 const positionedPlayers = computed(() => {
+  const isDynamos = props.team.name === DYNAMOS_NAME;
+
   return props.team.players.map((player) => {
     const x = player.x ?? EDITOR_PITCH_W / 2;
     const y = player.y ?? EDITOR_PITCH_H / 2;
+    const isGk = player.number === 1;
+    const invert = !isDynamos || isGk;
 
     return {
       player,
+      invert,
       style: {
         left: `${(x / EDITOR_PITCH_W) * 100}%`,
         top: `${(y / EDITOR_PITCH_H) * 100}%`,
@@ -185,7 +192,7 @@ watch(
                         style="
                           fill: none;
                           stroke: var(--pitch-colour);
-                          stroke-width: 18.54px;
+                          stroke-width: 10px;
                         "
                       />
                     </g>
@@ -195,7 +202,7 @@ watch(
                         style="
                           fill: none;
                           stroke: var(--pitch-colour);
-                          stroke-width: 19.01px;
+                          stroke-width: 10px;
                         "
                       />
                     </g>
@@ -207,7 +214,7 @@ watch(
                         style="
                           fill: none;
                           stroke: var(--pitch-colour);
-                          stroke-width: 19.01px;
+                          stroke-width: 10px;
                         "
                       />
                     </g>
@@ -220,7 +227,7 @@ watch(
                         style="
                           fill: none;
                           stroke: var(--pitch-colour);
-                          stroke-width: 18.78px;
+                          stroke-width: 10px;
                         "
                       />
                     </g>
@@ -235,7 +242,7 @@ watch(
                         style="
                           fill: none;
                           stroke: var(--pitch-colour);
-                          stroke-width: 18.78px;
+                          stroke-width: 10px;
                         "
                       />
                     </g>
@@ -247,6 +254,8 @@ watch(
                 :key="entry.player.number"
                 class="player-shirt-container"
                 :style="entry.style"
+                :data-gk="entry.player.number === 1 || undefined"
+                :data-invert="entry.invert || undefined"
               >
                 <div class="player-shirt">
                   <svg
@@ -319,10 +328,28 @@ watch(
 .overlay[data-location="home"] {
   --primary-colour: var(--home-colour-1);
   --secondary-colour: var(--home-colour-2);
+  --_primary: var(--home-colour-1);
+  --_secondary: var(--home-colour-2);
 }
 .overlay[data-location="away"] {
   --primary-colour: var(--away-colour-1);
   --secondary-colour: var(--away-colour-2);
+  --_primary: var(--away-colour-1);
+  --_secondary: var(--away-colour-2);
+}
+
+.player-shirt-container[data-invert] {
+  --primary-colour: var(--_secondary);
+  --secondary-colour: var(--_primary);
+}
+
+.overlay[data-location="home"] .player-shirt-container[data-gk] {
+  --primary-colour: var(--home-gk-colour-1);
+  --secondary-colour: var(--home-gk-colour-2);
+}
+.overlay[data-location="away"] .player-shirt-container[data-gk] {
+  --primary-colour: var(--away-gk-colour-1);
+  --secondary-colour: var(--away-gk-colour-2);
 }
 
 .teamsheet {

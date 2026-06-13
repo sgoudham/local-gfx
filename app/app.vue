@@ -33,12 +33,16 @@ watch(data, (raw) => {
   --muted-text: rgba(0, 0, 0, 0.45);
   --home-colour-1: #73aed8;
   --home-colour-2: #f5f5f5;
+  --home-gk-colour-1: #000000;
+  --home-gk-colour-2: #eb37a9;
   --away-colour-1: #f5b53e;
   --away-colour-2: #486745;
+  --away-gk-colour-1: #e2e2e2;
+  --away-gk-colour-2: #2d2d2d;
   --ribbon-colour: #b1303a;
   --pen-scored: #1aa11a;
   --pen-missed: #f53e3e;
-  --pitch-colour: #2d7a3a;
+  --pitch-colour: #e9e9e9;
   --large-scoreboard-x-padding: 40px;
   --ui-scale: 0.75;
 }
