@@ -1,4 +1,5 @@
 _store
+.store
 .nuxt
 .data
 .output

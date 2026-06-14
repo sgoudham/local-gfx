@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     storage: {
       fs: {
         driver: "fs",
-        base: process.env.STORAGE_BASE ?? resolve(baseDir, "_store"),
+        base: process.env.STORAGE_BASE ?? resolve(baseDir, ".store"),
       },
     },
     esbuild: {
