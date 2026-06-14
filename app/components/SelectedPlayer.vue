@@ -26,16 +26,6 @@ const handleGoal = () => {
   });
 };
 
-const handlePenaltyGoal = () => {
-  if (isPlaceholderPlayer.value || !selectedPlayer.value) return;
-  publish(SocketMessage.MatchGoalScored, {
-    data: {
-      player: selectedPlayer.value,
-      matchTime: state.value.matchTime,
-    },
-  });
-};
-
 const handleYellowCard = () => {
   if (isPlaceholderPlayer.value || !selectedPlayer.value) return;
   // TODO
@@ -83,14 +73,6 @@ const handleRedCard = () => {
         title="Red Card"
       >
         🟥
-      </button>
-      <button
-        class="action-button penalty-goal"
-        @click="handlePenaltyGoal"
-        :disabled="isPlaceholderPlayer"
-        title="Penalty Goal"
-      >
-        🎯
       </button>
     </div>
   </div>
