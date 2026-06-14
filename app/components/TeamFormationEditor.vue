@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
 import { TeamFormationPitch } from "~~/shared/utils/constants";
 
 const { state, publish } = useControlSocket();
@@ -11,9 +10,11 @@ const PITCH_W = TeamFormationPitch.Width;
 const PITCH_H = TeamFormationPitch.Height;
 const PITCH_HORIZONTAL_PADDING = TeamFormationPitch.HorizontalPadding;
 
-const players = reactive<Player[]>(props.players);
-const subs = reactive<Player[]>(props.substitutes);
-const sortedSubs = computed(() => [...subs].sort((a, b) => a.number - b.number));
+const players = computed(() => props.players);
+const subs = computed(() => props.substitutes);
+const sortedSubs = computed(() =>
+  [...subs.value].sort((a, b) => a.number - b.number),
+);
 const pendingSubs = ref<PendingSub[]>([]);
 const pitchEl = ref<HTMLElement | null>(null);
 const hoveredPlayerId = ref<number | null>(null);
@@ -29,12 +30,11 @@ watch(activeFormation, () => updatePlayerPositions(), {
   immediate: true,
 });
 
-// Unified drag state
-const drag = reactive({
-  id: null as number | null,
-  source: null as "pitch" | "bench" | null,
-  sub: null as Player | null,
-});
+const dragId = ref<number | null>(null);
+const dragSource = ref<"pitch" | "bench" | null>(null);
+const draggedSub = ref<Player | null>(null);
+const isDraggingPitch = computed(() => dragSource.value === "pitch");
+const isDraggingBench = computed(() => dragSource.value === "bench");
 
 let dragOffsetX = 0;
 let dragOffsetY = 0;
@@ -48,7 +48,9 @@ function isPendingLocked(playerNumber: number) {
 
 // ── Formations ──────────────────────────────────────────────
 
-function updatePlayerPositions(formation: FormationKey = activeFormation.value) {
+function updatePlayerPositions(
+  formation: FormationKey = activeFormation.value,
+) {
   const lines = [1, ...formation.split("-").map((v) => Number(v))];
   const positions: { x: number; y: number }[] = [];
   const padTop = 42,
@@ -71,7 +73,7 @@ function updatePlayerPositions(formation: FormationKey = activeFormation.value) 
   });
 
   positions.forEach((position, index) => {
-    const player = players[index];
+    const player = players.value[index];
     if (player) {
       player.x = position.x;
       player.y = position.y;
@@ -86,7 +88,7 @@ function applyFormation(key: FormationKey) {
     data: {
       location: props.location,
       activeFormation: key,
-      players,
+      players: players.value,
     },
   });
 }
@@ -94,9 +96,9 @@ function applyFormation(key: FormationKey) {
 // ── Pitch drag ───────────────────────────────────────────────
 
 function startPitchDrag(e: MouseEvent, player: Player) {
-  drag.id = player.number;
-  drag.source = "pitch";
-  drag.sub = null;
+  dragId.value = player.number;
+  dragSource.value = "pitch";
+  draggedSub.value = null;
   if (!pitchEl.value) return;
   const rect = pitchEl.value.getBoundingClientRect();
   dragOffsetX = e.clientX - rect.left - (player.x ?? 0);
@@ -108,9 +110,9 @@ function startPitchDrag(e: MouseEvent, player: Player) {
 function startBenchDrag(e: MouseEvent, sub: Player) {
   if (isPendingLocked(sub.number)) return;
 
-  drag.id = sub.number;
-  drag.source = "bench";
-  drag.sub = sub;
+  dragId.value = sub.number;
+  dragSource.value = "bench";
+  draggedSub.value = sub;
   dragOffsetX = 16;
   dragOffsetY = 16;
 }
@@ -118,8 +120,8 @@ function startBenchDrag(e: MouseEvent, sub: Player) {
 // ── Shared mousemove (on .wrap) ──────────────────────────────
 
 function onMouseMove(e: MouseEvent) {
-  if (drag.source === "pitch") {
-    const player = players.find((p) => p.number === drag.id);
+  if (isDraggingPitch.value) {
+    const player = players.value.find((p) => p.number === dragId.value);
     if (!player) return;
     if (!pitchEl.value) return;
     const rect = pitchEl.value.getBoundingClientRect();
@@ -135,25 +137,25 @@ function onMouseMove(e: MouseEvent) {
 }
 
 function stopDrag(_e: MouseEvent) {
-  if (drag.source === "bench" && drag.sub) {
+  if (isDraggingBench.value && draggedSub.value) {
     // Check if dropped on a player
     const target =
       hoveredPlayerId.value !== null
-        ? players.find((p) => p.number === hoveredPlayerId.value)
+        ? players.value.find((p) => p.number === hoveredPlayerId.value)
         : null;
 
     if (
       target &&
-      !isPendingLocked(drag.sub.number) &&
+      !isPendingLocked(draggedSub.value.number) &&
       !isPendingLocked(target.number)
     ) {
-      pendingSubs.value.push([drag.sub, target]);
+      pendingSubs.value.push([draggedSub.value, target]);
     }
   }
 
-  drag.id = null;
-  drag.source = null;
-  drag.sub = null;
+  dragId.value = null;
+  dragSource.value = null;
+  draggedSub.value = null;
   hoveredPlayerId.value = null;
 }
 
@@ -164,7 +166,7 @@ function cancelPendingSub(index: number) {
 }
 
 function onPlayerMouseEnter(player: Player) {
-  if (drag.source === "bench" && isPendingLocked(player.number)) {
+  if (isDraggingBench.value && isPendingLocked(player.number)) {
     hoveredPlayerId.value = null;
     return;
   }
@@ -182,26 +184,28 @@ function performSub() {
 
   // Client
   for (const [subIn, playerOut] of pendingSubs.value) {
-    const playerIndex = players.findIndex((p) => p.number === playerOut.number);
-    const subIndex = subs.findIndex((s) => s.number === subIn.number);
+    const playerIndex = players.value.findIndex(
+      (p) => p.number === playerOut.number,
+    );
+    const subIndex = subs.value.findIndex((s) => s.number === subIn.number);
 
     if (playerIndex === -1 || subIndex === -1) continue;
-    const player = players[playerIndex];
-    const sub = subs[subIndex];
+    const player = players.value[playerIndex];
+    const sub = subs.value[subIndex];
 
     if (!player || !sub) continue;
-    players[playerIndex] = sub;
-    subs[subIndex] = player;
+    players.value[playerIndex] = sub;
+    subs.value[subIndex] = player;
   }
   updatePlayerPositions();
-  pendingSubs.value = []
+  pendingSubs.value = [];
   // FIXME: Ideally shouldn't have to republish ActiveFormationUpdate, but this
   // allows for the player positions to be sent to the server for now
   publish(SocketMessage.ActiveFormationUpdate, {
     data: {
       location: props.location,
       activeFormation: activeFormation.value,
-      players,
+      players: players.value,
     },
   });
 }
@@ -382,9 +386,8 @@ function performSub() {
         class="player"
         :title="`${player.forename} ${player.surname}`"
         :class="{
-          dragging: drag.id === player.number && drag.source === 'pitch',
-          'sub-target':
-            drag.source === 'bench' && hoveredPlayerId === player.number,
+          dragging: dragId === player.number && isDraggingPitch,
+          'sub-target': isDraggingBench && hoveredPlayerId === player.number,
         }"
         :style="{ left: player.x + 'px', top: player.y + 'px' }"
         @mousedown.prevent="startPitchDrag($event, player)"
@@ -424,7 +427,7 @@ function performSub() {
           :title="`${sub.forename} ${sub.surname}`"
           class="sub"
           :class="{
-            dragging: drag.id === sub.number && drag.source === 'bench',
+            dragging: dragId === sub.number && isDraggingBench,
             'pending-locked': isPendingLocked(sub.number),
           }"
           @mousedown.prevent="startBenchDrag($event, sub)"
