@@ -5,6 +5,7 @@ const { state, publish } = useControlSocket();
 const { selectedPlayer } = useClientState();
 
 const placeholderPlayer: Player = {
+  id: "placeholder",
   number: 0,
   forename: "Awaiting",
   surname: "Selection",
@@ -17,16 +18,6 @@ const isPlaceholderPlayer = computed(
 );
 
 const handleGoal = () => {
-  if (isPlaceholderPlayer.value || !selectedPlayer.value) return;
-  publish(SocketMessage.MatchGoalScored, {
-    data: {
-      player: selectedPlayer.value,
-      matchTime: state.value.matchTime,
-    },
-  });
-};
-
-const handlePenaltyGoal = () => {
   if (isPlaceholderPlayer.value || !selectedPlayer.value) return;
   publish(SocketMessage.MatchGoalScored, {
     data: {
@@ -83,14 +74,6 @@ const handleRedCard = () => {
         title="Red Card"
       >
         🟥
-      </button>
-      <button
-        class="action-button penalty-goal"
-        @click="handlePenaltyGoal"
-        :disabled="isPlaceholderPlayer"
-        title="Penalty Goal"
-      >
-        🎯
       </button>
     </div>
   </div>

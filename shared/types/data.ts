@@ -1,6 +1,7 @@
 export type TeamLocation = "home" | "away";
 
 export type Player = {
+  id: string;
   forename: string;
   surname: string;
   /** @minimum 1 */
@@ -12,17 +13,14 @@ export type Player = {
 };
 
 export type TeamData = {
-  id: string;
   location: TeamLocation;
   name: string;
   shortName: string;
   players: Player[];
-  substitutes: Player[];
   manager: string;
 };
 
 export type MatchData = {
-  name: string;
   home: TeamData;
   away: TeamData;
 };

@@ -13,7 +13,7 @@ const EDITOR_PITCH_W = TeamFormationPitch.Width;
 const EDITOR_PITCH_H = TeamFormationPitch.Height;
 
 const sortedSubs = computed(() =>
-  props.team.substitutes.sort((a, b) => a.number - b.number),
+  [...props.team.substitutes].sort((a, b) => a.number - b.number),
 );
 
 const images = computed(() => {
@@ -251,7 +251,7 @@ watch(
               </svg>
               <div
                 v-for="entry in positionedPlayers"
-                :key="entry.player.number"
+                :key="entry.player.id"
                 class="player-shirt-container"
                 :style="entry.style"
                 :data-gk="entry.player.number === 1 || undefined"
@@ -298,7 +298,7 @@ watch(
             <div class="subs">
               <div class="subs-heading">SUBS</div>
               <ol class="subs-list">
-                <li v-for="sub in sortedSubs" :key="sub.number" class="sub">
+                <li v-for="sub in sortedSubs" :key="sub.id" class="sub">
                   {{ sub.number }}: {{ sub.forename }} {{ sub.surname }}
                 </li>
               </ol>

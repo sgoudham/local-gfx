@@ -36,11 +36,21 @@ const bigMatchScorecardData = computed<BigMatchScorecardProps>(() => {
     home: {
       name: state.value.home.name,
       shortName: state.value.home.shortName,
+      squad: new Map(
+        [...state.value.home.players, ...state.value.home.substitutes].map(
+          (player) => [player.id, player],
+        ),
+      ),
       goals: state.value.home.goals,
     },
     away: {
       name: state.value.away.name,
       shortName: state.value.away.shortName,
+      squad: new Map(
+        [...state.value.away.players, ...state.value.away.substitutes].map(
+          (player) => [player.id, player],
+        ),
+      ),
       goals: state.value.away.goals,
     },
     matchTime: state.value.matchTime,
@@ -59,12 +69,12 @@ const penaltiesScorecardData = computed<PenaltiesScorecardProps>(() => {
     name: state.value.graphics.penaltiesScorecard.name,
     visible: state.value.graphics.penaltiesScorecard.visible,
     home: {
-      id: state.value.home.id,
+      location: state.value.home.location,
       shortName: state.value.home.shortName,
       penalties: state.value.home.penalties,
     },
     away: {
-      id: state.value.away.id,
+      location: state.value.away.location,
       shortName: state.value.away.shortName,
       penalties: state.value.away.penalties,
     },
@@ -95,7 +105,7 @@ const substitutionData = computed<SubstitutionProps>(() => {
 <template>
   <OverlayMatchScorecard v-bind="matchScorecardData" />
   <OverlayBigMatchScorecard v-bind="bigMatchScorecardData" />
-  <OverlayStartingSoon v-bind="startingSoonData"/>
+  <OverlayStartingSoon v-bind="startingSoonData" />
   <OverlayPenaltiesScorecard v-bind="penaltiesScorecardData" />
   <OverlayTeamFormation v-bind="teamFormationData" />
   <OverlaySubstitution v-bind="substitutionData" />

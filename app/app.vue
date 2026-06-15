@@ -1,22 +1,27 @@
 <script setup lang="ts">
-const { data } = useSocketConnection();
+import { useSocketConnection } from "./composables/useSocketConnection";
+
 const state = useState<CompleteState>("state");
 
 await callOnce("socket:init", async () => {
   state.value = await $fetch("/api/state");
 });
 
-watch(data, (raw) => {
-  if (!raw) return;
-  try {
-    const parsed = JSON.parse(raw);
-    if (parsed.type === SocketMessage.SessionStateSync) {
-      state.value = parsed.data;
+if (import.meta.client) {
+  const { data } = useSocketConnection();
+
+  watch(data, (raw) => {
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed.type === SocketMessage.SessionStateSync) {
+        state.value = parsed.data;
+      }
+    } catch {
+      // ignore malformed messages
     }
-  } catch {
-    // ignore malformed messages
-  }
-});
+  });
+}
 </script>
 
 <template>
@@ -43,6 +48,7 @@ watch(data, (raw) => {
   --pen-scored: #1aa11a;
   --pen-missed: #f53e3e;
   --pitch-colour: #e9e9e9;
+  --pitch-editor: #40a02b;
   --large-scoreboard-x-padding: 40px;
   --ui-scale: 0.75;
 }

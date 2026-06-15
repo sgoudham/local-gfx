@@ -29,8 +29,19 @@ export type Goal = {
   matchTime: MatchTime;
 };
 
+export type PlayerState = {
+  id: string;
+  /** @minimum 1 */
+  /** @integer */
+  number: number;
+  x?: number;
+  y?: number;
+};
+
 export type TeamState = {
   activeFormation: FormationKey;
+  players: PlayerState[];
+  substitutes: PlayerState[];
   goals: Goal[];
   /** @minItems 5 @maxItems 5 */
   penalties: [
@@ -76,6 +87,27 @@ export type InitialState = {
   graphics: Graphics;
 };
 
-export type TeamComplete = TeamData & TeamState;
+export type TeamComplete = {
+  location: TeamLocation;
+  name: string;
+  shortName: string;
+  manager: string;
+  activeFormation: FormationKey;
+  players: Player[];
+  substitutes: Player[];
+  goals: Goal[];
+  penalties: [
+    PenaltyState,
+    PenaltyState,
+    PenaltyState,
+    PenaltyState,
+    PenaltyState,
+  ];
+};
 
-export type CompleteState = MatchData & InitialState;
+export type CompleteState = {
+  matchTime: MatchTime;
+  graphics: Graphics;
+  home: TeamComplete;
+  away: TeamComplete;
+};

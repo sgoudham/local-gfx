@@ -21,7 +21,7 @@ const teams = computed(() =>
   teamSlots.map((slot) => {
     const team = props[slot.id];
     return {
-      key: team.id,
+      key: team.location,
       abbreviation: team.shortName,
       penalties: team.penalties,
       panelClass: slot.panelClass,

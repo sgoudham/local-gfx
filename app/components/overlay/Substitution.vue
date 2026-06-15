@@ -118,7 +118,7 @@ watch(
           <div ref="playersOffGroup" class="panel-group panel-group-off">
             <div
               v-for="player in props.subs.map((s) => s[1])"
-              :key="`out-${player.number}-${player.forename}-${player.surname}`"
+              :key="`out-${player.id}`"
               class="panel player-off"
             >
               <div class="player-off-background"></div>
@@ -134,7 +134,7 @@ watch(
           <div ref="playersOnGroup" class="panel-group panel-group-on">
             <div
               v-for="player in props.subs.map((s) => s[0])"
-              :key="`in-${player.number}-${player.forename}-${player.surname}`"
+              :key="`in-${player.id}`"
               class="panel player-on"
             >
               <div class="player-on-background"></div>

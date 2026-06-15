@@ -1,5 +1,9 @@
-const { data, send } = useWebSocket("ws://localhost:3000/_ws");
+import type { SharedSocketConnection } from "~/plugins/websocket.client";
 
 export const useSocketConnection = () => {
-  return { data, send };
+  const { $ws } = useNuxtApp() as { $ws?: SharedSocketConnection };
+  if (!$ws) {
+    throw new Error("WebSocket plugin is unavailable");
+  }
+  return $ws;
 };

@@ -3,9 +3,17 @@ import type {
   MatchTime,
   OverlayState,
   SubstitutionData,
+  TeamComplete,
   TeamFormationData,
   TeamState,
 } from "../../shared/types/state";
+
+export type EditTeamDialogProps = Pick<
+  TeamComplete,
+  "location" | "players" | "substitutes" | "manager"
+>;
+
+export type SocialMediaPlayersProps = TeamComplete;
 
 export type MatchScorecardProps = OverlayState & {
   home: Pick<TeamData, "shortName"> & { goals: number };
@@ -16,9 +24,9 @@ export type MatchScorecardProps = OverlayState & {
 type BigMatchScorecardTeam = {
   name: TeamData["name"];
   shortName: TeamData["shortName"];
+  squad: Map<string, Player>;
   goals: TeamState["goals"];
 };
-
 export type BigMatchScorecardProps = OverlayState & {
   home: BigMatchScorecardTeam;
   away: BigMatchScorecardTeam;
@@ -26,10 +34,10 @@ export type BigMatchScorecardProps = OverlayState & {
 };
 
 export type PenaltiesScorecardProps = OverlayState & {
-  home: Pick<TeamData, "id" | "shortName"> & {
+  home: Pick<TeamData, "location" | "shortName"> & {
     penalties: TeamState["penalties"];
   };
-  away: Pick<TeamData, "id" | "shortName"> & {
+  away: Pick<TeamData, "location" | "shortName"> & {
     penalties: TeamState["penalties"];
   };
 };
@@ -39,9 +47,9 @@ export type TeamFormationProps = OverlayState & {
     location: TeamData["location"];
     name: TeamData["name"];
     shortName: TeamData["shortName"];
-    manager: TeamData["manager"]
-    players: TeamData["players"];
-    substitutes: TeamData["substitutes"];
+    manager: TeamData["manager"];
+    players: TeamComplete["players"];
+    substitutes: TeamComplete["substitutes"];
   };
 };
 

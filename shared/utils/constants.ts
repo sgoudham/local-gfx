@@ -59,6 +59,7 @@ export const SocketMessage = {
   MatchReset: "match.reset",
   MatchGoalScored: "match.goalScored",
   ActiveFormationUpdate: "activeFormation.update",
+  TeamInfoUpdate: "team.info.update",
   StartingSoonShow: overlayMsg(Overlay.StartingSoon, "show"),
   StartingSoonHide: overlayMsg(Overlay.StartingSoon, "hide"),
   MatchScorecardShow: overlayMsg(Overlay.MatchScorecard, "show"),
