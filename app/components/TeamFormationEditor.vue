@@ -33,11 +33,6 @@ watch(activeFormation, () => updatePlayerPositions(), {
 const dragId = ref<string | null>(null);
 const dragSource = ref<"pitch" | "bench" | null>(null);
 const draggedSub = ref<Player | null>(null);
-const isDraggingPitch = computed(() => dragSource.value === "pitch");
-const isDraggingBench = computed(() => dragSource.value === "bench");
-
-let dragOffsetX = 0;
-let dragOffsetY = 0;
 
 function isPendingLocked(playerId: string) {
   return pendingSubs.value.some(
@@ -92,19 +87,13 @@ function applyFormation(key: FormationKey) {
   });
 }
 
-// ── Pitch drag ───────────────────────────────────────────────
+// ── Drag handlers ──────────────────────────────────────────────
 
-function startPitchDrag(e: MouseEvent, player: Player) {
+function startPitchPlayerDrag(e: MouseEvent, player: Player) {
   dragId.value = player.id;
   dragSource.value = "pitch";
-  draggedSub.value = null;
-  if (!pitchEl.value) return;
-  const rect = pitchEl.value.getBoundingClientRect();
-  dragOffsetX = e.clientX - rect.left - (player.x ?? 0);
-  dragOffsetY = e.clientY - rect.top - (player.y ?? 0);
+  draggedSub.value = player;
 }
-
-// ── Bench drag ───────────────────────────────────────────────
 
 function startBenchDrag(e: MouseEvent, sub: Player) {
   if (isPendingLocked(sub.id)) return;
@@ -112,43 +101,44 @@ function startBenchDrag(e: MouseEvent, sub: Player) {
   dragId.value = sub.id;
   dragSource.value = "bench";
   draggedSub.value = sub;
-  dragOffsetX = 16;
-  dragOffsetY = 16;
-}
-
-// ── Shared mousemove (on .wrap) ──────────────────────────────
-
-function onMouseMove(e: MouseEvent) {
-  if (isDraggingPitch.value) {
-    const player = players.value.find((p) => p.id === dragId.value);
-    if (!player) return;
-    if (!pitchEl.value) return;
-    const rect = pitchEl.value.getBoundingClientRect();
-    player.x = Math.max(
-      16,
-      Math.min(PITCH_W - 16, e.clientX - rect.left - dragOffsetX),
-    );
-    player.y = Math.max(
-      16,
-      Math.min(PITCH_H - 16, e.clientY - rect.top - dragOffsetY),
-    );
-  }
 }
 
 function stopDrag(_e: MouseEvent) {
-  if (isDraggingBench.value && draggedSub.value) {
-    // Check if dropped on a player
-    const target =
-      hoveredPlayerId.value !== null
-        ? players.value.find((p) => p.id === hoveredPlayerId.value)
-        : null;
+  if (draggedSub.value && hoveredPlayerId.value) {
+    const target = players.value.find((p) => p.id === hoveredPlayerId.value);
 
     if (
       target &&
       !isPendingLocked(draggedSub.value.id) &&
       !isPendingLocked(target.id)
     ) {
-      pendingSubs.value.push([draggedSub.value, target]);
+      if (dragSource.value === "pitch") {
+        const draggedIndex = players.value.findIndex(
+          (p) => p.id === draggedSub.value!.id,
+        );
+        const targetIndex = players.value.findIndex((p) => p.id === target.id);
+
+        if (draggedIndex !== -1 && targetIndex !== -1) {
+          const draggedPlayer = players.value[draggedIndex]!;
+          const targetPlayer = players.value[targetIndex]!;
+          const tempX = draggedPlayer.x;
+          const tempY = draggedPlayer.y;
+          draggedPlayer.x = targetPlayer.x;
+          draggedPlayer.y = targetPlayer.y;
+          targetPlayer.x = tempX;
+          targetPlayer.y = tempY;
+
+          publish(SocketMessage.ActiveFormationUpdate, {
+            data: {
+              location: props.location,
+              activeFormation: activeFormation.value,
+              players: players.value,
+            },
+          });
+        }
+      } else {
+        pendingSubs.value.push([draggedSub.value, target]);
+      }
     }
   }
 
@@ -165,10 +155,13 @@ function cancelPendingSub(index: number) {
 }
 
 function onPlayerMouseEnter(player: Player) {
-  if (isDraggingBench.value && isPendingLocked(player.id)) {
+  if (!draggedSub.value) return;
+
+  if (isPendingLocked(player.id) || isPendingLocked(draggedSub.value.id)) {
     hoveredPlayerId.value = null;
     return;
   }
+
   hoveredPlayerId.value = player.id;
 }
 
@@ -207,7 +200,11 @@ function performSub() {
   });
 }
 
-function onTeamSave(updatedPlayers: Player[], updatedSubs: Player[], updatedManager: string) {
+function onTeamSave(
+  updatedPlayers: Player[],
+  updatedSubs: Player[],
+  updatedManager: string,
+) {
   players.value.splice(0, players.value.length, ...updatedPlayers);
   substitutes.value.splice(0, substitutes.value.length, ...updatedSubs);
 
@@ -216,19 +213,14 @@ function onTeamSave(updatedPlayers: Player[], updatedSubs: Player[], updatedMana
       location: props.location,
       players: players.value,
       substitutes: substitutes.value,
-      manager: updatedManager
+      manager: updatedManager,
     },
   });
 }
 </script>
 
 <template>
-  <div
-    class="wrap"
-    :style="layoutVars"
-    @mousemove="onMouseMove"
-    @mouseup="stopDrag"
-  >
+  <div class="wrap" :style="layoutVars" @mouseup="stopDrag">
     <div class="wrap row">
       <div>{{ props.name }}</div>
       <EditTeamDialog
@@ -405,11 +397,11 @@ function onTeamSave(updatedPlayers: Player[], updatedSubs: Player[], updatedMana
         class="player"
         :title="`${player.forename} ${player.surname}`"
         :class="{
-          dragging: dragId === player.id && isDraggingPitch,
-          'sub-target': isDraggingBench && hoveredPlayerId === player.id,
+          dragging: dragId === player.id && dragSource === 'pitch',
+          'sub-target': hoveredPlayerId === player.id && draggedSub,
         }"
         :style="{ left: player.x + 'px', top: player.y + 'px' }"
-        @mousedown.prevent="startPitchDrag($event, player)"
+        @mousedown.prevent="startPitchPlayerDrag($event, player)"
         @mouseenter="onPlayerMouseEnter(player)"
         @mouseleave="hoveredPlayerId = null"
         @click="() => (selectedPlayer = player)"
@@ -446,7 +438,7 @@ function onTeamSave(updatedPlayers: Player[], updatedSubs: Player[], updatedMana
           :title="`${sub.forename} ${sub.surname}`"
           class="sub"
           :class="{
-            dragging: dragId === sub.id && isDraggingBench,
+            dragging: dragId === sub.id && dragSource === 'bench',
             'pending-locked': isPendingLocked(sub.id),
           }"
           @mousedown.prevent="startBenchDrag($event, sub)"
