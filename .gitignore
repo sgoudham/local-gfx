@@ -4,3 +4,4 @@ _store
 .data
 .output
 data.json
+node_modules/
