@@ -15,12 +15,12 @@ const EDITOR_PITCH_H = TeamFormationPitch.Height;
 const sortedSubs = computed(() =>
   [...props.team.substitutes].sort((a, b) => a.number - b.number),
 );
+const isHome = computed(() => props.team.location === "home");
 
 const images = computed(() => {
   return {
-    badge: props.team.location === "home" ? "/homeBadge.png" : "/awayBadge.png",
-    manager:
-      props.team.location === "home" ? "/homeManager.png" : "/awayManager.jpg",
+    badge: isHome.value ? "/homeBadge.png" : "/awayBadge.png",
+    manager: isHome.value ? "/homeManager.png" : "/awayManager.jpg",
   };
 });
 
@@ -44,16 +44,12 @@ function shirtName(player: { forename: string; surname: string }) {
   return player.surname;
 }
 
-const DYNAMOS_NAME = "Dunterlie Dynamos";
-
 const positionedPlayers = computed(() => {
-  const isDynamos = props.team.name === DYNAMOS_NAME;
-
   return props.team.players.map((player) => {
     const x = player.x ?? EDITOR_PITCH_W / 2;
     const y = player.y ?? EDITOR_PITCH_H / 2;
     const isGk = player.number === 1;
-    const invert = !isDynamos || isGk;
+    const invert = player.location === "away" || isGk;
 
     return {
       player,
@@ -298,7 +294,13 @@ watch(
             <div class="subs">
               <div class="subs-heading">SUBS</div>
               <ol class="subs-list">
-                <li v-for="sub in sortedSubs" :key="sub.id" class="sub">
+                <li
+                  v-for="sub in sortedSubs.filter(
+                    (p) => p.forename && p.surname,
+                  )"
+                  :key="sub.id"
+                  class="sub"
+                >
                   {{ sub.number }}: {{ sub.forename }} {{ sub.surname }}
                 </li>
               </ol>

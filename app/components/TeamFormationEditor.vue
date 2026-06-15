@@ -13,7 +13,9 @@ const PITCH_HORIZONTAL_PADDING = TeamFormationPitch.HorizontalPadding;
 const players = computed(() => props.players);
 const substitutes = computed(() => props.substitutes);
 const sortedSubs = computed(() =>
-  [...substitutes.value].sort((a, b) => a.number - b.number),
+  [...substitutes.value]
+    .filter((s) => s.forename && s.surname)
+    .sort((a, b) => a.number - b.number),
 );
 const pendingSubs = ref<PendingSub[]>([]);
 const pitchEl = ref<HTMLElement | null>(null);

@@ -12,14 +12,10 @@ export const PenaltyState = {
 export const Formation = {
   "3-4-3": "3-4-3",
   "3-5-2": "3-5-2",
-  "3-4-2-1": "3-4-2-1",
-  "3-6-1": "3-6-1",
   "4-3-3": "4-3-3",
   "4-4-2": "4-4-2",
   "4-5-1": "4-5-1",
-  "4-4-1-1": "4-4-1-1",
   "4-3-2-1": "4-3-2-1",
-  "4-2-3-1": "4-2-3-1",
   "5-4-1": "5-4-1",
   "5-3-2": "5-3-2",
 } as const;
@@ -32,7 +28,7 @@ export const TeamLocation = {
 export const TeamFormationPitch = {
   Width: 250,
   Height: 400,
-  HorizontalPadding: 46,
+  HorizontalPadding: 36,
 } as const;
 
 export const Overlay = {

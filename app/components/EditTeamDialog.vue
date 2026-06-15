@@ -24,20 +24,6 @@ function close() {
   dialogRef.value?.close();
 }
 
-function addSub() {
-  draftSubs.value.push({
-    id: crypto.randomUUID(),
-    forename: "",
-    surname: "",
-    number: 0,
-    location: props.location,
-  });
-}
-
-function removeSub(index: number) {
-  draftSubs.value.splice(index, 1);
-}
-
 function save() {
   emit("save", draftPlayers.value, draftSubs.value, draftManager.value);
   close();
@@ -94,7 +80,7 @@ defineExpose({ open });
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(sub, i) in draftSubs" :key="sub.id">
+          <tr v-for="sub in draftSubs" :key="sub.id">
             <td>
               <input
                 type="number"
@@ -109,13 +95,9 @@ defineExpose({ open });
             <td>
               <input type="text" v-model="sub.surname" />
             </td>
-            <td>
-              <button type="button" @click="removeSub(i)">Remove</button>
-            </td>
           </tr>
         </tbody>
       </table>
-      <button type="button" @click="addSub">+ Add Sub</button>
 
       <div style="margin-top: 12px; display: flex; gap: 8px">
         <button type="submit">Save</button>
