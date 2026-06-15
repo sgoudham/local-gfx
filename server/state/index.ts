@@ -1,5 +1,11 @@
 import type { Peer } from "crossws";
-import { MatchData } from "~~/shared/types/data";
+import type { MatchData, Player, TeamData } from "~~/shared/types/data";
+import type {
+  InitialState,
+  PlayerState,
+  TeamComplete,
+  TeamState,
+} from "~~/shared/types/state";
 import { Mode } from "~~/shared/utils/constants";
 import { matchDataSchema } from "../schema/data";
 import { initialStateSchema } from "../schema/state";
@@ -13,8 +19,6 @@ export class ServerState {
   private _state!: CompleteState;
   private peer: Peer | undefined;
   matchTimer!: MatchTimer;
-
-  constructor() {}
 
   async init() {
     this._state = await this.initState();
@@ -36,7 +40,7 @@ export class ServerState {
 
   patchState = async (mutate: StateMutator): Promise<CompleteState> => {
     mutate(this._state);
-    await this.persistState(this._state);
+    await this.persistCompleteState(this._state);
     await this.syncState([Mode.Control, Mode.Output]);
     return this._state;
   };
@@ -53,42 +57,136 @@ export class ServerState {
     this.peer.send(data);
   }
 
-  private async initState() {
-    let state = await useStorage<CompleteState>("fs").getItem("state");
-    if (state) {
-      return state;
+  private async initState(): Promise<CompleteState> {
+    const [data, state] = await Promise.all([
+      this.loadData(),
+      this.loadState(),
+    ]);
+    const completeState = this.mergeDataAndState(data, state);
+    await this.persistCompleteState(completeState);
+    return completeState;
+  }
+
+  private async loadData(): Promise<MatchData> {
+    const storedData = await useStorage<MatchData>("fs").getItem("data");
+    const parsedData = matchDataSchema.safeParse(storedData);
+    if (parsedData.success) {
+      return parsedData.data;
     }
 
-    const data = await this.getData();
+    const initialData = await this.getInitialData();
+    await useStorage<MatchData>("fs").setItem("data", initialData);
+    return initialData;
+  }
+
+  private async loadState(): Promise<InitialState> {
+    const storedState = await useStorage<InitialState>("fs").getItem("state");
+    const parsedState = initialStateSchema.safeParse(storedState);
+    if (parsedState.success) {
+      return parsedState.data;
+    }
+
     const initialState = await this.getInitialState();
+    await useStorage<InitialState>("fs").setItem("state", initialState);
+    return initialState;
+  }
 
-    state = {
-      name: data.name,
-      matchTime: initialState.matchTime,
-      graphics: initialState.graphics,
-      home: {
-        ...data.home,
-        ...initialState.home,
-      },
-      away: {
-        ...data.away,
-        ...initialState.away,
-      },
+  private async persistCompleteState(state: CompleteState) {
+    await Promise.all([
+      useStorage<MatchData>("fs").setItem("data", this.extractData(state)),
+      useStorage<InitialState>("fs").setItem("state", this.extractState(state)),
+    ]);
+  }
+
+  private mergeDataAndState(
+    data: MatchData,
+    state: InitialState,
+  ): CompleteState {
+    return {
+      matchTime: state.matchTime,
+      graphics: state.graphics,
+      home: this.mergeTeam(data.home, state.home),
+      away: this.mergeTeam(data.away, state.away),
     };
-
-    await this.persistState(state);
-
-    return state;
   }
 
-  private async persistState(state: CompleteState) {
-    await useStorage<CompleteState>("fs").setItem("state", state);
+  private mergeTeam(data: TeamData, state: TeamState): TeamComplete {
+    return {
+      location: data.location,
+      name: data.name,
+      shortName: data.shortName,
+      manager: data.manager,
+      activeFormation: state.activeFormation,
+      players: this.hydratePlayers(data, state.players),
+      substitutes: this.hydratePlayers(data, state.substitutes),
+      goals: state.goals,
+      penalties: state.penalties,
+    };
   }
 
-  private async getData(): Promise<MatchData> {
-    const raw = await useStorage("assets:server").getItem("data.json");
+  private hydratePlayers(data: TeamData, players: PlayerState[]): Player[] {
+    const playersById = new Map(
+      data.players.map((player) => [player.id, player]),
+    );
+
+    return players.flatMap((playerState) => {
+      const player = playersById.get(playerState.id);
+      if (!player) return [];
+      return [{ ...player, x: playerState.x, y: playerState.y }];
+    });
+  }
+
+  private extractData(state: CompleteState): MatchData {
+    return {
+      home: this.extractTeamData(state.home),
+      away: this.extractTeamData(state.away),
+    };
+  }
+
+  private extractTeamData(team: TeamComplete): TeamData {
+    return {
+      location: team.location,
+      name: team.name,
+      shortName: team.shortName,
+      manager: team.manager,
+      players: [...team.players, ...team.substitutes],
+    };
+  }
+
+  private extractState(state: CompleteState): InitialState {
+    return {
+      matchTime: state.matchTime,
+      graphics: state.graphics,
+      home: this.extractTeamState(state.home),
+      away: this.extractTeamState(state.away),
+    };
+  }
+
+  private extractTeamState(team: TeamComplete): TeamState {
+    return {
+      activeFormation: team.activeFormation,
+      players: team.players.map((player) => this.extractPlayerState(player)),
+      substitutes: team.substitutes.map((player) =>
+        this.extractPlayerState(player),
+      ),
+      goals: team.goals,
+      penalties: team.penalties,
+    };
+  }
+
+  private extractPlayerState(player: Player): PlayerState {
+    return {
+      id: player.id,
+      number: player.number,
+      x: player.x,
+      y: player.y,
+    };
+  }
+
+  private async getInitialData(): Promise<MatchData> {
+    const raw = await useStorage("assets:server").getItem("initialData.json");
     if (!raw) {
-      throw new Error("err=no_data msg='couldn't load data.json'");
+      throw new Error("err=no_data msg='couldn't load initialData.json'");
     }
     return matchDataSchema.parse(raw);
   }
@@ -103,8 +201,17 @@ export class ServerState {
 
   public async clear() {
     await this.matchTimer.reset();
-    await useStorage<CompleteState>("fs").removeItem("state");
-    this._state = await this.initState();
+    const [data, initialState] = await Promise.all([
+      this.loadData(),
+      this.getInitialState(),
+    ]);
+
+    this._state = this.mergeDataAndState(data, initialState);
+    await useStorage<InitialState>("fs").setItem(
+      "state",
+      this.extractState(this._state),
+    );
+    this.matchTimer = new MatchTimer(this.patchState, this._state.matchTime);
     await this.syncState([Mode.Control, Mode.Output]);
   }
 }

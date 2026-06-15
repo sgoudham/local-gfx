@@ -38,6 +38,13 @@ const ActiveFormationUpdateSchema = z.object({
   players: z.array(playerSchema),
 });
 
+const TeamInfoUpdateSchema = z.object({
+  location: teamLocationSchema,
+  players: z.array(playerSchema),
+  substitutes: z.array(playerSchema),
+  manager: z.string(),
+});
+
 const TeamFormationShowSchema = z.object({
   location: teamLocationSchema,
 });
@@ -52,6 +59,9 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   }),
   socketMsg(Mode.Control, SocketMessage.ActiveFormationUpdate, {
     data: ActiveFormationUpdateSchema,
+  }),
+  socketMsg(Mode.Control, SocketMessage.TeamInfoUpdate, {
+    data: TeamInfoUpdateSchema,
   }),
   socketMsg(Mode.Control, SocketMessage.StartingSoonShow),
   socketMsg(Mode.Control, SocketMessage.StartingSoonHide),

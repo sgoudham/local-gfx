@@ -63,7 +63,7 @@ function stopAutoScroll() {
   autoScrollTweens.length = 0;
 }
 
-function dedupeGoals(goals: TeamState["goals"]) {
+function dedupeGoals(goals: TeamState["goals"], squad: Map<string, Player>) {
   const groupedGoals = new Map<
     string,
     { player: Player; minuteLabels: string[] }
@@ -71,14 +71,14 @@ function dedupeGoals(goals: TeamState["goals"]) {
 
   for (const goal of goals) {
     const minuteLabel = `'${goal.matchTime.formatted.split(":")[0]}`;
-    const key = `${goal.player.forename}-${goal.player.surname}-${goal.player.number}`;
+    const key = goal.player.id;
     const groupedGoal = groupedGoals.get(key);
 
     if (groupedGoal) {
       groupedGoal.minuteLabels.push(minuteLabel);
     } else {
       groupedGoals.set(key, {
-        player: goal.player,
+        player: squad.get(key) ?? goal.player,
         minuteLabels: [minuteLabel],
       });
     }
@@ -89,16 +89,15 @@ function dedupeGoals(goals: TeamState["goals"]) {
 
 function goalsSignature(goals: TeamState["goals"]) {
   return goals
-    .map(
-      (goal) =>
-        `${goal.player.number}-${goal.player.forename}-${goal.player.surname}-${goal.matchTime.formatted}`,
-    )
+    .map((goal) => `${goal.player.id}-${goal.matchTime.formatted}`)
     .join("|");
 }
 
+// FIXME: Instead of combining players and substitutes on the client side, there
+// should be a lookup object containing all the players and substitutes already
 const goals = computed(() => ({
-  home: dedupeGoals(props.home.goals),
-  away: dedupeGoals(props.away.goals),
+  home: dedupeGoals(props.home.goals, props.home.squad),
+  away: dedupeGoals(props.away.goals, props.away.squad),
   signature: `${goalsSignature(props.home.goals)}::${goalsSignature(props.away.goals)}`,
 }));
 
@@ -202,11 +201,12 @@ onUnmounted(() => {
               <div class="scorers-track" ref="homeScorersRef">
                 <div
                   v-for="goal in goals.home"
-                  :key="`home-${goal.player.forename}-${goal.player.surname}-${goal.player.number}`"
+                  :key="`home-${goal.player.id}`"
                   class="scorer"
                 >
                   {{ goal.player.number }}: {{ goal.player.forename }}
-                  {{ goal.player.surname }} ({{ goal.minuteLabels.join(", ") }})
+                  {{ goal.player.surname }}
+                  ({{ goal.minuteLabels.join(", ") }})
                 </div>
               </div>
             </div>
@@ -238,7 +238,7 @@ onUnmounted(() => {
               <div class="scorers-track" ref="awayScorersRef">
                 <div
                   v-for="goal in goals.away"
-                  :key="`away-${goal.player.forename}-${goal.player.surname}-${goal.player.number}`"
+                  :key="`away-${goal.player.id}`"
                   class="scorer"
                 >
                   {{ goal.player.number }}: {{ goal.player.forename }}
@@ -478,9 +478,9 @@ onUnmounted(() => {
   z-index: 100;
 }
 
-.score-large {  
+.score-large {
   position: relative;
-  z-index: 11;  
+  z-index: 11;
   font-size: 76px;
   font-style: italic;
   letter-spacing: -0.1em;

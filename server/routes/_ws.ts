@@ -69,6 +69,15 @@ export default defineWebSocketHandler({
             });
             break;
 
+          case SocketMessage.TeamInfoUpdate:
+            const teamData = parsed.msg.data;
+            await serverState.patchState((s) => {
+              s[teamData.location].players = teamData.players;
+              s[teamData.location].substitutes = teamData.substitutes;
+              s[teamData.location].manager = teamData.manager;
+            });
+            break;
+
           case SocketMessage.StartingSoonShow:
             await serverState.patchState((s) => {
               s.graphics.startingSoon.visible = true;
@@ -152,10 +161,10 @@ export default defineWebSocketHandler({
             await serverState.patchState((s) => {
               for (const [subIn, playerOut] of data.subs) {
                 const playerIndex = s[data.location].players.findIndex(
-                  (p) => p.number === playerOut.number,
+                  (p) => p.id === playerOut.id,
                 );
                 const subIndex = s[data.location].substitutes.findIndex(
-                  (p) => p.number === subIn.number,
+                  (p) => p.id === subIn.id,
                 );
                 const player = s[data.location].players[playerIndex];
                 const sub = s[data.location].substitutes[subIndex];

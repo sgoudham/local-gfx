@@ -1,22 +1,27 @@
 <script setup lang="ts">
-const { data } = useSocketConnection();
+import { useSocketConnection } from "./composables/useSocketConnection";
+
 const state = useState<CompleteState>("state");
 
 await callOnce("socket:init", async () => {
   state.value = await $fetch("/api/state");
 });
 
-watch(data, (raw) => {
-  if (!raw) return;
-  try {
-    const parsed = JSON.parse(raw);
-    if (parsed.type === SocketMessage.SessionStateSync) {
-      state.value = parsed.data;
+if (import.meta.client) {
+  const { data } = useSocketConnection();
+
+  watch(data, (raw) => {
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed.type === SocketMessage.SessionStateSync) {
+        state.value = parsed.data;
+      }
+    } catch {
+      // ignore malformed messages
     }
-  } catch {
-    // ignore malformed messages
-  }
-});
+  });
+}
 </script>
 
 <template>

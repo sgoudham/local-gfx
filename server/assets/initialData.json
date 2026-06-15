@@ -1,0 +1,40 @@
+{
+  "home": {
+    "location": "home",
+    "name": "Dunterlie Dynamos",
+    "shortName": "DUN",
+    "manager": "",
+    "players": [
+      { "id": "59192b96-09c6-4418-86b0-5c65c8e79d37", "forename": "", "surname": "", "number": 1, "location": "home" },
+      { "id": "5eff02e2-04f0-41c4-974f-7f9c64e0c53f", "forename": "", "surname": "", "number": 2, "location": "home" },
+      { "id": "40f62868-47cc-4b98-96d9-065f0d18b997", "forename": "", "surname": "", "number": 3, "location": "home" },
+      { "id": "b0a636b4-bc29-410c-9e1d-611805ef7ec9", "forename": "", "surname": "", "number": 4, "location": "home" },
+      { "id": "5d91cf9b-3d2a-4276-963b-711725ec0c5d", "forename": "", "surname": "", "number": 5, "location": "home" },
+      { "id": "f2a0d680-03cf-4a31-88bf-78deabea514c", "forename": "", "surname": "", "number": 6, "location": "home" },
+      { "id": "ca82ac5d-5221-48ca-bd09-6f90f97bf078", "forename": "", "surname": "", "number": 7, "location": "home" },
+      { "id": "3d648f26-7338-4d32-9854-2bac7bf4dae7", "forename": "", "surname": "", "number": 8, "location": "home" },
+      { "id": "84a92695-b1d3-4324-b18a-aa477c798ffa", "forename": "", "surname": "", "number": 9, "location": "home" },
+      { "id": "19bb70de-26ad-48cb-9a98-86ee02214aec", "forename": "", "surname": "", "number": 10, "location": "home" },
+      { "id": "5dd336f2-f576-4534-a0ea-ffe651256ac7", "forename": "", "surname": "", "number": 11, "location": "home" }
+    ]
+  },
+  "away": {
+    "location": "away",
+    "name": "AC Malones",
+    "shortName": "MAL",
+    "manager": "",
+    "players": [
+      { "id": "cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d", "forename": "", "surname": "", "number": 1, "location": "away" },
+      { "id": "4ddc7913-1c11-4596-be89-32108c476101", "forename": "", "surname": "", "number": 2, "location": "away" },
+      { "id": "84cbd624-d399-4406-b902-e9c61a7e3f09", "forename": "", "surname": "", "number": 3, "location": "away" },
+      { "id": "e4fa8c38-38e4-4d26-9434-d90e5bfc0479", "forename": "", "surname": "", "number": 4, "location": "away" },
+      { "id": "b9f95965-c2af-4716-8825-3b1a64b926cc", "forename": "", "surname": "", "number": 5, "location": "away" },
+      { "id": "39c09ef3-609d-48aa-9919-2a78b0843162", "forename": "", "surname": "", "number": 6, "location": "away" },
+      { "id": "3dbcb9f3-9106-4516-ad65-6c788a95105f", "forename": "", "surname": "", "number": 7, "location": "away" },
+      { "id": "33944913-b2db-4012-ade4-38fae96c969a", "forename": "", "surname": "", "number": 8, "location": "away" },
+      { "id": "222bda56-3584-404b-b7b2-b3fa9f57349d", "forename": "", "surname": "", "number": 9, "location": "away" },
+      { "id": "323d18b3-97b3-4381-803c-2df65a13d4e5", "forename": "", "surname": "", "number": 10, "location": "away" },
+      { "id": "432ab771-3f25-43fc-bebf-3fd61e5be9cc", "forename": "", "surname": "", "number": 11, "location": "away" }
+    ]
+  }
+}

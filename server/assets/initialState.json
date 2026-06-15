@@ -6,11 +6,39 @@
   },
   "home": {
     "activeFormation": "4-4-2",
+    "players": [
+      { "id": "59192b96-09c6-4418-86b0-5c65c8e79d37", "number": 1 },
+      { "id": "5eff02e2-04f0-41c4-974f-7f9c64e0c53f", "number": 2 },
+      { "id": "40f62868-47cc-4b98-96d9-065f0d18b997", "number": 3 },
+      { "id": "b0a636b4-bc29-410c-9e1d-611805ef7ec9", "number": 4 },
+      { "id": "5d91cf9b-3d2a-4276-963b-711725ec0c5d", "number": 5 },
+      { "id": "f2a0d680-03cf-4a31-88bf-78deabea514c", "number": 6 },
+      { "id": "ca82ac5d-5221-48ca-bd09-6f90f97bf078", "number": 7 },
+      { "id": "3d648f26-7338-4d32-9854-2bac7bf4dae7", "number": 8 },
+      { "id": "84a92695-b1d3-4324-b18a-aa477c798ffa", "number": 9 },
+      { "id": "19bb70de-26ad-48cb-9a98-86ee02214aec", "number": 10 },
+      { "id": "5dd336f2-f576-4534-a0ea-ffe651256ac7", "number": 11 }
+    ],
+    "substitutes": [],
     "goals": [],
     "penalties": [0, 0, 0, 0, 0]
   },
   "away": {
     "activeFormation": "4-4-2",
+    "players": [
+      { "id": "cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d", "number": 1 },
+      { "id": "4ddc7913-1c11-4596-be89-32108c476101", "number": 2 },
+      { "id": "84cbd624-d399-4406-b902-e9c61a7e3f09", "number": 3 },
+      { "id": "e4fa8c38-38e4-4d26-9434-d90e5bfc0479", "number": 4 },
+      { "id": "b9f95965-c2af-4716-8825-3b1a64b926cc", "number": 5 },
+      { "id": "39c09ef3-609d-48aa-9919-2a78b0843162", "number": 6 },
+      { "id": "3dbcb9f3-9106-4516-ad65-6c788a95105f", "number": 7 },
+      { "id": "33944913-b2db-4012-ade4-38fae96c969a", "number": 8 },
+      { "id": "222bda56-3584-404b-b7b2-b3fa9f57349d", "number": 9 },
+      { "id": "323d18b3-97b3-4381-803c-2df65a13d4e5", "number": 10 },
+      { "id": "432ab771-3f25-43fc-bebf-3fd61e5be9cc", "number": 11 }
+    ],
+    "substitutes": [],
     "goals": [],
     "penalties": [0, 0, 0, 0, 0]
   },

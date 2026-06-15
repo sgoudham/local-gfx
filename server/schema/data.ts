@@ -4,6 +4,7 @@ import { z } from "zod";
 export const teamLocationSchema = z.union([z.literal("home"), z.literal("away")]);
 
 export const playerSchema = z.object({
+    id: z.string(),
     forename: z.string(),
     surname: z.string(),
     number: z.number().min(1),
@@ -13,17 +14,14 @@ export const playerSchema = z.object({
 });
 
 export const teamDataSchema = z.object({
-    id: z.string(),
     location: teamLocationSchema,
     name: z.string(),
     shortName: z.string(),
     players: z.array(playerSchema),
-    substitutes: z.array(playerSchema),
     manager: z.string()
 });
 
 export const matchDataSchema = z.object({
-    name: z.string(),
     home: teamDataSchema,
     away: teamDataSchema
 });

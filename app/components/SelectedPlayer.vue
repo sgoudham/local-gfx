@@ -5,6 +5,7 @@ const { state, publish } = useControlSocket();
 const { selectedPlayer } = useClientState();
 
 const placeholderPlayer: Player = {
+  id: "placeholder",
   number: 0,
   forename: "Awaiting",
   surname: "Selection",

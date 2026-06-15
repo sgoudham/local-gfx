@@ -11,13 +11,13 @@ const PITCH_H = TeamFormationPitch.Height;
 const PITCH_HORIZONTAL_PADDING = TeamFormationPitch.HorizontalPadding;
 
 const players = computed(() => props.players);
-const subs = computed(() => props.substitutes);
+const substitutes = computed(() => props.substitutes);
 const sortedSubs = computed(() =>
-  [...subs.value].sort((a, b) => a.number - b.number),
+  [...substitutes.value].sort((a, b) => a.number - b.number),
 );
 const pendingSubs = ref<PendingSub[]>([]);
 const pitchEl = ref<HTMLElement | null>(null);
-const hoveredPlayerId = ref<number | null>(null);
+const hoveredPlayerId = ref<string | null>(null);
 const hasPendingSubs = computed(() => pendingSubs.value.length === 0);
 const activeFormation = computed(() => props.activeFormation);
 const layoutVars = computed(() => ({
@@ -30,7 +30,7 @@ watch(activeFormation, () => updatePlayerPositions(), {
   immediate: true,
 });
 
-const dragId = ref<number | null>(null);
+const dragId = ref<string | null>(null);
 const dragSource = ref<"pitch" | "bench" | null>(null);
 const draggedSub = ref<Player | null>(null);
 const isDraggingPitch = computed(() => dragSource.value === "pitch");
@@ -39,10 +39,9 @@ const isDraggingBench = computed(() => dragSource.value === "bench");
 let dragOffsetX = 0;
 let dragOffsetY = 0;
 
-function isPendingLocked(playerNumber: number) {
+function isPendingLocked(playerId: string) {
   return pendingSubs.value.some(
-    ([subIn, playerOut]) =>
-      subIn.number === playerNumber || playerOut.number === playerNumber,
+    ([subIn, playerOut]) => subIn.id === playerId || playerOut.id === playerId,
   );
 }
 
@@ -96,7 +95,7 @@ function applyFormation(key: FormationKey) {
 // ── Pitch drag ───────────────────────────────────────────────
 
 function startPitchDrag(e: MouseEvent, player: Player) {
-  dragId.value = player.number;
+  dragId.value = player.id;
   dragSource.value = "pitch";
   draggedSub.value = null;
   if (!pitchEl.value) return;
@@ -108,9 +107,9 @@ function startPitchDrag(e: MouseEvent, player: Player) {
 // ── Bench drag ───────────────────────────────────────────────
 
 function startBenchDrag(e: MouseEvent, sub: Player) {
-  if (isPendingLocked(sub.number)) return;
+  if (isPendingLocked(sub.id)) return;
 
-  dragId.value = sub.number;
+  dragId.value = sub.id;
   dragSource.value = "bench";
   draggedSub.value = sub;
   dragOffsetX = 16;
@@ -121,7 +120,7 @@ function startBenchDrag(e: MouseEvent, sub: Player) {
 
 function onMouseMove(e: MouseEvent) {
   if (isDraggingPitch.value) {
-    const player = players.value.find((p) => p.number === dragId.value);
+    const player = players.value.find((p) => p.id === dragId.value);
     if (!player) return;
     if (!pitchEl.value) return;
     const rect = pitchEl.value.getBoundingClientRect();
@@ -141,13 +140,13 @@ function stopDrag(_e: MouseEvent) {
     // Check if dropped on a player
     const target =
       hoveredPlayerId.value !== null
-        ? players.value.find((p) => p.number === hoveredPlayerId.value)
+        ? players.value.find((p) => p.id === hoveredPlayerId.value)
         : null;
 
     if (
       target &&
-      !isPendingLocked(draggedSub.value.number) &&
-      !isPendingLocked(target.number)
+      !isPendingLocked(draggedSub.value.id) &&
+      !isPendingLocked(target.id)
     ) {
       pendingSubs.value.push([draggedSub.value, target]);
     }
@@ -166,11 +165,11 @@ function cancelPendingSub(index: number) {
 }
 
 function onPlayerMouseEnter(player: Player) {
-  if (isDraggingBench.value && isPendingLocked(player.number)) {
+  if (isDraggingBench.value && isPendingLocked(player.id)) {
     hoveredPlayerId.value = null;
     return;
   }
-  hoveredPlayerId.value = player.number;
+  hoveredPlayerId.value = player.id;
 }
 
 function performSub() {
@@ -184,18 +183,16 @@ function performSub() {
 
   // Client
   for (const [subIn, playerOut] of pendingSubs.value) {
-    const playerIndex = players.value.findIndex(
-      (p) => p.number === playerOut.number,
-    );
-    const subIndex = subs.value.findIndex((s) => s.number === subIn.number);
+    const playerIndex = players.value.findIndex((p) => p.id === playerOut.id);
+    const subIndex = substitutes.value.findIndex((s) => s.id === subIn.id);
 
     if (playerIndex === -1 || subIndex === -1) continue;
     const player = players.value[playerIndex];
-    const sub = subs.value[subIndex];
+    const sub = substitutes.value[subIndex];
 
     if (!player || !sub) continue;
     players.value[playerIndex] = sub;
-    subs.value[subIndex] = player;
+    substitutes.value[subIndex] = player;
   }
   updatePlayerPositions();
   pendingSubs.value = [];
@@ -209,6 +206,20 @@ function performSub() {
     },
   });
 }
+
+function onTeamSave(updatedPlayers: Player[], updatedSubs: Player[], updatedManager: string) {
+  players.value.splice(0, players.value.length, ...updatedPlayers);
+  substitutes.value.splice(0, substitutes.value.length, ...updatedSubs);
+
+  publish(SocketMessage.TeamInfoUpdate, {
+    data: {
+      location: props.location,
+      players: players.value,
+      substitutes: substitutes.value,
+      manager: updatedManager
+    },
+  });
+}
 </script>
 
 <template>
@@ -218,10 +229,19 @@ function performSub() {
     @mousemove="onMouseMove"
     @mouseup="stopDrag"
   >
-    <div>{{ props.name }} ({{ props.shortName }})</div>
+    <div class="wrap row">
+      <div>{{ props.name }}</div>
+      <EditTeamDialog
+        :players="players"
+        :substitutes="substitutes"
+        :manager="props.manager"
+        :location="props.location"
+        @save="onTeamSave"
+      />
+    </div>
 
     <!-- Controls -->
-    <div class="wrap row">
+    <div class="wrap">
       <select
         class="controls"
         :value="activeFormation"
@@ -231,7 +251,6 @@ function performSub() {
           {{ key }}
         </option>
       </select>
-      <Button class="action">Edit Players</Button>
     </div>
     <ToggleOverlayButton
       v-bind="{
@@ -382,12 +401,12 @@ function performSub() {
       <!-- On-pitch players -->
       <button
         v-for="player in players"
-        :key="player.number"
+        :key="player.id"
         class="player"
         :title="`${player.forename} ${player.surname}`"
         :class="{
-          dragging: dragId === player.number && isDraggingPitch,
-          'sub-target': isDraggingBench && hoveredPlayerId === player.number,
+          dragging: dragId === player.id && isDraggingPitch,
+          'sub-target': isDraggingBench && hoveredPlayerId === player.id,
         }"
         :style="{ left: player.x + 'px', top: player.y + 'px' }"
         @mousedown.prevent="startPitchDrag($event, player)"
@@ -402,7 +421,7 @@ function performSub() {
         <ul class="pending-list">
           <li
             v-for="(item, index) in pendingSubs"
-            :key="`${item[0].number}-${item[1].number}-${index}`"
+            :key="`${item[0].id}-${item[1].id}-${index}`"
             class="pending-item"
           >
             <span>
@@ -423,12 +442,12 @@ function performSub() {
       <div class="bench" ref="benchEl">
         <div
           v-for="sub in sortedSubs"
-          :key="sub.number"
+          :key="sub.id"
           :title="`${sub.forename} ${sub.surname}`"
           class="sub"
           :class="{
-            dragging: dragId === sub.number && isDraggingBench,
-            'pending-locked': isPendingLocked(sub.number),
+            dragging: dragId === sub.id && isDraggingBench,
+            'pending-locked': isPendingLocked(sub.id),
           }"
           @mousedown.prevent="startBenchDrag($event, sub)"
         >
