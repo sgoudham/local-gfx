@@ -70,22 +70,19 @@ const countdown = ref("");
 function updateClocks() {
   const now = new Date();
 
-  // Current time
   time.value = now.toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
   });
 
-  // Next 13:00
   const kickoff = new Date();
-kickoff.setHours(13, 0, 0, 0);
+  kickoff.setHours(13, 0, 0, 0);
 
-if (now > kickoff) {
-  kickoff.setDate(kickoff.getDate() + 1);
-}
+  if (now > kickoff) {
+    kickoff.setDate(kickoff.getDate() + 1);
+  }
 
-  // If it's already past 13:00, show 00:00:00
   const diff = Math.max(0, kickoff.getTime() - now.getTime());
 
   const hours = Math.floor(diff / 3_600_000);
@@ -108,37 +105,66 @@ onMounted(() => {
 
 onUnmounted(() => {
   clearInterval(timer);
+  if (panelTimer) clearInterval(panelTimer);
 });
+
 
 const tickerItems = [
   {
     id: 1,
-    text: "Malones goalkeeper, Danny Kelly, ruled out for final after sustaining stair-related arm injury. He is set to be replaced by ..."
+    text: "Malones goalkeeper, Danny Kelly, ruled out for final after sustaining stair-related arm injury. He is set to be replaced by ...",
   },
   {
     id: 2,
-    text: "Fan-favourite Dynamos defender, Drew 'Lennie' Maynard, won't be present for the game after being stranded on the Isle of Harris."
+    text: "Fan-favourite Dynamos defender, Drew 'Lennie' Maynard, won't be present for the game after being stranded on the Isle of Harris.",
   },
   {
     id: 3,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien augue. Donec vel sapien augue."
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien augue. Donec vel sapien augue.",
   },
   {
     id: 4,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien augue. Donec vel sapien augue."
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien augue. Donec vel sapien augue.",
   },
   {
     id: 5,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien augue. Donec vel sapien augue."
-  }
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien augue. Donec vel sapien augue.",
+  },
 ];
 
+// --- Stat panels ---
+interface StatPanel {
+  id: string;
+  label: string;
+}
+
+const statPanels: StatPanel[] = [
+  { id: "h2h",        label: "YCF Head-to-Head" },
+  { id: "form",       label: "Recent Form"       },
+  { id: "topscorers", label: "Top Scorers" },
+  { id: "fundraiser", label: "Charity Efforts" }
+];
+
+const activePanelIndex = ref(0);
+const activePanel = computed(() => statPanels[activePanelIndex.value]!);
+let panelTimer: ReturnType<typeof setInterval> | null = null;
+
+function startPanelTimer() {
+  if (panelTimer) clearInterval(panelTimer);
+  panelTimer = setInterval(() => {
+    activePanelIndex.value = (activePanelIndex.value + 1) % statPanels.length;
+  }, 8000);
+}
+
+onMounted(() => {
+  startPanelTimer();
+});
 </script>
 
 <template>
   <section class="overlay" ref="overlay" v-if="rendered">
     <div class="main-screen">
-      <div class="starting-soon-panel">
+      <div class="starting-soon-panel red glossy">
         <div class="starting-soon-heading">STARTING SOON</div>
         <div class="starting-soon-name">Y'MORZIN CUP FINAL 2026</div>
         <div class="starting-soon-h2h">
@@ -166,52 +192,128 @@ const tickerItems = [
         </div>
         <div class="starting-soon-countdown">
           <div class="countdown-label">Kickoff at 13:00</div>
-          <div class="countdown-timer">{{ countdown }}</div>
+          <div class="countdown-timer glossy">{{ countdown }}</div>
         </div>
       </div>
     </div>
 
-    <div class="stats">
-      <div class="stat-heading">
-        YCF Head-to-Head
+    <div class="stats red glossy">
+      <div class="stat-heading">{{ activePanel.label }}</div>
+
+      <div class="stat-dots">
+        <span
+          v-for="(panel, i) in statPanels"
+          :key="panel.id"
+          class="stat-dot"
+          :class="{ active: i === activePanelIndex }"
+        />
       </div>
-      <div class="stat">
-        <div class="stat-label">
-          2024
+
+      <Transition name="panel-fade" mode="out-in">
+        <div :key="activePanelIndex" class="stat-panel-body">
+
+          <!-- H2H panel -->
+          <template v-if="activePanel.id === 'h2h'">
+            <div class="stat">
+              <div class="stat-label">2024</div>
+              <div class="stat-h2h">
+                <div class="stat-h2h-team">MAL</div>
+                <div class="stat-h2h-score">5 - 4</div>
+                <div class="stat-h2h-team">DUN</div>
+              </div>
+              <div class="stat-label">2025</div>
+              <div class="stat-h2h">
+                <div class="stat-h2h-team">MAL</div>
+                <div class="stat-h2h-score">0 - 0</div>
+                <div class="stat-h2h-team">DUN</div>
+              </div>
+              <div class="stat-label-pens">(MAL won 4-3 on pens)</div>
+            </div>
+          </template>
+
+          <!-- Form guide panel -->
+          <template v-else-if="activePanel.id === 'form'">
+            <div class="stat">
+              <div class="form-row">
+                <span class="form-team">DUN</span>
+                <span
+                  v-for="(r, i) in ['L', 'L']"
+                  :key="i"
+                  class="form-result"
+                  :class="r.toLowerCase()"
+                >{{ r }}</span>
+              </div>
+              <div class="form-row">
+                <span class="form-team">MAL</span>
+                <span
+                  v-for="(r, i) in ['W', 'W']"
+                  :key="i"
+                  class="form-result"
+                  :class="r.toLowerCase()"
+                >{{ r }}</span>
+              </div>
+            </div>
+          </template>
+
+          <!-- Top scorers panel -->
+          <template v-else-if="activePanel.id === 'topscorers'">
+            <div class="stat">
+              <div
+                v-for="(player, i) in [
+                  { name: 'James Hazlett', team: 'MAL', goals: 3 },
+                  { name: 'Drew Maynard', team: 'DUN', goals: 1 },
+                  { name: 'Haaris Sattar', team: 'MAL', goals: 1 },
+                  { name: 'John Mahon', team: 'MAL', goals: 1 },
+                  { name: 'Dominic Collins', team: 'DUN', goals: 1 },
+                  { name: 'Matthew Blyth', team: 'DUN', goals: 1 },
+                  { name: 'Mark Harty', team: 'DUN', goals: 1 },
+                  { name: 'Mark Harty', team: 'DUN', goals: 1 },
+                  { name: 'Mark Harty', team: 'DUN', goals: 1 },
+                ]"
+                :key="i"
+                class="scorer-row"
+              >
+                <span class="scorer-rank">{{ i + 1 }}</span>
+                <span class="scorer-name">{{ player.name }}</span>
+                <span class="scorer-team">{{ player.team }}</span>
+                <span class="scorer-goals">{{ player.goals }}</span>
+              </div>
+            </div>
+          </template>
+
+        <!-- Fundraiser panel -->
+      <template v-else-if="activePanel.id === 'fundraiser'">
+        <div class="stat">
+          <div class="fundraiser-charity">Refuweegee</div>
+          <div class="fundraiser-total">
+            £450
+          </div>
+          <div class="fundraiser-label">raised so far</div>
         </div>
-        <div class="stat-h2h">
-          <div class="stat-h2h-team">
-            MAL
-          </div>
-          <div class="stat-h2h-score">
-            5 - 4
-          </div>
-          <div class="stat-h2h-team">
-            DUN
-          </div>
+      </template>
+
         </div>
-        <div class="stat-label">
-          2025
+      </Transition>
+
+      <div class="stat-sponsor">
+        <div class="stat-sponsor-qr">
+          <img
+          src="/qrCode.png"
+          alt="QR Code"
+          style="width: 100%; height: 100%;"
+        />
         </div>
-        <div class="stat-h2h">
-          <div class="stat-h2h-team">
-            MAL
-          </div>
-          <div class="stat-h2h-score">
-            0 - 0
-          </div>
-          <div class="stat-h2h-team">
-            DUN
-          </div>
-        </div>
-        <div class="stat-label-pens">
-          (MAL won 4-3 on pens)
-        </div>
+        <img
+          class="stat-sponsor-logo"
+          src="/refuweegeeLogoWhite.png"
+          alt="Sponsor Logo"
+        />
       </div>
     </div>
+
     <div class="info">
       <div class="info-top-row">
-        <div class="news-title">KICK-OFF APPROACHING</div>
+        <div class="news-title red glossy">KICK-OFF APPROACHING</div>
         <div class="news-info">
           Dunterlie Dynamos and AC Malones face off in the third annual Y'morzin Cup Final
         </div>
@@ -222,7 +324,7 @@ const tickerItems = [
             <div class="ycf-news-ycf">YCF</div>news</div>
           <div class="time">{{ time }}</div>
         </div>
-        <div class="ticker">
+        <div class="ticker glossy">
           <div class="ticker-track">
             <div
               v-for="copy in 2"
@@ -306,7 +408,6 @@ const tickerItems = [
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: linear-gradient(var(--ribbon-colour), #000);
   color: var(--text-color);
   padding: 30px;
   border-radius: 8px;
@@ -386,17 +487,54 @@ const tickerItems = [
   grid-column: 2;
   grid-row: 1;
 
-  background: linear-gradient(var(--ribbon-colour), #000);
   padding: 15px;
   color: var(--text-color);
 
   display: flex;
   flex-direction: column;
+  align-items: center;
+
+  width: 25vw;
 }
 
 .stat-heading {
   font-size: 1.5882em;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+}
+
+.stat-dots {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.3s ease;
+}
+
+.stat-dot.active {
+  background: var(--text-color);
+}
+
+.stat-panel-body {
+  flex: 1;
+  width: 100%;
+  align-items: center;
+  min-height: 0;
+}
+
+.panel-fade-enter-active,
+.panel-fade-leave-active {
+  transition: opacity 0.35s ease;
+}
+
+.panel-fade-enter-from,
+.panel-fade-leave-to {
+  opacity: 0;
 }
 
 .stat {
@@ -407,6 +545,10 @@ const tickerItems = [
   padding: 15px;
   border-radius: 8px;
   align-items: center;
+  max-height: 80%;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
 .stat-label {
@@ -437,6 +579,133 @@ const tickerItems = [
   margin-top: -10px;
 }
 
+/* Form guide */
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.form-team {
+  margin-right: 20px;
+  font-weight: bold;
+  width: 50px;
+}
+
+.form-result {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.form-result.w { background: #2ecc71; color: #fff; }
+.form-result.d { background: #888;    color: #fff; }
+.form-result.l { background: #e74c3c; color: #fff; }
+
+/* Top scorers */
+.scorer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.85em;
+  width: 100%;
+}
+
+.scorer-row:last-child {
+  border-bottom: none;
+}
+
+.scorer-rank {
+  width: 20px;
+  opacity: 0.5;
+}
+
+.scorer-name {
+  flex: 1;
+}
+
+.scorer-team {
+  opacity: 0.65;
+  font-size: 0.85em;
+}
+
+.scorer-goals {
+  background: var(--text-color);
+  color: var(--ribbon-colour);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-weight: bold;
+}
+
+.fundraiser-charity {
+  font-size: 0.8em;
+  opacity: 0.65;
+}
+
+.fundraiser-total {
+  font-size: 2.2em;
+  font-weight: bold;
+  color: var(--text-color);
+  line-height: 1;
+}
+
+.fundraiser-label {
+  font-size: 0.75em;
+  opacity: 0.7;
+  margin-top: -4px;
+}
+
+.stat-sponsor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 10px;
+  bottom: 0;
+  max-height: 40%;
+}
+
+.stat-sponsor-qr {
+  width: 40%;
+  height: auto;
+  border-radius: 3%;
+  overflow: hidden;
+  position: relative;
+
+  border: 1px solid rgba(237, 237, 237, 0.79);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.758),
+    inset 0 5px 0 rgba(255, 255, 255, 0.9);
+}
+
+.stat-sponsor-qr::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(199, 199, 199, 0.491) 0%,
+    rgba(34, 34, 34, 0.306) 40%,
+    rgba(30, 30, 30, 0.331) 60%,
+    rgba(156, 156, 156, 0.397) 100%
+  );
+  pointer-events: none;
+}
+
+.stat-sponsor-logo {
+  width: 50%;
+  object-fit: contain;
+}
+
 .info {
   grid-column: 1 / -1;
   grid-row: 2;
@@ -458,7 +727,6 @@ const tickerItems = [
   padding: 35px 30px;
   font-family: var(--font-secondary);
   font-size: 74px;
-  background: linear-gradient(var(--ribbon-colour), #000);
   color: var(--text-color);
   font-size: 2.1765em;
   display: flex;
@@ -532,7 +800,7 @@ const tickerItems = [
   display: inline-block;
   background: var(--text-color-secondary);
   color: #f4b12c;
-  padding: 7px 18px;
+  padding: 8px 18px;
   margin: 0 20px;
 }
 
@@ -568,34 +836,6 @@ const tickerItems = [
     );
 
   pointer-events: none;
-}
-
-.starting-soon-panel::after,
-.stats::after,
-.news-title::after {
-  content: "";
-  position: absolute;
-
-  left: -20px;
-  top: -150px;
-
-  width: 150%;
-  height: 100px;
-
-  background:
-    linear-gradient(
-      180deg,
-      transparent,
-      rgba(255, 255, 255, 0.053),
-      rgba(255, 255, 255, 0.123),
-      rgba(255, 255, 255, 0.043),
-      transparent
-    );
-
-  filter: blur(4px);
-
-
-  animation: shineSweep 20s linear infinite;
 }
 
 @keyframes shineSweep {
@@ -680,6 +920,163 @@ const tickerItems = [
     );
 
   pointer-events: none;
+}
+
+.red {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ribbon-colour), white 18%) 0%,
+      var(--ribbon-colour) 45%,
+      #520000 100%
+    );
+}
+
+.glossy {
+  position: relative;
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 2px 6px rgba(255, 255, 255, 0.25),
+    inset 0 -8px 14px rgba(0, 0, 0, 0.22),
+    0 5px 14px rgba(0, 0, 0, 0.18);
+}
+
+.glossy::before {
+  content: '';
+  position: absolute;
+  inset: -50% -80%;
+
+  background:
+    linear-gradient(
+      110deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.28) 48%,
+      rgba(255, 255, 255, 0.06) 55%,
+      transparent 70%
+    );
+
+  transform: translateX(-60%);
+  animation: glossy-shine 10s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+.glossy::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.22),
+      rgba(255,255,255,0.04) 35%,
+      transparent 65%
+    );
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.22),
+    inset 0 1px 8px rgba(255,255,255,0.18),
+    inset 0 -1px 8px rgba(0,0,0,0.18);
+
+  mix-blend-mode: soft-light;
+
+  pointer-events: none;
+}
+
+@keyframes glossy-shine {
+  0%, 35% {
+    transform: translateX(-60%);
+  }
+
+  65%, 100% {
+    transform: translateX(60%);
+  }
+}
+
+.dark-glossy {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      #3a3a3a 0%,
+      #151515 45%,
+      #050505 100%
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    inset 0 0 18px rgba(255,255,255,0.08),
+    inset 0 -8px 18px rgba(0,0,0,0.65),
+    0 8px 20px rgba(0,0,0,0.25);
+}
+
+.dark-glossy::before {
+  content: '';
+  position: absolute;
+  inset: -60% -80%;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 35%,
+      rgba(255,255,255,0.35) 48%,
+      rgba(255,255,255,0.08) 55%,
+      transparent 70%
+    );
+
+  transform: translateX(-60%);
+  animation: dark-glossy-shine 8s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+.dark-glossy::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.18),
+      rgba(255,255,255,0.03) 35%,
+      transparent 60%
+    );
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.12),
+    inset 0 2px 8px rgba(255,255,255,0.12),
+    inset 0 -2px 10px rgba(0,0,0,0.5);
+
+  mix-blend-mode: screen;
+
+  pointer-events: none;
+}
+
+@keyframes dark-glossy-shine {
+  0%, 35% {
+    transform: translateX(-60%);
+  }
+
+  65%, 100% {
+    transform: translateX(60%);
+  }
+}
+
+.borderless {
+  border: none !important;
+  box-shadow: none !important;
 }
 
 </style>
