@@ -116,6 +116,7 @@ export class ServerState {
       name: data.name,
       shortName: data.shortName,
       manager: data.manager,
+      captain: data.players.find((p) => p.id === data.captain)!,
       activeFormation: state.activeFormation,
       players: this.hydratePlayers(data, state.players),
       substitutes: this.hydratePlayers(data, state.substitutes),
@@ -149,6 +150,7 @@ export class ServerState {
       name: team.name,
       shortName: team.shortName,
       manager: team.manager,
+      captain: team.captain.id,
       players: [...team.players, ...team.substitutes],
     };
   }

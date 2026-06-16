@@ -4,6 +4,7 @@
     "name": "Dunterlie Dynamos",
     "shortName": "DUN",
     "manager": "",
+    "captain": "59192b96-09c6-4418-86b0-5c65c8e79d37",
     "players": [
       { "id": "59192b96-09c6-4418-86b0-5c65c8e79d37", "forename": "", "surname": "", "number": 1, "location": "home" },
       { "id": "5eff02e2-04f0-41c4-974f-7f9c64e0c53f", "forename": "", "surname": "", "number": 2, "location": "home" },
@@ -34,6 +35,7 @@
     "name": "AC Malones",
     "shortName": "MAL",
     "manager": "",
+    "captain": "cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d",
     "players": [
       { "id": "cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d", "forename": "", "surname": "", "number": 1, "location": "away" },
       { "id": "4ddc7913-1c11-4596-be89-32108c476101", "forename": "", "surname": "", "number": 2, "location": "away" },

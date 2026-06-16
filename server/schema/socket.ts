@@ -43,6 +43,7 @@ const TeamInfoUpdateSchema = z.object({
   players: z.array(playerSchema),
   substitutes: z.array(playerSchema),
   manager: z.string(),
+  captain: playerSchema,
 });
 
 const TeamFormationShowSchema = z.object({

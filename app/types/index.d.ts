@@ -10,7 +10,7 @@ import type {
 
 export type EditTeamDialogProps = Pick<
   TeamComplete,
-  "location" | "players" | "substitutes" | "manager"
+  "location" | "players" | "substitutes" | "manager" | "captain"
 >;
 
 export type SocialMediaPlayersProps = TeamComplete;

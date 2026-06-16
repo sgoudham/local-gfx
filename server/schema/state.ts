@@ -74,6 +74,7 @@ export const teamCompleteSchema = z.object({
     name: z.string(),
     shortName: z.string(),
     manager: z.string(),
+    captain: playerSchema,
     activeFormation: formationKeySchema,
     players: z.array(playerSchema),
     substitutes: z.array(playerSchema),

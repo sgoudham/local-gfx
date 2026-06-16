@@ -75,6 +75,7 @@ export default defineWebSocketHandler({
               s[teamData.location].players = teamData.players;
               s[teamData.location].substitutes = teamData.substitutes;
               s[teamData.location].manager = teamData.manager;
+              s[teamData.location].captain = teamData.captain;
             });
             break;
 

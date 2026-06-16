@@ -13,7 +13,9 @@ const PITCH_HORIZONTAL_PADDING = TeamFormationPitch.HorizontalPadding;
 const players = computed(() => props.players);
 const substitutes = computed(() => props.substitutes);
 const sortedSubs = computed(() =>
-  [...substitutes.value].filter((s) => s.forename && s.surname).sort((a, b) => a.number - b.number),
+  [...substitutes.value]
+    .filter((s) => s.forename && s.surname)
+    .sort((a, b) => a.number - b.number),
 );
 const pendingSubs = ref<PendingSub[]>([]);
 const hoveredPlayerId = ref<string | null>(null);
@@ -203,6 +205,7 @@ function onTeamSave(
   updatedPlayers: Player[],
   updatedSubs: Player[],
   updatedManager: string,
+  updatedCaptain: Player,
 ) {
   players.value.splice(0, players.value.length, ...updatedPlayers);
   substitutes.value.splice(0, substitutes.value.length, ...updatedSubs);
@@ -215,6 +218,7 @@ function onTeamSave(
       players: players.value,
       substitutes: substitutes.value,
       manager: updatedManager,
+      captain: updatedCaptain,
     },
   });
 }
@@ -229,6 +233,7 @@ function onTeamSave(
         :substitutes="substitutes"
         :manager="props.manager"
         :location="props.location"
+        :captain="props.captain"
         @save="onTeamSave"
       />
     </div>

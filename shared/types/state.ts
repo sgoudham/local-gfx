@@ -92,6 +92,7 @@ export type TeamComplete = {
   name: string;
   shortName: string;
   manager: string;
+  captain: Player;
   activeFormation: FormationKey;
   players: Player[];
   substitutes: Player[];

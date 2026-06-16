@@ -18,7 +18,8 @@ export const teamDataSchema = z.object({
     name: z.string(),
     shortName: z.string(),
     players: z.array(playerSchema),
-    manager: z.string()
+    manager: z.string(),
+    captain: z.string()
 });
 
 export const matchDataSchema = z.object({
