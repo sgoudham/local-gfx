@@ -8,6 +8,7 @@ const props = defineProps<TeamFormationProps>();
 
 const overlay = useTemplateRef("overlay");
 const rendered = ref(false);
+const captainId = computed(() => props.team.captain?.id);
 
 const EDITOR_PITCH_W = TeamFormationPitch.Width;
 const EDITOR_PITCH_H = TeamFormationPitch.Height;
@@ -274,6 +275,7 @@ watch(
                   <div class="shirt-name-container">
                     <div class="shirt-name">
                       {{ shirtName(entry.player) }}
+                      <div v-if="entry.player.number !== 1 && entry.player.id === captainId" class="captain">C</div>
                     </div>
                   </div>
                 </div>
@@ -454,12 +456,26 @@ watch(
   white-space: nowrap;
 }
 
+.captain {
+  display: inline-block;
+  width: auto;
+  position: relative;
+  background-color: #e3c117;
+  box-shadow: 0 0 3px 0 #00000048;
+  font-family: var(--font-secondary);
+  font-style: normal;
+  font-size: 0.8em;
+  color: #000000;
+  margin-left: 5px;
+  padding: 0 12px;
+}
+
 .details-section {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: #ffffff;
+  color: var(--secondary-colour);
   width: 30%;
 }
 

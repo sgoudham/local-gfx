@@ -93,6 +93,7 @@ const teamFormationData = computed<TeamFormationProps>(() => {
       manager: state.value[location].manager,
       players: state.value[location].players,
       substitutes: state.value[location].substitutes,
+      captain: state.value[location].captain,
     },
   };
 });
