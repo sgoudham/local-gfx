@@ -39,7 +39,7 @@ export type PlayerState = {
 };
 
 export type TeamState = {
-  activeFormation: FormationKey;
+  activeFormation?: FormationKey;
   players: PlayerState[];
   substitutes: PlayerState[];
   goals: Goal[];
@@ -93,7 +93,7 @@ export type TeamComplete = {
   shortName: string;
   manager: string;
   captain: Player;
-  activeFormation: FormationKey;
+  activeFormation?: FormationKey;
   players: Player[];
   substitutes: Player[];
   goals: Goal[];

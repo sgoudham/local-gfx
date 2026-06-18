@@ -26,7 +26,7 @@ export const playerStateSchema = z.object({
 });
 
 export const teamStateSchema = z.object({
-    activeFormation: formationKeySchema,
+    activeFormation: formationKeySchema.optional(),
     players: z.array(playerStateSchema),
     substitutes: z.array(playerStateSchema),
     goals: z.array(goalSchema),
@@ -75,7 +75,7 @@ export const teamCompleteSchema = z.object({
     shortName: z.string(),
     manager: z.string(),
     captain: playerSchema,
-    activeFormation: formationKeySchema,
+    activeFormation: formationKeySchema.optional(),
     players: z.array(playerSchema),
     substitutes: z.array(playerSchema),
     goals: z.array(goalSchema),

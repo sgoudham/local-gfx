@@ -44,8 +44,11 @@ function isPendingLocked(playerId: string) {
 // ── Formations ──────────────────────────────────────────────
 
 function updatePlayerPositions(
-  formation: FormationKey = activeFormation.value,
+  formation: FormationKey | undefined = activeFormation.value,
 ) {
+  if (!formation) {
+    return;
+  }
   const lines = [1, ...formation.split("-").map((v) => Number(v))];
   const positions: { x: number; y: number }[] = [];
   const padTop = 42,
@@ -245,12 +248,14 @@ function onTeamSave(
         :value="activeFormation"
         @change="applyFormation($event.target.value)"
       >
+        <option disabled value="">Choose Formation</option>
         <option v-for="key in Formation" :key="key" :value="key">
           {{ key }}
         </option>
       </select>
     </div>
     <ToggleOverlayButton
+      :disabled="!activeFormation"
       v-bind="{
         val: Overlay.TeamFormation,
         name: state.graphics.teamFormation.name,
@@ -398,6 +403,7 @@ function onTeamSave(
 
       <!-- On-pitch players -->
       <button
+        v-if="activeFormation"
         v-for="player in players"
         :key="player.id"
         class="player"

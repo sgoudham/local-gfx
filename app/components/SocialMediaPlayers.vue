@@ -21,7 +21,7 @@ const visibleSubstitutes = computed(() =>
   ),
 );
 
-const captainId = computed(() => props.captain?.id);
+const captainId = computed(() => props.captain.id);
 </script>
 
 <template>

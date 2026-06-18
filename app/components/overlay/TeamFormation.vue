@@ -8,7 +8,7 @@ const props = defineProps<TeamFormationProps>();
 
 const overlay = useTemplateRef("overlay");
 const rendered = ref(false);
-const captainId = computed(() => props.team.captain?.id);
+const captainId = computed(() => props.team.captain.id);
 
 const EDITOR_PITCH_W = TeamFormationPitch.Width;
 const EDITOR_PITCH_H = TeamFormationPitch.Height;

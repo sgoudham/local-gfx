@@ -39,7 +39,8 @@ const props = defineProps<{
   background: #11111b;
 }
 .button.disabled {
-  opacity: 0.7;
+  color: #9ca0b0;
+  background-color: #ccd0da;
   cursor: not-allowed;
 }
 .action {
