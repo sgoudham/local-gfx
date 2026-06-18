@@ -25,35 +25,40 @@ const captainId = computed(() => props.captain.id);
 </script>
 
 <template>
-  <section class="container"
-    :data-location="props.location">
-      <div class="social-media-players">
-        <div class="team-info">
+  <section class="container" :data-location="props.location">
+    <div class="social-media-players">
+      <div class="team-info">
         <h1>{{ props.name }}</h1>
         <div class="squad-info">
           <h2>Starting XI</h2>
           <ul>
             <li v-for="player in visiblePlayers" :key="player.id">
-              {{ player.number }}. {{ player.forename }} {{ player.surname }} {{ player.id === captainId ? '(C)' : '' }}
+              {{ player.number }}. {{ player.forename }} {{ player.surname }}
+              {{ player.id === captainId ? "(C)" : "" }}
             </li>
           </ul>
           <h2>Substitutes</h2>
           <ul class="substitutes">
-            <li class="substitute" v-for="player in visibleSubstitutes" :key="player.id">
-              {{ player.number }}. {{ player.forename }} {{ player.surname }} {{ player.id === captainId ? '(C)' : '' }}
+            <li
+              class="substitute"
+              v-for="player in visibleSubstitutes"
+              :key="player.id"
+            >
+              {{ player.number }}. {{ player.forename }} {{ player.surname }}
+              {{ player.id === captainId ? "(C)" : "" }}
             </li>
           </ul>
         </div>
         <div class="decor">
           <div class="player-img">
-            <img :src="imageUrlPlayer" alt="Player">
+            <img :src="imageUrlPlayer" alt="Player" />
           </div>
           <div class="team-badge">
             <img :src="imageUrl" alt="Team Badge" />
           </div>
         </div>
         <div class="league-badge">
-          <img src="/26LogoOutlinesTransparent.png" alt="League Badge">
+          <img src="/26LogoOutlinesTransparent.png" alt="League Badge" />
         </div>
         <div class="bottom-flair">
           <div class="flair-line"></div>
@@ -65,7 +70,6 @@ const captainId = computed(() => props.captain.id);
 </template>
 
 <style lang="css" scoped>
-
 .container[data-location="home"] {
   --primary-colour: var(--home-colour-1);
   --secondary-colour: var(--home-colour-2);
@@ -100,7 +104,11 @@ const captainId = computed(() => props.captain.id);
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background: linear-gradient(var(--gradient-direction), rgb(0, 0, 0), rgba(0, 0, 0, 0) 75%);
+  background: linear-gradient(
+    var(--gradient-direction),
+    rgb(0, 0, 0),
+    rgba(0, 0, 0, 0) 75%
+  );
   mix-blend-mode: overlay;
 }
 
@@ -205,7 +213,6 @@ ul {
   object-fit: contain;
   position: relative;
   z-index: 2;
-  filter: brightness(0) ;
+  filter: brightness(0);
 }
-
 </style>
