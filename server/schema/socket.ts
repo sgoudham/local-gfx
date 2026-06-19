@@ -58,6 +58,7 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.SessionRegister),
   socketMsg(Mode.Control, SocketMessage.MatchTimerStart),
   socketMsg(Mode.Control, SocketMessage.MatchTimerStop),
+  socketMsg(Mode.Control, SocketMessage.MatchTimerHalfTime),
   socketMsg(Mode.Control, SocketMessage.MatchReset),
   socketMsg(Mode.Control, SocketMessage.MatchGoalScored, {
     data: goalSchema,
