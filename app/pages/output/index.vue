@@ -61,6 +61,7 @@ const startingSoonData = computed<StartingSoonProps>(() => {
   return {
     name: state.value.graphics.startingSoon.name,
     visible: state.value.graphics.startingSoon.visible,
+    kickoffTime: state.value.graphics.startingSoon.kickoffTime,
   };
 });
 

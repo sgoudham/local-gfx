@@ -7,6 +7,17 @@ const props = defineProps<StartingSoonProps>();
 const overlay = useTemplateRef("overlay");
 const rendered = ref(false);
 
+const kickoffTimeString = computed(() => props.kickoffTime || "15:00");
+
+function parseKickoffTime(timeString: string) {
+  const [hour = 15, minute = 0] = timeString
+    .split(":")
+    .map((value) => Number(value));
+  const kickoff = new Date();
+  kickoff.setHours(Number.isFinite(hour) ? hour : 15, Number.isFinite(minute) ? minute : 0, 0, 0);
+  return kickoff;
+}
+
 async function show() {
   rendered.value = true;
   nextTick(() => {
@@ -76,8 +87,7 @@ function updateClocks() {
     hour12: false,
   });
 
-  const kickoff = new Date();
-  kickoff.setHours(13, 0, 0, 0);
+  const kickoff = parseKickoffTime(kickoffTimeString.value);
 
   if (now > kickoff) {
     kickoff.setDate(kickoff.getDate() + 1);
@@ -191,7 +201,7 @@ onMounted(() => {
           </div>
         </div>
         <div class="starting-soon-countdown">
-          <div class="countdown-label">Kickoff at 13:00</div>
+          <div class="countdown-label">Kickoff at {{ kickoffTimeString }}</div>
           <div class="countdown-timer glossy">{{ countdown }}</div>
         </div>
       </div>

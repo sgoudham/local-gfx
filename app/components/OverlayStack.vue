@@ -33,12 +33,27 @@ const overlayToggles = [
 ];
 
 const hasMatchStarted = computed(() => !state.value.matchTime.paused);
+const kickoffTime = ref(state.value.graphics.startingSoon.kickoffTime);
+
+watch(
+  () => state.value.graphics.startingSoon.kickoffTime,
+  (value) => {
+    kickoffTime.value = value;
+  },
+);
+
 const toggleMatchTimer = () => {
   publish(
     hasMatchStarted.value
       ? SocketMessage.MatchTimerStop
       : SocketMessage.MatchTimerStart,
   );
+};
+
+const updateKickoffTime = () => {
+  publish(SocketMessage.KickoffTimeUpdated, {
+    data: { kickoffTime: kickoffTime.value },
+  });
 };
 </script>
 
@@ -53,6 +68,17 @@ const toggleMatchTimer = () => {
       </Button>
       <Button @click="publish(SocketMessage.MatchReset)" class="item action">
         Reset
+      </Button>
+    </li>
+    <li class="overlay-list-item" style="margin-top: 8px;">
+      <input
+        type="time"
+        v-model="kickoffTime"
+        @change="updateKickoffTime"
+        class="item"
+      />
+      <Button @click="updateKickoffTime" class="item action">
+        Update Kickoff
       </Button>
     </li>
     <li

@@ -54,6 +54,8 @@ export type TeamFormationProps = OverlayState & {
   };
 };
 
-export type StartingSoonProps = OverlayState;
+export type StartingSoonProps = OverlayState & {
+  kickoffTime: string;
+};
 
 export type SubstitutionProps = SubstitutionData;

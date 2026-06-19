@@ -38,6 +38,12 @@ export const overlayStateSchema = z.object({
     visible: z.boolean()
 });
 
+const startingSoonDataUpdateSchema = z.object({
+    kickoffTime: z.string()
+});
+
+export const startingSoonStateSchema = overlayStateSchema.and(startingSoonDataUpdateSchema);
+
 export const pendingSubSchema = z.tuple([playerSchema, playerSchema]);
 
 export const substitutionDataUpdateSchema = z.object({
@@ -54,7 +60,7 @@ const teamFormationDataUpdateSchema = z.object({
 export const teamFormationDataSchema = overlayStateSchema.and(teamFormationDataUpdateSchema);
 
 export const graphicsSchema = z.object({
-    startingSoon: overlayStateSchema,
+    startingSoon: startingSoonStateSchema,
     matchScorecard: overlayStateSchema,
     penaltiesScorecard: overlayStateSchema,
     bigMatchScorecard: overlayStateSchema,

@@ -67,7 +67,8 @@
   "graphics": {
     "startingSoon": {
       "name": "Starting Soon",
-      "visible": false
+      "visible": false,
+      "kickoffTime": "15:00"
     },
     "matchScorecard": {
       "name": "Match Scorecard",

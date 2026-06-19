@@ -78,6 +78,13 @@ export default defineWebSocketHandler({
               s[teamData.location].captain = teamData.captain;
             });
             break;
+          
+          case SocketMessage.KickoffTimeUpdated:
+            const kickOff = parsed.msg.data;
+            await serverState.patchState((s) => {
+              s.graphics.startingSoon.kickoffTime = kickOff.kickoffTime;
+            });
+            break;
 
           case SocketMessage.StartingSoonShow:
             await serverState.patchState((s) => {

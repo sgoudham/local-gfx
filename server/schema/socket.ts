@@ -50,6 +50,10 @@ const TeamFormationShowSchema = z.object({
   location: teamLocationSchema,
 });
 
+const KickoffTimeUpdateSchema = z.object({
+  kickoffTime: z.string(),
+});
+
 export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.SessionRegister),
   socketMsg(Mode.Control, SocketMessage.MatchTimerStart),
@@ -63,6 +67,9 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   }),
   socketMsg(Mode.Control, SocketMessage.TeamInfoUpdate, {
     data: TeamInfoUpdateSchema,
+  }),
+  socketMsg(Mode.Control, SocketMessage.KickoffTimeUpdated, {
+    data: KickoffTimeUpdateSchema,
   }),
   socketMsg(Mode.Control, SocketMessage.StartingSoonShow),
   socketMsg(Mode.Control, SocketMessage.StartingSoonHide),
