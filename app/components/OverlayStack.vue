@@ -70,6 +70,15 @@ const startHalfMatchTimer = () => {
     <li class="overlay-list-item">
       Match Score: {{ state.home.goals.length }} - {{ state.away.goals.length }}
     </li>
+    <li class="overlay-list-item">
+      <p>Kickoff Time: </p>
+      <input
+        type="time"
+        v-model="kickoffTime"
+        @change="updateKickoffTime"
+        class="item"
+      />
+    </li>
     <li class="overlay-list-item" v-if="isDev">
       <Button @click="publish(SocketMessage.MatchReset)" class="item action">
         Reset
