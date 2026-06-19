@@ -5,6 +5,8 @@ import SelectedPlayer from "./SelectedPlayer.vue";
 
 const { state, publish } = useControlSocket();
 
+const isDev = import.meta.dev;
+
 const overlayToggles = [
   {
     val: Overlay.StartingSoon,
@@ -53,7 +55,7 @@ const startHalfMatchTimer = () => {
     <li class="overlay-list-item">
       Match Score: {{ state.home.goals.length }} - {{ state.away.goals.length }}
     </li>
-    <li class="overlay-list-item">
+    <li class="overlay-list-item" v-if="isDev">
       <Button @click="publish(SocketMessage.MatchReset)" class="item action">
         Reset
       </Button>
@@ -71,9 +73,6 @@ const startHalfMatchTimer = () => {
         :class="[isTimerRunning ? 'disabled' : 'show', 'item', 'action']"
       >
         Start Half
-      </Button>
-      <Button @click="publish(SocketMessage.MatchReset)" class="item action">
-        Reset Timer
       </Button>
     </li>
     <li
