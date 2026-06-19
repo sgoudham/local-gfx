@@ -6,8 +6,9 @@ const props = defineProps<StartingSoonProps>();
 
 const overlay = useTemplateRef("overlay");
 const rendered = ref(false);
+const showMainScreen = true;
 
-const kickoffTimeString = computed(() => props.kickoffTime || "15:00");
+const kickoffTimeString = computed(() => props.kickoffTime);
 
 function parseKickoffTime(timeString: string) {
   const [hour = 15, minute = 0] = timeString
@@ -118,6 +119,7 @@ onUnmounted(() => {
   if (panelTimer) clearInterval(panelTimer);
 });
 
+const headline = "Dunterlie Dynamos and AC Malones face off in the third annual Y'morzin Cup Final"
 
 const tickerItems = [
   {
@@ -173,7 +175,7 @@ onMounted(() => {
 
 <template>
   <section class="overlay" ref="overlay" v-if="rendered">
-    <div class="main-screen">
+    <div class="main-screen" :class="{ hidden: !showMainScreen }">
       <div class="starting-soon-panel red glossy">
         <div class="starting-soon-heading">STARTING SOON</div>
         <div class="starting-soon-name">Y'MORZIN CUP FINAL 2026</div>
@@ -325,7 +327,7 @@ onMounted(() => {
       <div class="info-top-row">
         <div class="news-title red glossy">KICK-OFF APPROACHING</div>
         <div class="news-info">
-          Dunterlie Dynamos and AC Malones face off in the third annual Y'morzin Cup Final
+          {{ headline }}
         </div>
       </div>
       <div class="info-bottom-row">
@@ -392,6 +394,13 @@ onMounted(() => {
   overflow: hidden;
 }
 
+.main-screen.hidden {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+
 .main-screen::before {
   content: "";
   position: absolute;
@@ -457,11 +466,17 @@ onMounted(() => {
   align-items: center;
   gap: 20px;
   width: 400px;
+  height: 100%;
 }
 
 .starting-soon-team-badge {
-  width: 200px;
+  height: 200px;
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.5));
+}
+
+.starting-soon-team-name {
+  position: relative;
+  bottom: 0;
 }
 
 .starting-soon-vs {
