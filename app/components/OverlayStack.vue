@@ -4,6 +4,7 @@ import ToggleOverlayButton from "./ToggleOverlayButton.vue";
 import SelectedPlayer from "./SelectedPlayer.vue";
 
 const { state, publish } = useControlSocket();
+const { selectedPlayer } = useClientState();
 
 const isDev = import.meta.dev;
 
@@ -35,8 +36,8 @@ const overlayToggles = [
 ];
 
 const isTimerRunning = computed(() => !state.value.matchTime.paused);
-const kickoffTime = ref(state.value.graphics.startingSoon.kickoffTime);
 
+const kickoffTime = ref(state.value.graphics.startingSoon.kickoffTime);
 watch(
   () => state.value.graphics.startingSoon.kickoffTime,
   (value) => {
@@ -51,7 +52,6 @@ const toggleMatchTimer = () => {
       : SocketMessage.MatchTimerStart,
   );
 };
-
 const updateKickoffTime = () => {
   publish(SocketMessage.MatchKickoffTimeUpdated, {
     data: { kickoffTime: kickoffTime.value },
@@ -59,6 +59,10 @@ const updateKickoffTime = () => {
 };
 const startHalfMatchTimer = () => {
   publish(SocketMessage.MatchTimerHalfTime);
+};
+const matchReset = () => {
+  selectedPlayer.value = undefined;
+  publish(SocketMessage.MatchReset);
 };
 </script>
 
@@ -71,7 +75,7 @@ const startHalfMatchTimer = () => {
       Match Score: {{ state.home.goals.length }} - {{ state.away.goals.length }}
     </li>
     <li class="overlay-list-item">
-      <p class="item">Kickoff Time: </p>
+      <p class="item">Kickoff Time:</p>
       <input
         type="time"
         v-model="kickoffTime"
@@ -80,9 +84,7 @@ const startHalfMatchTimer = () => {
       />
     </li>
     <li class="overlay-list-item" v-if="isDev">
-      <Button @click="publish(SocketMessage.MatchReset)" class="item action">
-        Reset
-      </Button>
+      <Button @click="matchReset" class="item action"> Reset </Button>
     </li>
     <li class="overlay-list-item">
       <Button
