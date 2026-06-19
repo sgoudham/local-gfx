@@ -7,6 +7,25 @@ import {
   OutputMessage,
   OutputMessageSchema,
 } from "../schema/socket";
+import { ServerState } from "../state";
+
+const animateMatchTimerIn = async (serverState: ServerState) => {
+  await serverState.patchState((s) => {
+    s.graphics.bigMatchScorecard.visible = true;
+    s.graphics.matchScorecard.visible = false;
+  });
+  await new Promise((resolve) => setTimeout(resolve, 10500));
+  await serverState.patchState((s) => {
+    s.graphics.bigMatchScorecard.visible = false;
+    s.graphics.matchScorecard.visible = true;
+  });
+};
+
+const animateMatchTimerOut = async (serverState: ServerState) => {
+  await serverState.patchState((s) => {
+    s.graphics.matchScorecard.visible = false;
+  });
+};
 
 export default defineWebSocketHandler({
   open(peer) {
@@ -46,9 +65,15 @@ export default defineWebSocketHandler({
 
           case SocketMessage.MatchTimerStart:
             serverState.matchTimer.start();
+            await animateMatchTimerIn(serverState);
             break;
           case SocketMessage.MatchTimerStop:
             await serverState.matchTimer.stop();
+            await animateMatchTimerOut(serverState);
+            break;
+          case SocketMessage.MatchTimerHalfTime:
+            await serverState.matchTimer.halfTime();
+            await animateMatchTimerIn(serverState);
             break;
           case SocketMessage.MatchReset:
             await serverState.clear();

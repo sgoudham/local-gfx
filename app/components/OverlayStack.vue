@@ -11,7 +11,7 @@ const overlayToggles = [
     name: state.value.graphics.startingSoon.name,
     showMessage: SocketMessage.StartingSoonShow,
     hideMessage: SocketMessage.StartingSoonHide,
-},
+  },
   {
     val: Overlay.MatchScorecard,
     name: state.value.graphics.matchScorecard.name,
@@ -32,27 +32,48 @@ const overlayToggles = [
   },
 ];
 
-const hasMatchStarted = computed(() => !state.value.matchTime.paused);
+const isTimerRunning = computed(() => !state.value.matchTime.paused);
 const toggleMatchTimer = () => {
   publish(
-    hasMatchStarted.value
+    isTimerRunning.value
       ? SocketMessage.MatchTimerStop
       : SocketMessage.MatchTimerStart,
   );
+};
+const startHalfMatchTimer = () => {
+  publish(SocketMessage.MatchTimerHalfTime);
 };
 </script>
 
 <template>
   <ul class="overlay-list">
     <li class="overlay-list-item">
-      <Button
-        @click="toggleMatchTimer"
-        :class="[hasMatchStarted ? 'hide' : 'show', 'item', 'action']"
-      >
-        {{ hasMatchStarted ? "Stop Match Timer" : "Start Match Timer" }}
-      </Button>
+      Match Time: {{ state.matchTime.formatted }}
+    </li>
+    <li class="overlay-list-item">
+      Match Score: {{ state.home.goals.length }} - {{ state.away.goals.length }}
+    </li>
+    <li class="overlay-list-item">
       <Button @click="publish(SocketMessage.MatchReset)" class="item action">
         Reset
+      </Button>
+    </li>
+    <li class="overlay-list-item">
+      <Button
+        @click="toggleMatchTimer"
+        :class="[isTimerRunning ? 'hide' : 'show', 'item', 'action']"
+      >
+        {{ isTimerRunning ? "Stop Match Timer" : "Start Match Timer" }}
+      </Button>
+      <Button
+        @click="startHalfMatchTimer"
+        :disabled="isTimerRunning"
+        :class="[isTimerRunning ? 'disabled' : 'show', 'item', 'action']"
+      >
+        Start Half
+      </Button>
+      <Button @click="publish(SocketMessage.MatchReset)" class="item action">
+        Reset Timer
       </Button>
     </li>
     <li
@@ -62,7 +83,7 @@ const toggleMatchTimer = () => {
     >
       <ToggleOverlayButton v-bind="overlay" class="item" />
     </li>
-    <li class="overlay-list-item" style="margin-top: 8px;">
+    <li class="overlay-list-item" style="margin-top: 8px">
       <SelectedPlayer />
     </li>
   </ul>
@@ -82,6 +103,7 @@ const toggleMatchTimer = () => {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   width: 100%;
   gap: 2px;
 }

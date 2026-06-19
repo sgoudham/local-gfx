@@ -5,6 +5,7 @@ export class MatchTimer {
   private patchState: PatchState;
   private matchTime: MatchTime;
   private readonly ONE_SECOND_MS = 1000;
+  private readonly FORTY_FIVE_MINUTES_MS = 2700000;
   private timerId: NodeJS.Timeout | null = null;
 
   constructor(patchState: PatchState, matchTime: MatchTime) {
@@ -38,6 +39,14 @@ export class MatchTimer {
     this.matchTime.formatted = this.formatMatchTime();
     await this.stop();
     await this.updateState();
+  }
+
+  async halfTime() {
+    this.matchTime.ms = this.FORTY_FIVE_MINUTES_MS;
+    this.matchTime.formatted = this.formatMatchTime();
+    await this.stop();
+    await this.updateState();
+    this.start()
   }
 
   private async updateState() {

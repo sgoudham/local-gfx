@@ -52,6 +52,7 @@ export const SocketMessage = {
   SessionStateSync: "session.state.sync",
   MatchTimerStart: "match.timer.start",
   MatchTimerStop: "match.timer.stop",
+  MatchTimerHalfTime: "match.timer.halfTime",
   MatchReset: "match.reset",
   MatchGoalScored: "match.goalScored",
   ActiveFormationUpdate: "activeFormation.update",
