@@ -4,6 +4,7 @@ import { playerSchema, teamLocationSchema } from "./data";
 import {
   formationKeySchema,
   goalSchema,
+  startingSoonDataUpdateSchema,
   substitutionDataUpdateSchema,
 } from "./state";
 
@@ -50,15 +51,14 @@ const TeamFormationShowSchema = z.object({
   location: teamLocationSchema,
 });
 
-const KickoffTimeUpdateSchema = z.object({
-  kickoffTime: z.string(),
-});
-
 export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.SessionRegister),
   socketMsg(Mode.Control, SocketMessage.MatchTimerStart),
   socketMsg(Mode.Control, SocketMessage.MatchTimerStop),
   socketMsg(Mode.Control, SocketMessage.MatchTimerHalfTime),
+  socketMsg(Mode.Control, SocketMessage.MatchKickoffTimeUpdated, {
+    data: startingSoonDataUpdateSchema,
+  }),
   socketMsg(Mode.Control, SocketMessage.MatchReset),
   socketMsg(Mode.Control, SocketMessage.MatchGoalScored, {
     data: goalSchema,
@@ -68,9 +68,6 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   }),
   socketMsg(Mode.Control, SocketMessage.TeamInfoUpdate, {
     data: TeamInfoUpdateSchema,
-  }),
-  socketMsg(Mode.Control, SocketMessage.KickoffTimeUpdated, {
-    data: KickoffTimeUpdateSchema,
   }),
   socketMsg(Mode.Control, SocketMessage.StartingSoonShow),
   socketMsg(Mode.Control, SocketMessage.StartingSoonHide),

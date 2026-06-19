@@ -75,14 +75,20 @@ export default defineWebSocketHandler({
             await serverState.matchTimer.halfTime();
             await animateMatchTimerIn(serverState);
             break;
-          case SocketMessage.MatchReset:
-            await serverState.clear();
+          case SocketMessage.MatchKickoffTimeUpdated:
+            const kickoffData = parsed.msg.data;
+            await serverState.patchState((s) => {
+              s.graphics.startingSoon.kickoffTime = kickoffData.kickoffTime;
+            });
             break;
           case SocketMessage.MatchGoalScored:
             const goalScoredData = parsed.msg.data;
             await serverState.patchState((s) => {
               s[goalScoredData.player.location].goals.push(goalScoredData);
             });
+            break;
+          case SocketMessage.MatchReset:
+            await serverState.clear();
             break;
 
           case SocketMessage.ActiveFormationUpdate:
@@ -104,13 +110,6 @@ export default defineWebSocketHandler({
             });
             break;
           
-          case SocketMessage.KickoffTimeUpdated:
-            const kickOff = parsed.msg.data;
-            await serverState.patchState((s) => {
-              s.graphics.startingSoon.kickoffTime = kickOff.kickoffTime;
-            });
-            break;
-
           case SocketMessage.StartingSoonShow:
             await serverState.patchState((s) => {
               s.graphics.startingSoon.visible = true;

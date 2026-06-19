@@ -53,7 +53,7 @@ const toggleMatchTimer = () => {
 };
 
 const updateKickoffTime = () => {
-  publish(SocketMessage.KickoffTimeUpdated, {
+  publish(SocketMessage.MatchKickoffTimeUpdated, {
     data: { kickoffTime: kickoffTime.value },
   });
 };
@@ -71,7 +71,7 @@ const startHalfMatchTimer = () => {
       Match Score: {{ state.home.goals.length }} - {{ state.away.goals.length }}
     </li>
     <li class="overlay-list-item">
-      <p>Kickoff Time: </p>
+      <p class="item">Kickoff Time: </p>
       <input
         type="time"
         v-model="kickoffTime"

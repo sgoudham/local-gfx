@@ -58,11 +58,11 @@ export type OverlayState = {
   visible: boolean;
 };
 
-type StartingSoonDataUpdate = {
+export type StartingSoonDataUpdate = {
   kickoffTime: string;
 };
 
-export type StartingSoonState = OverlayState & StartingSoonDataUpdate;
+export type StartingSoonData = OverlayState & StartingSoonDataUpdate;
 
 export type PendingSub = [Player, Player];
 
@@ -78,7 +78,7 @@ type TeamFormationDataUpdate = {
 export type TeamFormationData = OverlayState & TeamFormationDataUpdate;
 
 export type Graphics = {
-  startingSoon: StartingSoonState;
+  startingSoon: StartingSoonData;
   matchScorecard: OverlayState;
   penaltiesScorecard: OverlayState;
   bigMatchScorecard: OverlayState;
