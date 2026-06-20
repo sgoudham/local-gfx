@@ -26,7 +26,9 @@ function open() {
   draftPlayers.value = props.players.map((p) => ({ ...p }));
   draftSubs.value = props.substitutes.map((p) => ({ ...p }));
   draftManager.value = `${props.manager}`;
-  draftCaptain.value = props.captain;
+  draftCaptain.value = draftPlayers.value.find(
+    (player) => player.id === props.captain.id,
+  )!;
   dialogRef.value?.showModal();
 }
 
