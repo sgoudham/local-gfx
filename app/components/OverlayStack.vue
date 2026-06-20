@@ -8,12 +8,15 @@ const { selectedPlayer } = useClientState();
 
 const isDev = import.meta.dev;
 
-const overlayToggles = [
+const isTimerRunning = computed(() => !state.value.matchTime.paused);
+
+const overlayToggles = computed(() => [
   {
     val: Overlay.StartingSoon,
     name: state.value.graphics.startingSoon.name,
     showMessage: SocketMessage.StartingSoonShow,
     hideMessage: SocketMessage.StartingSoonHide,
+    disabled: isTimerRunning.value,
   },
   {
     val: Overlay.MatchScorecard,
@@ -33,9 +36,7 @@ const overlayToggles = [
     showMessage: SocketMessage.PenaltiesScorecardShow,
     hideMessage: SocketMessage.PenaltiesScorecardHide,
   },
-];
-
-const isTimerRunning = computed(() => !state.value.matchTime.paused);
+]);
 
 const kickoffTime = ref(state.value.graphics.startingSoon.kickoffTime);
 watch(
@@ -75,7 +76,7 @@ const matchReset = () => {
       Match Score: {{ state.home.goals.length }} - {{ state.away.goals.length }}
     </li>
     <li class="overlay-list-item">
-      <p>Kickoff Time: </p>
+      <p>Kickoff Time:</p>
       <input
         type="time"
         v-model="kickoffTime"
