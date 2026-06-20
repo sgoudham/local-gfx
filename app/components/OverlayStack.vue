@@ -33,6 +33,12 @@ const overlayToggles = [
     showMessage: SocketMessage.PenaltiesScorecardShow,
     hideMessage: SocketMessage.PenaltiesScorecardHide,
   },
+  {
+    val: Overlay.HydrationBreak,
+    name: state.value.graphics.hydrationBreak.name,
+    showMessage: SocketMessage.HydrationBreakShow,
+    hideMessage: SocketMessage.HydrationBreakHide,
+  }
 ];
 
 const isTimerRunning = computed(() => !state.value.matchTime.paused);

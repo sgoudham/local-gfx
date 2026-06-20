@@ -65,7 +65,8 @@ export const graphicsSchema = z.object({
     penaltiesScorecard: overlayStateSchema,
     bigMatchScorecard: overlayStateSchema,
     teamFormation: teamFormationDataSchema,
-    substitution: substitutionDataSchema
+    substitution: substitutionDataSchema,
+    hydrationBreak: overlayStateSchema,
 });
 
 export const initialStateSchema = z.object({

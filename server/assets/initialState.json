@@ -92,6 +92,10 @@
       "visible": false,
       "subs": [],
       "location": "home"
+    },
+    "hydrationBreak": {
+      "name": "Hydration Break",
+      "visible": false
     }
   }
 }

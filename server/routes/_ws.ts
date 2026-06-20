@@ -218,6 +218,18 @@ export default defineWebSocketHandler({
               s.graphics.substitution.subs = [];
             });
             break;
+          
+          case SocketMessage.HydrationBreakShow:
+            await serverState.patchState((s) => {
+              s.graphics.hydrationBreak.visible = true;
+            });
+            break;
+          
+          case SocketMessage.HydrationBreakHide:
+            await serverState.patchState((s) => {
+              s.graphics.hydrationBreak.visible = false;
+            });
+            break;
         }
         break;
     }
