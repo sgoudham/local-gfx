@@ -19,9 +19,3 @@ pnpm dev
 pnpm build
 node .output/server/index.mjs
 ```
-
-TODO:
-
-- Tidy up the CSS on the team dialog, avoid layout shifting when subs get added
-- Set activeFormation as undefined in the initialState and then default to the first one in the list
-- Overhaul penalty logic, rework schema to store players. Client side will need a "penalty mode" to easily pick players across both teams who have scored a penalty.
