@@ -71,7 +71,7 @@ const startHalfMatchTimer = () => {
       Match Score: {{ state.home.goals.length }} - {{ state.away.goals.length }}
     </li>
     <li class="overlay-list-item">
-      <p class="item">Kickoff Time: </p>
+      <p>Kickoff Time: </p>
       <input
         type="time"
         v-model="kickoffTime"
