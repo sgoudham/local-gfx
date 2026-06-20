@@ -275,7 +275,9 @@ watch(
                   <div class="shirt-name-container">
                     <div class="shirt-name">
                       {{ shirtName(entry.player) }}
-                      <div v-if="entry.player.number !== 1 && entry.player.id === captainId" class="captain">C</div>
+                      <div v-if="entry.player.id === captainId" class="captain">
+                        C
+                      </div>
                     </div>
                   </div>
                 </div>
