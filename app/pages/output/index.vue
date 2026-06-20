@@ -107,10 +107,10 @@ const substitutionData = computed<SubstitutionProps>(() => {
 <template>
   <OverlayMatchScorecard v-bind="matchScorecardData" />
   <OverlayBigMatchScorecard v-bind="bigMatchScorecardData" />
-  <OverlayStartingSoon v-bind="startingSoonData" />
   <OverlayPenaltiesScorecard v-bind="penaltiesScorecardData" />
   <OverlayTeamFormation v-bind="teamFormationData" />
   <OverlaySubstitution v-bind="substitutionData" />
+  <OverlayStartingSoon v-bind="startingSoonData" />
 </template>
 
 <style scoped></style>
