@@ -255,12 +255,12 @@ function onTeamSave(
       </select>
     </div>
     <ToggleOverlayButton
-      :disabled="!activeFormation"
       v-bind="{
         val: Overlay.TeamFormation,
         name: state.graphics.teamFormation.name,
         showMessage: SocketMessage.TeamFormationShow,
         hideMessage: SocketMessage.TeamFormationHide,
+        disabled: !activeFormation || !state.matchTime.paused,
         data: {
           data: {
             location: props.location,

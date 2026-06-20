@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    title: string;
+    title?: string;
     src: string;
     baseWidth?: number;
     baseHeight?: number;
@@ -34,7 +34,7 @@ onMounted(() => {
 
 <template>
   <div class="preview-card">
-    <h2>{{ title }}</h2>
+    <h2 v-if="title">{{ title }}</h2>
     <div ref="viewport" class="frame-viewport">
       <div
         class="frame-stage"

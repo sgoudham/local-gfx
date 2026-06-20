@@ -1,16 +1,18 @@
 <script setup lang="ts">
 const { state, publish } = useControlSocket();
 publish(SocketMessage.SessionRegister);
+
+const isDev = import.meta.dev;
 </script>
 
 <template>
   <div class="layout">
+    <WindowFrame v-if="isDev" src="/output" class="frame" />
     <div class="control">
       <TeamFormationEditor v-bind="state.home" />
       <OverlayStack />
       <TeamFormationEditor v-bind="state.away" />
     </div>
-    <WindowFrame title="" src="/output" />
   </div>
 </template>
 
@@ -19,6 +21,10 @@ publish(SocketMessage.SessionRegister);
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+.frame {
+  display: flex;
+  align-self: center;
 }
 .control {
   display: flex;

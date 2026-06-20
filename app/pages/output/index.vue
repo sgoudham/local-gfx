@@ -115,11 +115,11 @@ const hydrationBreakData = computed<HydrationBreakProps>(() => {
 <template>
   <OverlayMatchScorecard v-bind="matchScorecardData" />
   <OverlayBigMatchScorecard v-bind="bigMatchScorecardData" />
-  <OverlayStartingSoon v-bind="startingSoonData" />
   <OverlayPenaltiesScorecard v-bind="penaltiesScorecardData" />
   <OverlayTeamFormation v-bind="teamFormationData" />
   <OverlaySubstitution v-bind="substitutionData" />
   <OverlayHydrationBreak v-bind="hydrationBreakData" />
+  <OverlayStartingSoon v-bind="startingSoonData" />
 </template>
 
 <style scoped></style>
