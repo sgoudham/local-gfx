@@ -1,12 +1,16 @@
 <script setup lang="ts">
+import type { TeamLocation } from "~~/shared/types/data";
+
 const props = defineProps<{
   onClick?: () => void;
   disabled?: boolean;
+  location?: TeamLocation;
 }>();
 </script>
 
 <template>
   <button
+    :data-location="props.location"
     :class="['button', { disabled: disabled }]"
     @click="onClick"
     :disabled
@@ -15,7 +19,16 @@ const props = defineProps<{
   </button>
 </template>
 
-<style scoped>
+<style lang="css" scoped>
+.button[data-location="home"] {
+  --primary-colour: var(--home-colour-1);
+  --secondary-colour: var(--home-colour-2);
+}
+
+.button[data-location="away"] {
+  --primary-colour: var(--away-colour-1);
+  --secondary-colour: var(--away-colour-2);
+}
 .button {
   background: #d32f2f;
   border: 0;
@@ -45,5 +58,9 @@ const props = defineProps<{
 }
 .action {
   background-color: #1e66f5;
+}
+.neutral {
+  background-color: var(--primary-colour);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 </style>

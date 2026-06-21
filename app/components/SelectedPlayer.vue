@@ -79,7 +79,7 @@ const handleRedCard = () => {
   </div>
 </template>
 
-<style scoped>
+<style lang="css" scoped>
 .selected-player {
   --team-colour-1: var(--home-colour-1);
   --team-colour-2: var(--home-colour-2);

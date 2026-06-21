@@ -34,6 +34,7 @@ watch(activeFormation, () => updatePlayerPositions(), {
 const dragId = ref<string | null>(null);
 const dragSource = ref<"pitch" | "bench" | null>(null);
 const draggedSub = ref<Player | null>(null);
+const dialogRef = ref<HTMLDialogElement | null>(null);
 
 function isPendingLocked(playerId: string) {
   return pendingSubs.value.some(
@@ -224,6 +225,12 @@ function onTeamSave(
       captain: updatedCaptain,
     },
   });
+
+  dialogRef.value?.close();
+}
+
+function openDialog() {
+  dialogRef.value?.showModal();
 }
 </script>
 
@@ -231,14 +238,19 @@ function onTeamSave(
   <div class="wrap" :style="layoutVars" @mouseup="stopDrag">
     <div class="wrap row">
       <div>{{ props.name }}</div>
-      <EditTeamDialog
-        :players="players"
-        :substitutes="substitutes"
-        :manager="props.manager"
-        :location="props.location"
-        :captain="props.captain"
-        @save="onTeamSave"
-      />
+      <Button class="neutral" :location="props.location" @click="openDialog">
+        📝
+      </Button>
+      <dialog ref="dialogRef">
+        <EditTeamForm
+          :players="players"
+          :substitutes="substitutes"
+          :manager="props.manager"
+          :location="props.location"
+          :captain="props.captain"
+          @save="onTeamSave"
+        />
+      </dialog>
     </div>
 
     <!-- Controls -->
