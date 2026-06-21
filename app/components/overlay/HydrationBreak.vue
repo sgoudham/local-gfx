@@ -67,19 +67,67 @@ watch(
 
 <template>
   <div class="overlay" ref="overlay" v-if="rendered">
-    HYDRATION BREAK
+    <div class="ribbon-box" ref="ribbonBox">
+      <div class="ribbon"></div>
+      <div class="ribbon"></div>
+    </div>
+
+    <div class="container">
+      HYDRATION BREAK
+    </div>
   </div>
 </template>
 
 <style scoped>
 .overlay {
+  --base-font-size: 36px;
+
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-display);
+  font-size: var(--base-font-size);
   color: var(--text-color);
-  padding: 16px;
+  padding: 0 16px;
   overflow: visible;
-  top: 10px;
+  width: 30%;
+  position: absolute;
+  right: 2%;
+  bottom: 2%;
+  min-width: 500px;
 }
+
+.container {
+  position: relative;
+  background: #000;
+  padding: 10px 90px;
+  z-index: 1;
+  width: 65%;
+  text-align: center;
+  min-width: none;
+}
+
+.ribbon-box {
+  position: absolute;
+  left: 0;
+  transform: skewX(-30deg);
+  transform-origin: center;
+  overflow: visible;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10%;
+}
+
+.ribbon {
+  background: var(--ribbon-colour);
+  width: 100%;
+  height: 30%;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
 </style>
