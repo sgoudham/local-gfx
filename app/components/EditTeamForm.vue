@@ -15,15 +15,34 @@ const emit = defineEmits<{
 
 const MAX_PLAYERS = 11;
 
-const draftPlayers = ref(
-  props.players.map((p) => ({ ...p })).filter((p) => p.forename !== ""),
-);
-const draftSubs = ref(
-  props.substitutes.map((p) => ({ ...p })).filter((p) => p.forename !== ""),
-);
-const draftManager = ref(`${props.manager}`);
-const draftCaptain = ref(
-  draftPlayers.value.find((player) => player.id === props.captain.id)!,
+const draftPlayers = ref<Player[]>([]);
+const draftSubs = ref<Player[]>([]);
+const draftManager = ref("");
+const draftCaptain = ref<Player>(props.captain);
+
+function resetData() {
+  draftPlayers.value = props.players
+    .map((p) => ({ ...p }))
+    .filter((p) => p.forename !== "");
+  draftSubs.value = props.substitutes
+    .map((p) => ({ ...p }))
+    .filter((p) => p.forename !== "");
+  draftManager.value = `${props.manager}`;
+  draftCaptain.value = draftPlayers.value.find(
+    (player) => player.id === props.captain.id,
+  )!;
+}
+
+watch(
+  () => [
+    props.location,
+    props.players,
+    props.substitutes,
+    props.manager,
+    props.captain,
+  ],
+  resetData,
+  { immediate: true, deep: true },
 );
 
 const tooManyOrNotEnoughPlayers = computed(
@@ -45,7 +64,12 @@ function handleSubmit() {
   <form @submit.prevent="handleSubmit">
     <div class="field-row">
       <h3 class="field-label">Manager:</h3>
-      <input type="text" v-model="draftManager" class="field-control" />
+      <input
+        type="text"
+        v-model="draftManager"
+        class="field-control"
+        @keydown.enter.prevent
+      />
     </div>
 
     <div class="field-row">
@@ -83,6 +107,7 @@ function handleSubmit() {
             v-model.number="player.number"
             class="number-input"
             min="1"
+            @keydown.enter.prevent
           />
           <span class="player-name"
             >{{ player.forename }} {{ player.surname }}</span
@@ -109,6 +134,7 @@ function handleSubmit() {
             v-model.number="player.number"
             class="number-input"
             min="1"
+            @keydown.enter.prevent
           />
           <span class="player-name"
             >{{ player.forename }} {{ player.surname }}</span
@@ -213,7 +239,6 @@ function handleSubmit() {
 
 .submit-btn {
   margin-top: 8px;
-  margin-bottom: 16px;
   padding: 14px;
   font-size: 15px;
   width: 100%;

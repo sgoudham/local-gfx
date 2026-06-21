@@ -19,3 +19,10 @@ pnpm dev
 pnpm build
 node .output/server/index.mjs
 ```
+
+TODO:
+
+- Remove x/y coordinates from player object and rely on percentages to give
+you positioning. This will ensure that subbing on players from the data input
+view doesn't rely on positions calculated from the team formation editor.
+- Prevent duplicate numbers from being entered on the data input view.
