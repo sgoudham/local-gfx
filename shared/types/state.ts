@@ -84,6 +84,7 @@ export type Graphics = {
   bigMatchScorecard: OverlayState;
   teamFormation: TeamFormationData;
   substitution: SubstitutionData;
+  hydrationBreak: OverlayState;
 };
 
 export type InitialState = {

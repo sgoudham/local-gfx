@@ -38,6 +38,7 @@ export const Overlay = {
   PenaltiesScorecard: "penaltiesScorecard",
   TeamFormation: "teamFormation",
   Substitution: "substitution",
+  HydrationBreak: "hydrationBreak",
 } as const;
 export type Overlay = (typeof Overlay)[keyof typeof Overlay];
 
@@ -70,5 +71,7 @@ export const SocketMessage = {
   TeamFormationHide: overlayMsg(Overlay.TeamFormation, "hide"),
   SubstitutionShow: overlayMsg(Overlay.Substitution, "show"),
   SubstitutionHide: overlayMsg(Overlay.Substitution, "hide"),
+  HydrationBreakShow: overlayMsg(Overlay.HydrationBreak, "show"),
+  HydrationBreakHide: overlayMsg(Overlay.HydrationBreak, "hide"),
 } as const;
 export type SocketMessage = (typeof SocketMessage)[keyof typeof SocketMessage];

@@ -36,7 +36,14 @@ const overlayToggles = computed(() => [
     showMessage: SocketMessage.PenaltiesScorecardShow,
     hideMessage: SocketMessage.PenaltiesScorecardHide,
   },
+  {
+    val: Overlay.HydrationBreak,
+    name: state.value.graphics.hydrationBreak.name,
+    showMessage: SocketMessage.HydrationBreakShow,
+    hideMessage: SocketMessage.HydrationBreakHide,
+  }
 ]);
+
 
 const kickoffTime = ref(state.value.graphics.startingSoon.kickoffTime);
 watch(

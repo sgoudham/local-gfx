@@ -7,6 +7,7 @@ import type {
   StartingSoonProps,
   SubstitutionProps,
   TeamFormationProps,
+  HydrationBreakProps,
 } from "~/types";
 
 const { state, publish } = useOutputSocket();
@@ -102,6 +103,13 @@ const teamFormationData = computed<TeamFormationProps>(() => {
 const substitutionData = computed<SubstitutionProps>(() => {
   return state.value.graphics.substitution;
 });
+
+const hydrationBreakData = computed<HydrationBreakProps>(() => {
+  return {
+    name: state.value.graphics.hydrationBreak.name,
+    visible: state.value.graphics.hydrationBreak.visible,
+  }
+});
 </script>
 
 <template>
@@ -110,6 +118,7 @@ const substitutionData = computed<SubstitutionProps>(() => {
   <OverlayPenaltiesScorecard v-bind="penaltiesScorecardData" />
   <OverlayTeamFormation v-bind="teamFormationData" />
   <OverlaySubstitution v-bind="substitutionData" />
+  <OverlayHydrationBreak v-bind="hydrationBreakData" />
   <OverlayStartingSoon v-bind="startingSoonData" />
 </template>
 
