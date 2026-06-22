@@ -13,6 +13,14 @@ export const matchTimeSchema = z.object({
     formatted: z.string()
 });
 
+const goalScoredEventSchema = z.object({
+    type: z.literal("goalScored"),
+    player: playerSchema,
+    matchTime: matchTimeSchema
+});
+
+export const pendingSubSchema = z.tuple([playerSchema, playerSchema]);
+
 export const goalSchema = z.object({
     player: playerSchema,
     matchTime: matchTimeSchema
@@ -44,8 +52,6 @@ export const startingSoonDataUpdateSchema = z.object({
 
 export const startingSoonDataSchema = overlayStateSchema.and(startingSoonDataUpdateSchema);
 
-export const pendingSubSchema = z.tuple([playerSchema, playerSchema]);
-
 export const substitutionDataUpdateSchema = z.object({
     location: teamLocationSchema,
     subs: z.array(pendingSubSchema)
@@ -69,13 +75,6 @@ export const graphicsSchema = z.object({
     hydrationBreak: overlayStateSchema
 });
 
-export const initialStateSchema = z.object({
-    matchTime: matchTimeSchema,
-    home: teamStateSchema,
-    away: teamStateSchema,
-    graphics: graphicsSchema
-});
-
 export const teamCompleteSchema = z.object({
     location: teamLocationSchema,
     name: z.string(),
@@ -89,9 +88,27 @@ export const teamCompleteSchema = z.object({
     penalties: z.tuple([penaltyStateSchema, penaltyStateSchema, penaltyStateSchema, penaltyStateSchema, penaltyStateSchema])
 });
 
+const substitutionMadeEventSchema = z.object({
+    type: z.literal("substitution"),
+    location: teamLocationSchema,
+    subs: z.array(pendingSubSchema),
+    matchTime: matchTimeSchema
+});
+
+const matchEventSchema = z.union([goalScoredEventSchema, substitutionMadeEventSchema]);
+
 export const completeStateSchema = z.object({
     matchTime: matchTimeSchema,
+    events: z.array(matchEventSchema),
     graphics: graphicsSchema,
     home: teamCompleteSchema,
     away: teamCompleteSchema
+});
+
+export const initialStateSchema = z.object({
+    matchTime: matchTimeSchema,
+    events: z.array(matchEventSchema),
+    home: teamStateSchema,
+    away: teamStateSchema,
+    graphics: graphicsSchema
 });

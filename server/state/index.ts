@@ -107,6 +107,7 @@ export class ServerState {
       graphics: state.graphics,
       home: this.mergeTeam(data.home, state.home),
       away: this.mergeTeam(data.away, state.away),
+      events: state.events
     };
   }
 
@@ -161,6 +162,7 @@ export class ServerState {
       graphics: state.graphics,
       home: this.extractTeamState(state.home),
       away: this.extractTeamState(state.away),
+      events: state.events
     };
   }
 
