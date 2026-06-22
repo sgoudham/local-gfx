@@ -37,6 +37,7 @@ export default defineNuxtConfig({
     families: [
       { name: "DM Serif Text", provider: "local" },
       { name: "Haettenschweiler", provider: "local" },
+      { name: "Roboto", provider: "local" },
     ],
   },
 });

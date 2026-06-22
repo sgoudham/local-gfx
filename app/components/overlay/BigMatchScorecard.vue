@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import type { BigMatchScorecardProps } from "~/types";
+import getMinutes from "~/utils/getMinutes";
 
 const props = defineProps<BigMatchScorecardProps>();
 
@@ -70,7 +71,7 @@ function dedupeGoals(goals: TeamState["goals"], squad: Map<string, Player>) {
   >();
 
   for (const goal of goals) {
-    const minuteLabel = `'${goal.matchTime.formatted.split(":")[0]}`;
+    const minuteLabel = `'${getMinutes(goal.matchTime)}`;
     const key = goal.player.id;
     const groupedGoal = groupedGoals.get(key);
 
