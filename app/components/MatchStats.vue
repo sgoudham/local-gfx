@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const { state, publish } = useOutputSocket();
-publish(SocketMessage.SessionRegister);
 </script>
 
 <template>
@@ -47,6 +46,25 @@ publish(SocketMessage.SessionRegister);
               {{ state.away.goals.length }}
             </div>
           </div>
+
+          <div class="scorers">
+            <div class="home-scorers">
+              <ul v-for="goal in state.home.goals">
+                <li>
+                  ({{ getMinutes(goal.matchTime) }}') {{ goal.player.forename }}
+                  {{ goal.player.surname }}
+                </li>
+              </ul>
+            </div>
+            <div class="away-scorers">
+              <ul v-for="goal in state.away.goals">
+                <li>
+                  ({{ getMinutes(goal.matchTime) }}') {{ goal.player.forename }}
+                  {{ goal.player.surname }}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -78,6 +96,8 @@ publish(SocketMessage.SessionRegister);
   background: #000;
   color: #ffffff;
   margin-top: 2dvh;
+  min-width: 6ch;
+  text-align: center;
   padding: 0.2em 0.9em;
   font-size: 1.5em;
 }
@@ -114,9 +134,29 @@ publish(SocketMessage.SessionRegister);
   line-height: 0.9em;
 }
 
+.scorers {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 3em 1fr;
+  align-items: center;
+  font-size: 0.8em;
+  font-style: italic;
+  background: #d6cfc7;
+  border-radius: 0.5em;
+  padding: 0.35em 0.6em;
+}
+
+.scorers ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
 .home-abbr,
 .home-name,
-.home-score {
+.home-score,
+.home-scorers {
   grid-column: 1;
   text-align: right;
   justify-self: end;
@@ -124,10 +164,10 @@ publish(SocketMessage.SessionRegister);
 
 .away-abbr,
 .away-name,
-.away-score {
+.away-score,
+.away-scorers {
   grid-column: 3;
   text-align: left;
   justify-self: start;
 }
-
 </style>

@@ -32,6 +32,7 @@ if (import.meta.client) {
 :root {
   --font-display: "DM Serif Text", serif;
   --font-secondary: "Haettenschweiler", sans-serif;
+  --font-subheading: "Roboto", sans-serif;
   --text-color: #dcebf4;
   --text-color-secondary: #242424;
   --muted-color: rgba(0, 0, 0, 0.35);

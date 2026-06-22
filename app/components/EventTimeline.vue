@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
+import getMinutes from "~/utils/getMinutes";
 
 const { state, publish } = useOutputSocket();
-publish(SocketMessage.SessionRegister);
 
 const listRef = ref<HTMLElement | null>(null);
 
@@ -28,14 +28,30 @@ watch(
       <p class="events-heading">Match Events</p>
       <ul ref="listRef" class="overlay-list">
         <li v-for="e in [...state.events].reverse()" class="event">
-          <p v-if="e.type === 'goalScored'">
-            ⚽️ {{ e.matchTime.formatted }} - GOAL: ({{ e.player.number }})
+          <div v-if="e.type === 'goalScored'">
+            <div :class="['event-header', e.player.location]">
+              <div>
+                {{ state[e.player.location].shortName }}
+              </div>
+              <div>
+                {{ getMinutes(e.matchTime) }}'
+              </div>
+            </div>
+            ⚽️ GOAL: ({{ e.player.number }})
             {{ e.player.forename }}
             {{ e.player.surname }}
-          </p>
-          <p v-if="e.type === 'substitution'">
-            🔺🔻 {{ e.matchTime.formatted }} - Substitution:
-          </p>
+          </div>
+          <div v-if="e.type === 'substitution'">
+            <div :class="['event-header', e.location]">
+              <div>
+                {{ state[e.location].shortName }}
+              </div>
+              <div>
+                {{ getMinutes(e.matchTime) }}'
+              </div>
+            </div>
+            🔺🔻 {{ getMinutes(e.matchTime) }}' - Substitution:
+          </div>
           <div v-if="e.type === 'substitution'" class="substitution-details">
             <div class="sub-group off-group">
               <p class="group-label">Off</p>
@@ -74,6 +90,8 @@ watch(
 </template>
 
 <style lang="css" scoped>
+
+
 .events-panel {
   --base-font-size: 20px;
 
@@ -204,4 +222,28 @@ li:last-child {
   color: #42de42;
   font-weight: bold;
 }
+
+.event-header {
+  position: relative;
+  padding: 0.1em 0.4em;
+  margin-bottom: 0.4em;
+  border-radius: 0.3em;
+  font-family: var(--font-subheading);
+  font-weight: bold;
+  font-size: 1.2em;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.763);
+  display: flex;
+  justify-content: space-between;
+}
+
+.home {
+  background: var(--home-colour-1);
+  color: var(--home-colour-2)
+}
+
+.away {
+  background: var(--away-colour-1);
+  color: var(--away-colour-2)
+}
+
 </style>

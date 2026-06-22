@@ -78,13 +78,6 @@ const captainId = computed(() => props.captain.id);
   position: relative;
   overflow: hidden;
   height: 100%;
-  mask-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 2%,
-    rgba(0, 0, 0, 1) 5%,
-    rgba(0, 0, 0, 1) 85%,
-    rgba(0, 0, 0, 0) 95%
-  );
 }
 
 .social-media-players::after {
