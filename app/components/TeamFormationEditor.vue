@@ -175,6 +175,7 @@ function performSub() {
     data: {
       location: props.location,
       subs: pendingSubs.value,
+      matchTime: state.value.matchTime,
     },
   });
 

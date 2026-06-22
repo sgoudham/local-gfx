@@ -24,6 +24,21 @@ export type MatchTime = {
   formatted: string;
 };
 
+type MatchEvent = GoalScoredEvent | SubstitutionMadeEvent;
+
+type GoalScoredEvent = {
+  type: "goalScored";
+  player: Player;
+  matchTime: MatchTime;
+}
+
+type SubstitutionMadeEvent = {
+  type: "substitution";
+  location: TeamLocation;
+  subs: PendingSub[];
+  matchTime: MatchTime;
+};
+
 export type Goal = {
   player: Player;
   matchTime: MatchTime;
@@ -69,6 +84,7 @@ export type PendingSub = [Player, Player];
 export type SubstitutionDataUpdate = {
   location: TeamLocation;
   subs: PendingSub[];
+  matchTime: MatchTime;
 };
 export type SubstitutionData = OverlayState & SubstitutionDataUpdate;
 
@@ -89,6 +105,7 @@ export type Graphics = {
 
 export type InitialState = {
   matchTime: MatchTime;
+  events: MatchEvent[];
   home: TeamState;
   away: TeamState;
   graphics: Graphics;
@@ -115,6 +132,7 @@ export type TeamComplete = {
 
 export type CompleteState = {
   matchTime: MatchTime;
+  events: MatchEvent[];
   graphics: Graphics;
   home: TeamComplete;
   away: TeamComplete;
