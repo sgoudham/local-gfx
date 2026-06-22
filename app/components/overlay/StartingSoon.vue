@@ -2,6 +2,19 @@
 import gsap from "gsap";
 import type { StartingSoonProps } from "~/types";
 
+// Donations skeleton
+const donations = ref([])
+
+setInterval(async () => {
+  // todo api call
+  donations.value = await $fetch("/api/donations");
+}, 60000);
+
+watch(donations, () => {
+  // show()
+})
+
+
 const props = defineProps<StartingSoonProps>();
 
 const overlay = useTemplateRef("overlay");
