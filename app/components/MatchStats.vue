@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { state, publish } = useOutputSocket();
+const { state } = useOutputSocket();
 </script>
 
 <template>
@@ -47,7 +47,10 @@ const { state, publish } = useOutputSocket();
             </div>
           </div>
 
-          <div class="scorers">
+          <div
+            class="scorers"
+            v-if="state.home.goals.length > 0 || state.away.goals.length > 0"
+          >
             <div class="home-scorers">
               <ul v-for="goal in state.home.goals">
                 <li>
