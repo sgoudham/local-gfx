@@ -7,7 +7,7 @@
     "captain": "59192b96-09c6-4418-86b0-5c65c8e79d37",
     "players": [
       { "id": "59192b96-09c6-4418-86b0-5c65c8e79d37", "forename": "Cammy", "surname": "Hay", "number": 1, "location": "home" },
-      { "id": "5eff02e2-04f0-41c4-974f-7f9c64e0c53f", "forename": "Callum", "surname": "Holmes", "number": 2, "location": "home" },
+      { "id": "5eff02e2-04f0-41c4-974f-7f9c64e0c53f", "forename": "Callum", "surname": "Holmes", "number": 6, "location": "home" },
       { "id": "40f62868-47cc-4b98-96d9-065f0d18b997", "forename": "Alex", "surname": "Moran", "number": 3, "location": "home" },
       { "id": "b0a636b4-bc29-410c-9e1d-611805ef7ec9", "forename": "Alex", "surname": "O'Donnell", "number": 4, "location": "home" },
       { "id": "5d91cf9b-3d2a-4276-963b-711725ec0c5d", "forename": "Matthew", "surname": "Blyth", "number": 5, "location": "home" },

@@ -39,7 +39,7 @@ function onTeamSave(
 
 <template>
   <main>
-    <EditTeamForm v-bind="data" @save="onTeamSave" />
+    <EditTeamForm :key="activeTeam" v-bind="data" @save="onTeamSave" />
   </main>
 
   <nav class="tabs" :data-location="activeTeam">

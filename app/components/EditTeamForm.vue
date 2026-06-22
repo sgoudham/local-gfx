@@ -33,17 +33,7 @@ function resetData() {
   )!;
 }
 
-watch(
-  () => [
-    props.location,
-    props.players,
-    props.substitutes,
-    props.manager,
-    props.captain,
-  ],
-  resetData,
-  { immediate: true, deep: true },
-);
+resetData();
 
 const tooManyOrNotEnoughPlayers = computed(
   () => draftPlayers.value.length !== MAX_PLAYERS,

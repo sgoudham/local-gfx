@@ -35,6 +35,7 @@ const dragId = ref<string | null>(null);
 const dragSource = ref<"pitch" | "bench" | null>(null);
 const draggedSub = ref<Player | null>(null);
 const dialogRef = ref<HTMLDialogElement | null>(null);
+const dialogKey = ref(0);
 
 function isPendingLocked(playerId: string) {
   return pendingSubs.value.some(
@@ -230,6 +231,7 @@ function onTeamSave(
 }
 
 function openDialog() {
+  dialogKey.value++;
   dialogRef.value?.showModal();
 }
 </script>
@@ -243,6 +245,7 @@ function openDialog() {
       </Button>
       <dialog ref="dialogRef">
         <EditTeamForm
+          :key="dialogKey"
           :players="players"
           :substitutes="substitutes"
           :manager="props.manager"
