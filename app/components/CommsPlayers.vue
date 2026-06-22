@@ -23,6 +23,7 @@ const captainId = computed(() => props.captain.id);
     <div class="social-media-players">
       <div class="team-info">
         <h1>{{ props.name }}</h1>
+        <h3>Manager: {{ props.manager }}</h3>
         <div class="squad-info">
           <h2>On-field Players</h2>
           <ul>
@@ -98,6 +99,10 @@ const captainId = computed(() => props.captain.id);
     rgba(0, 0, 0, 0) 75%
   );
   mix-blend-mode: overlay;
+}
+
+h3 {
+  font-weight: normal;
 }
 
 ul {
