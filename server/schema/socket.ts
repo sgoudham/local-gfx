@@ -1,5 +1,5 @@
 import z from "zod";
-import { Mode, SocketMessage } from "~~/shared/utils/constants";
+import { Mode, PingMessage, SocketMessage } from "~~/shared/utils/constants";
 import { playerSchema, teamLocationSchema } from "./data";
 import {
   formationKeySchema,
@@ -86,11 +86,15 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   }),
   socketMsg(Mode.Control, SocketMessage.SubstitutionHide),
   socketMsg(Mode.Control, SocketMessage.HydrationBreakShow),
-  socketMsg(Mode.Control, SocketMessage.HydrationBreakHide)
+  socketMsg(Mode.Control, SocketMessage.HydrationBreakHide),
 ]);
 export type ControlMessage = z.infer<typeof ControlMessageSchema>;
 
+export const HeartbeatMessageSchema = z.discriminatedUnion("type", [
+  socketMsg(Mode.Heartbeat, PingMessage.type),
+]);
+
 export const ModeEnvelopeSchema = z.object({
-  mode: z.enum([Mode.Control, Mode.Output]),
+  mode: z.enum([Mode.Control, Mode.Output, Mode.Heartbeat]),
 });
 export type ModeEnvelope = z.infer<typeof ModeEnvelopeSchema>;

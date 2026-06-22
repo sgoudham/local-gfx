@@ -1,4 +1,4 @@
-const overlayMsg = <O extends Overlay, A extends "show" | "hide" | "update">(
+const overlayMsg = <O extends Overlay, A extends "show" | "hide">(
   overlayKey: O,
   action: A,
 ): `${O}.${A}` => `${overlayKey}.${action}`;
@@ -45,8 +45,19 @@ export type Overlay = (typeof Overlay)[keyof typeof Overlay];
 export const Mode = {
   Control: "control",
   Output: "output",
+  Heartbeat: "heartbeat",
 } as const;
 export type Mode = (typeof Mode)[keyof typeof Mode];
+
+export const PingMessage = {
+  mode: Mode.Heartbeat,
+  type: "ping",
+} as const;
+
+export const PongMessage = {
+  mode: Mode.Heartbeat,
+  type: "pong",
+} as const;
 
 export const SocketMessage = {
   SessionRegister: "session.register",

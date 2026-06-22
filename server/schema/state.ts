@@ -28,7 +28,7 @@ export const goalSchema = z.object({
 
 export const playerStateSchema = z.object({
     id: z.string(),
-    number: z.number().min(1),
+    number: z.number(),
     x: z.number().optional(),
     y: z.number().optional()
 });

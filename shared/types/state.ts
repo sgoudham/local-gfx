@@ -46,7 +46,6 @@ export type Goal = {
 
 export type PlayerState = {
   id: string;
-  /** @minimum 1 */
   /** @integer */
   number: number;
   x?: number;
