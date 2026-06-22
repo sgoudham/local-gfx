@@ -84,7 +84,6 @@ export type PendingSub = [Player, Player];
 export type SubstitutionDataUpdate = {
   location: TeamLocation;
   subs: PendingSub[];
-  matchTime: MatchTime;
 };
 export type SubstitutionData = OverlayState & SubstitutionDataUpdate;
 

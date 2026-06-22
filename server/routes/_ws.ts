@@ -189,9 +189,8 @@ export default defineWebSocketHandler({
               }
               s.graphics.substitution.subs = data.subs;
               s.graphics.substitution.location = data.location;
-              s.graphics.substitution.matchTime = data.matchTime;
               s.graphics.substitution.visible = true;
-              s.events.push({type:"substitution", location:data.location, subs: data.subs, matchTime: data.matchTime})
+              s.events.push({type:"substitution", location:data.location, subs: data.subs, matchTime: s.matchTime})
             });
             await new Promise((resolve) => setTimeout(resolve, 6500));
             await serverState.patchState(async (s) => {

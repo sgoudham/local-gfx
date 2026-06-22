@@ -54,8 +54,7 @@ export const startingSoonDataSchema = overlayStateSchema.and(startingSoonDataUpd
 
 export const substitutionDataUpdateSchema = z.object({
     location: teamLocationSchema,
-    subs: z.array(pendingSubSchema),
-    matchTime: matchTimeSchema
+    subs: z.array(pendingSubSchema)
 });
 
 export const substitutionDataSchema = overlayStateSchema.and(substitutionDataUpdateSchema);
