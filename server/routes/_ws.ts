@@ -85,6 +85,7 @@ export default defineWebSocketHandler({
             const goalScoredData = parsed.msg.data;
             await serverState.patchState((s) => {
               s[goalScoredData.player.location].goals.push(goalScoredData);
+              s.events.push({ type: "goalScored", player: goalScoredData.player, matchTime: goalScoredData.matchTime });
             });
             break;
           case SocketMessage.MatchReset:
@@ -189,6 +190,7 @@ export default defineWebSocketHandler({
               s.graphics.substitution.subs = data.subs;
               s.graphics.substitution.location = data.location;
               s.graphics.substitution.visible = true;
+              s.events.push({type:"substitution", location:data.location, subs: data.subs, matchTime: s.matchTime})
             });
             await new Promise((resolve) => setTimeout(resolve, 6500));
             await serverState.patchState(async (s) => {
