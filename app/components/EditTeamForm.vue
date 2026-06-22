@@ -96,7 +96,6 @@ function handleSubmit() {
             type="number"
             v-model.number="player.number"
             class="number-input"
-            min="1"
             @keydown.enter.prevent
           />
           <span class="player-name"
@@ -123,7 +122,6 @@ function handleSubmit() {
             type="number"
             v-model.number="player.number"
             class="number-input"
-            min="1"
             @keydown.enter.prevent
           />
           <span class="player-name"

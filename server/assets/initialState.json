@@ -8,29 +8,23 @@
   "home": {
     "players": [
       { "id": "59192b96-09c6-4418-86b0-5c65c8e79d37", "number": 1 },
-      { "id": "5eff02e2-04f0-41c4-974f-7f9c64e0c53f", "number": 2 },
-      { "id": "40f62868-47cc-4b98-96d9-065f0d18b997", "number": 3 },
-      { "id": "b0a636b4-bc29-410c-9e1d-611805ef7ec9", "number": 4 },
-      { "id": "5d91cf9b-3d2a-4276-963b-711725ec0c5d", "number": 5 },
-      { "id": "f2a0d680-03cf-4a31-88bf-78deabea514c", "number": 6 },
-      { "id": "ca82ac5d-5221-48ca-bd09-6f90f97bf078", "number": 7 },
-      { "id": "3d648f26-7338-4d32-9854-2bac7bf4dae7", "number": 8 },
-      { "id": "84a92695-b1d3-4324-b18a-aa477c798ffa", "number": 9 },
-      { "id": "19bb70de-26ad-48cb-9a98-86ee02214aec", "number": 10 },
-      { "id": "5dd336f2-f576-4534-a0ea-ffe651256ac7", "number": 11 }
+      { "id": "40f62868-47cc-4b98-96d9-065f0d18b997", "number": 0 },
+      { "id": "6f93466d-933a-4053-8788-d76e65ea2279", "number": 0 },
+      { "id": "5d91cf9b-3d2a-4276-963b-711725ec0c5d", "number": 0 },
+      { "id": "ca82ac5d-5221-48ca-bd09-6f90f97bf078", "number": 0 },
+      { "id": "5eff02e2-04f0-41c4-974f-7f9c64e0c53f", "number": 6 },
+      { "id": "47ef94c8-14a6-43c8-b181-50d4f908106b", "number": 0 },
+      { "id": "84a92695-b1d3-4324-b18a-aa477c798ffa", "number": 0 },
+      { "id": "19bb70de-26ad-48cb-9a98-86ee02214aec", "number": 0 },
+      { "id": "5dd336f2-f576-4534-a0ea-ffe651256ac7", "number": 0 },
+      { "id": "b126d1b1-eb56-4944-9088-171845e61df8", "number": 0 }
     ],
     "substitutes": [
-      { "id": "bb4ef152-efcb-472e-aead-a1ed0c10b921", "number": 12 },
-      { "id": "b126d1b1-eb56-4944-9088-171845e61df8", "number": 13 },
-      { "id": "6f93466d-933a-4053-8788-d76e65ea2279", "number": 14 },
-      { "id": "47ef94c8-14a6-43c8-b181-50d4f908106b", "number": 15 },
-      { "id": "e468c2f7-d374-4940-a175-38fea4114d9e", "number": 16 },
-      { "id": "a2d28fd9-9a93-44a7-851e-d1f252067a45", "number": 17 },
-      { "id": "ac685cf7-8d5e-452a-b71c-3dfcbeafb0ad", "number": 18 }, 
-      { "id": "ad702b4b-db94-4bfe-97c0-71e59de78bae", "number": 19 }, 
-      { "id": "28dfa445-224f-48fc-8a9c-d6faf3b169dc", "number": 20 },
-      { "id": "09dd967f-b81e-4b00-8e8f-67f269d52a90", "number": 21 },
-      { "id": "adf515cd-b76b-4914-b362-2c249afd672d", "number": 22 }
+      { "id": "bb4ef152-efcb-472e-aead-a1ed0c10b921", "number": 0 },
+      { "id": "f2a0d680-03cf-4a31-88bf-78deabea514c", "number": 0 },
+      { "id": "e468c2f7-d374-4940-a175-38fea4114d9e", "number": 0 },
+      { "id": "b0a636b4-bc29-410c-9e1d-611805ef7ec9", "number": 0 },
+      { "id": "3d648f26-7338-4d32-9854-2bac7bf4dae7", "number": 0 }
     ],
     "goals": [],
     "penalties": [0, 0, 0, 0, 0]
@@ -38,29 +32,24 @@
   "away": {
     "players": [
       { "id": "cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d", "number": 1 },
-      { "id": "4ddc7913-1c11-4596-be89-32108c476101", "number": 2 },
-      { "id": "84cbd624-d399-4406-b902-e9c61a7e3f09", "number": 3 },
+      { "id": "4ddc7913-1c11-4596-be89-32108c476101", "number": 0 },
+      { "id": "84cbd624-d399-4406-b902-e9c61a7e3f09", "number": 17 },
       { "id": "e4fa8c38-38e4-4d26-9434-d90e5bfc0479", "number": 4 },
-      { "id": "b9f95965-c2af-4716-8825-3b1a64b926cc", "number": 5 },
-      { "id": "39c09ef3-609d-48aa-9919-2a78b0843162", "number": 6 },
-      { "id": "3dbcb9f3-9106-4516-ad65-6c788a95105f", "number": 7 },
-      { "id": "33944913-b2db-4012-ade4-38fae96c969a", "number": 8 },
-      { "id": "222bda56-3584-404b-b7b2-b3fa9f57349d", "number": 9 },
-      { "id": "323d18b3-97b3-4381-803c-2df65a13d4e5", "number": 10 },
-      { "id": "432ab771-3f25-43fc-bebf-3fd61e5be9cc", "number": 11 }
+      { "id": "b9f95965-c2af-4716-8825-3b1a64b926cc", "number": 0 },
+      { "id": "39c09ef3-609d-48aa-9919-2a78b0843162", "number": 11 },
+      { "id": "3dbcb9f3-9106-4516-ad65-6c788a95105f", "number": 35 },
+      { "id": "33944913-b2db-4012-ade4-38fae96c969a", "number": 0 },
+      { "id": "222bda56-3584-404b-b7b2-b3fa9f57349d", "number": 0 },
+      { "id": "323d18b3-97b3-4381-803c-2df65a13d4e5", "number": 7 },
+      { "id": "432ab771-3f25-43fc-bebf-3fd61e5be9cc", "number": 21 }
     ],
     "substitutes": [
-      { "id": "d53bf826-2cb7-4d15-8675-d0a17abab03e", "number": 12 },
-      { "id": "84384e63-83c6-40b3-b04f-ef69be7584eb", "number": 13 },
-      { "id": "5d8cd745-a930-45e4-8944-e9052fbf0137", "number": 14 },
-      { "id": "f5b34f3b-f3a4-4ea3-8f87-fcb50b750361", "number": 15 },
-      { "id": "eb73634d-6664-4de1-b6f3-41adf0071614", "number": 16 },
-      { "id": "9c347a58-933d-4975-8b40-64191d5981f6", "number": 17 },
-      { "id": "52e1d113-7f6d-4512-9759-59d70919cc3a", "number": 18 },
-      { "id": "ac406e89-d400-45ee-a210-34690e674da4", "number": 19 },
-      { "id": "1f130bbd-ed35-4972-b411-46f3d7845375", "number": 20 },
-      { "id": "819a4d34-164c-4871-b848-eeafb9baa86a", "number": 21 },
-      { "id": "a2df191d-6ca8-4816-a653-f6b3443492c3", "number": 22 }
+      { "id": "d53bf826-2cb7-4d15-8675-d0a17abab03e", "number": 0 },
+      { "id": "84384e63-83c6-40b3-b04f-ef69be7584eb", "number": 0 },
+      { "id": "5d8cd745-a930-45e4-8944-e9052fbf0137", "number": 0 },
+      { "id": "f5b34f3b-f3a4-4ea3-8f87-fcb50b750361", "number": 0 },
+      { "id": "eb73634d-6664-4de1-b6f3-41adf0071614", "number": 0 },
+      { "id": "9c347a58-933d-4975-8b40-64191d5981f6", "number": 0 }
     ],
     "goals": [],
     "penalties": [0, 0, 0, 0, 0]
