@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useOutputSocket } from "~/composables/useOutputSocket";
 import type {
   BigMatchScorecardProps,
   MatchScorecardProps,
@@ -10,9 +9,7 @@ import type {
   HydrationBreakProps,
 } from "~/types";
 
-const { state, publish } = useOutputSocket();
-
-publish(SocketMessage.SessionRegister);
+const { state } = useOutputSocket();
 
 const matchScorecardData = computed<MatchScorecardProps>(() => {
   return {

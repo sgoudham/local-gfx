@@ -5,7 +5,6 @@ import type { EditTeamFormProps } from "~/types";
 import type { TeamLocation as TLocation } from "~~/shared/types/data";
 
 const { state, publish } = useControlSocket();
-publish(SocketMessage.SessionRegister);
 
 const activeTeam = ref<TLocation>(TeamLocation.Home);
 

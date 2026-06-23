@@ -1,7 +1,5 @@
 <script setup lang="ts">
-const { state, publish } = useControlSocket();
-publish(SocketMessage.SessionRegister);
-
+const { state } = useControlSocket();
 const isDev = import.meta.dev;
 </script>
 

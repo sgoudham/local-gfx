@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const { state, publish } = useOutputSocket();
-publish(SocketMessage.SessionRegister);
+const { state } = useOutputSocket();
 </script>
 
 <template>

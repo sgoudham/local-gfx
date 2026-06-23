@@ -1,13 +1,3 @@
-import { useSocketConnection } from "./useSocketConnection";
+import { useSession } from "./useSession";
 
-export const useControlSocket = () => {
-  const state = useState<CompleteState>("state");
-
-  const publish = (type: string, data?: Record<string, unknown>) => {
-    if (import.meta.server) return;
-    const { send } = useSocketConnection();
-    send(JSON.stringify({ mode: Mode.Control, type, ...data }));
-  };
-
-  return { publish, state };
-};
+export const useControlSocket = () => useSession(Mode.Control);
