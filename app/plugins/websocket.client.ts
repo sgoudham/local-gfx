@@ -1,9 +1,9 @@
 import { PingMessage, PongMessage } from "~~/shared/utils/constants";
 
-export type SharedSocketConnection = {
-  data: ReturnType<typeof useWebSocket<string>>["data"];
-  send: ReturnType<typeof useWebSocket<string>>["send"];
-};
+export type SharedSocketConnection = Pick<
+  ReturnType<typeof useWebSocket<string>>,
+  "data" | "send"
+>;
 
 export default defineNuxtPlugin(() => {
   const requestURL = useRequestURL();
@@ -20,12 +20,18 @@ export default defineNuxtPlugin(() => {
     },
   });
 
+  useEventListener(document, "visibilitychange", () => {
+    if (document.visibilityState === "visible" && ws.status.value !== "OPEN") {
+      ws.open();
+    }
+  });
+
   return {
     provide: {
       ws: {
         data: ws.data,
         send: ws.send,
-      } satisfies SharedSocketConnection,
+      },
     },
   };
 });
