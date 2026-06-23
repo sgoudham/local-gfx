@@ -11,6 +11,7 @@ export default defineNuxtPlugin(() => {
     heartbeat: {
       message: JSON.stringify(PingMessage),
       responseMessage: JSON.stringify(PongMessage),
+      interval: 10000,
       pongTimeout: 3000,
     },
     autoReconnect: {
