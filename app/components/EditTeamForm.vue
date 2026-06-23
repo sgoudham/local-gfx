@@ -15,31 +15,29 @@ const emit = defineEmits<{
 
 const MAX_PLAYERS = 11;
 
-const draftPlayers = ref<Player[]>([]);
-const draftSubs = ref<Player[]>([]);
-const draftManager = ref("");
-const draftCaptain = ref<Player>(props.captain);
+const draftPlayers = ref<Player[]>(props.players.map((p) => ({ ...p })));
+const draftSubs = ref<Player[]>(props.substitutes.map((p) => ({ ...p })));
+const draftManager = ref(props.manager);
+const draftCaptain = ref<Player | null>(props.captain);
 
-function resetData() {
-  draftPlayers.value = props.players
-    .map((p) => ({ ...p }))
-    .filter((p) => p.forename !== "");
-  draftSubs.value = props.substitutes
-    .map((p) => ({ ...p }))
-    .filter((p) => p.forename !== "");
-  draftManager.value = `${props.manager}`;
-  draftCaptain.value = draftPlayers.value.find(
-    (player) => player.id === props.captain.id,
-  )!;
-}
-
-resetData();
-
-const tooManyOrNotEnoughPlayers = computed(
-  () => draftPlayers.value.length !== MAX_PLAYERS,
+const tooManyPlayers = computed(() => draftPlayers.value.length > MAX_PLAYERS);
+const notEnoughPlayers = computed(
+  () => draftPlayers.value.length < MAX_PLAYERS,
+);
+const captainSelected = computed(() => {
+  if (!draftCaptain.value) return false;
+  return draftPlayers.value.some((p) => p.id === draftCaptain.value?.id);
+});
+const isSubmitDisabled = computed(
+  () =>
+    tooManyPlayers.value || notEnoughPlayers.value || !captainSelected.value,
 );
 
 function handleSubmit() {
+  if (!draftCaptain.value) {
+    return;
+  }
+
   emit(
     "save",
     draftPlayers.value,
@@ -58,6 +56,7 @@ function handleSubmit() {
         type="text"
         v-model="draftManager"
         class="field-control"
+        required
         @keydown.enter.prevent
       />
     </div>
@@ -69,7 +68,10 @@ function handleSubmit() {
         id="captain"
         v-model="draftCaptain"
         class="field-control"
+        :class="{ 'input-invalid': !captainSelected }"
+        required
       >
+        <option :value="null" disabled>Select captain</option>
         <option :value="player" v-for="player in draftPlayers">
           {{ player.number }}' {{ player.forename }} {{ player.surname }}
         </option>
@@ -77,7 +79,7 @@ function handleSubmit() {
     </div>
 
     <section class="squad-section">
-      <h3 :class="{ warn: tooManyOrNotEnoughPlayers }">
+      <h3 :class="{ warn: tooManyPlayers || notEnoughPlayers }">
         Starting XI ({{ draftPlayers.length }}/{{ MAX_PLAYERS }})
       </h3>
       <VueDraggable
@@ -87,7 +89,7 @@ function handleSubmit() {
         item-key="id"
         tag="ul"
         class="list"
-        :class="{ 'list--invalid': tooManyOrNotEnoughPlayers }"
+        :class="{ 'input-invalid': tooManyPlayers || notEnoughPlayers }"
         handle=".drag-handle"
       >
         <li v-for="player in draftPlayers" :key="player.id" class="player-row">
@@ -131,14 +133,18 @@ function handleSubmit() {
       </VueDraggable>
     </section>
 
-    <button
-      type="submit"
-      :disabled="tooManyOrNotEnoughPlayers"
-      class="submit-btn"
-    >
-      <template v-if="!tooManyOrNotEnoughPlayers"> Save </template>
-      <template v-else>
+    <button type="submit" :disabled="isSubmitDisabled" class="submit-btn">
+      <template v-if="!tooManyPlayers && !notEnoughPlayers && captainSelected">
+        Save
+      </template>
+      <template v-else-if="!captainSelected">Captain is required</template>
+      <template v-else-if="notEnoughPlayers">
         Need {{ MAX_PLAYERS - draftPlayers.length }} more player{{
+          MAX_PLAYERS - draftPlayers.length === 1 ? "" : "s"
+        }}
+      </template>
+      <template v-else-if="tooManyPlayers">
+        Remove {{ Math.abs(MAX_PLAYERS - draftPlayers.length) }} player{{
           MAX_PLAYERS - draftPlayers.length === 1 ? "" : "s"
         }}
       </template>
@@ -186,8 +192,8 @@ function handleSubmit() {
   border: 1px solid #000000;
   border-radius: 4px;
 }
-.list--invalid {
-  border: 2px solid red;
+.input-invalid {
+  border: 4px solid red;
 }
 
 .player-row {
