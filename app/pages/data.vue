@@ -7,6 +7,7 @@ import type { TeamLocation as TLocation } from "~~/shared/types/data";
 const { state, publish } = useControlSocket();
 
 const activeTeam = ref<TLocation>(TeamLocation.Home);
+const saved = ref(false);
 
 const data = computed<EditTeamFormProps>(() => {
   return {
@@ -33,12 +34,14 @@ function onTeamSave(
       captain: updatedCaptain,
     },
   });
+  saved.value = true;
+  setTimeout(() => (saved.value = false), 2000);
 }
 </script>
 
 <template>
   <main>
-    <EditTeamForm :key="activeTeam" v-bind="data" @save="onTeamSave" />
+    <EditTeamForm :key="activeTeam" v-bind="data" :saved="saved" @save="onTeamSave" />
   </main>
 
   <nav class="tabs" :data-location="activeTeam">

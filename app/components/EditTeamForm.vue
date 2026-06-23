@@ -133,8 +133,16 @@ function handleSubmit() {
       </VueDraggable>
     </section>
 
-    <button type="submit" :disabled="isSubmitDisabled" class="submit-btn">
-      <template v-if="!tooManyPlayers && !notEnoughPlayers && captainSelected">
+    <button
+      type="submit"
+      :disabled="isSubmitDisabled"
+      class="submit-btn"
+      :class="{ 'submit-btn--saved': saved }"
+    >
+      <template v-if="saved">Saved</template>
+      <template
+        v-else-if="!tooManyPlayers && !notEnoughPlayers && captainSelected"
+      >
         Save
       </template>
       <template v-else-if="!captainSelected">Captain is required</template>
@@ -145,7 +153,7 @@ function handleSubmit() {
       </template>
       <template v-else-if="tooManyPlayers">
         Remove {{ Math.abs(MAX_PLAYERS - draftPlayers.length) }} player{{
-          MAX_PLAYERS - draftPlayers.length === 1 ? "" : "s"
+          Math.abs(MAX_PLAYERS - draftPlayers.length) === 1 ? "" : "s"
         }}
       </template>
     </button>
@@ -233,15 +241,28 @@ function handleSubmit() {
 
 .submit-btn {
   margin-top: 8px;
-  padding: 14px;
+  padding: 12px 20px;
   font-size: 15px;
+  font-weight: 600;
   width: 100%;
   border-radius: 8px;
+  border: none;
+  background-color: #000000;
+  color: #fff;
   cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 .submit-btn:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.4;
+}
+.submit-btn--saved {
+  background-color: #40a02b;
+  border-color: #16a34a;
+  color: #fff;
+  cursor: default;
 }
 
 .warn {

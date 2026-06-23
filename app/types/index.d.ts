@@ -11,7 +11,7 @@ import type {
 export type EditTeamFormProps = Pick<
   TeamComplete,
   "location" | "players" | "substitutes" | "manager" | "captain"
->;
+> & { saved?: boolean };
 
 export type SocialMediaPlayersProps = TeamComplete;
 
