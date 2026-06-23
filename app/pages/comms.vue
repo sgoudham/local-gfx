@@ -7,8 +7,8 @@ publish(SocketMessage.SessionRegister);
   <main class="page">
     <CommsPlayers v-bind="state.home" class="team team-home" />
 
-    <MatchStats class="match-stats"/>
-    <EventTimeline v-bind="state.home" class="match-events"/>
+    <MatchStats class="match-stats" />
+    <EventTimeline v-bind="state.home" class="match-events" />
 
     <CommsPlayers v-bind="state.away" class="team team-away" />
   </main>
@@ -39,7 +39,6 @@ publish(SocketMessage.SessionRegister);
 
 .match-events {
   width: 25%;
-  height: 100dvh
+  height: 100dvh;
 }
-
 </style>

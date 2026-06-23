@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import { TeamFormationPitch } from "~~/shared/utils/constants";
-
+import { getFormationPosition } from "~/utils/getFormationPosition";
 const { state, publish } = useControlSocket();
 const { selectedPlayer } = useClientState();
 
 const props = defineProps<TeamComplete>();
-
-const PITCH_W = TeamFormationPitch.Width;
-const PITCH_H = TeamFormationPitch.Height;
-const PITCH_HORIZONTAL_PADDING = TeamFormationPitch.HorizontalPadding;
 
 const players = computed(() => props.players);
 const substitutes = computed(() => props.substitutes);
@@ -21,19 +16,12 @@ const pendingSubs = ref<PendingSub[]>([]);
 const hoveredPlayerId = ref<string | null>(null);
 const hasPendingSubs = computed(() => pendingSubs.value.length === 0);
 const activeFormation = computed(() => props.activeFormation);
-const layoutVars = computed(() => ({
-  "--pitch-width": `${PITCH_W}px`,
-  "--pitch-height": `${PITCH_H}px`,
-}));
-
-watch(activeFormation, () => updatePlayerPositions(), {
-  deep: true,
-  immediate: true,
-});
 
 const dragId = ref<string | null>(null);
 const dragSource = ref<"pitch" | "bench" | null>(null);
 const draggedSub = ref<Player | null>(null);
+const dialogRef = ref<HTMLDialogElement | null>(null);
+const dialogKey = ref(0);
 
 function isPendingLocked(playerId: string) {
   return pendingSubs.value.some(
@@ -43,45 +31,7 @@ function isPendingLocked(playerId: string) {
 
 // ── Formations ──────────────────────────────────────────────
 
-function updatePlayerPositions(
-  formation: FormationKey | undefined = activeFormation.value,
-) {
-  if (!formation) {
-    return;
-  }
-  const lines = [1, ...formation.split("-").map((v) => Number(v))];
-  const positions: { x: number; y: number }[] = [];
-  const padTop = 42,
-    padBottom = 120;
-  const usableHeight = PITCH_H - padTop - padBottom;
-  const numLines = lines.length;
-
-  lines.forEach((playersPerLine, lineIndex) => {
-    const lineProgress = numLines === 1 ? 0.5 : lineIndex / (numLines - 1);
-    const y = padTop + lineProgress * usableHeight;
-
-    for (let playerIndex = 0; playerIndex < playersPerLine; playerIndex++) {
-      const playerProgress =
-        playersPerLine === 1 ? 0.5 : playerIndex / (playersPerLine - 1);
-      const x =
-        PITCH_HORIZONTAL_PADDING +
-        playerProgress * (PITCH_W - 2 * PITCH_HORIZONTAL_PADDING);
-      positions.push({ x, y });
-    }
-  });
-
-  positions.forEach((position, index) => {
-    const player = players.value[index];
-    if (player) {
-      player.x = position.x;
-      player.y = position.y;
-    }
-  });
-}
-
 function applyFormation(key: FormationKey) {
-  updatePlayerPositions(key);
-
   publish(SocketMessage.ActiveFormationUpdate, {
     data: {
       location: props.location,
@@ -123,14 +73,9 @@ function stopDrag(_e: MouseEvent) {
         const targetIndex = players.value.findIndex((p) => p.id === target.id);
 
         if (draggedIndex !== -1 && targetIndex !== -1) {
-          const draggedPlayer = players.value[draggedIndex]!;
-          const targetPlayer = players.value[targetIndex]!;
-          const tempX = draggedPlayer.x;
-          const tempY = draggedPlayer.y;
-          draggedPlayer.x = targetPlayer.x;
-          draggedPlayer.y = targetPlayer.y;
-          targetPlayer.x = tempX;
-          targetPlayer.y = tempY;
+          const temp = players.value[draggedIndex]!;
+          players.value[draggedIndex] = players.value[targetIndex]!;
+          players.value[targetIndex] = temp;
 
           publish(SocketMessage.ActiveFormationUpdate, {
             data: {
@@ -170,38 +115,13 @@ function onPlayerMouseEnter(player: Player) {
 }
 
 function performSub() {
-  // Server
   publish(SocketMessage.SubstitutionShow, {
     data: {
       location: props.location,
       subs: pendingSubs.value,
     },
   });
-
-  // Client
-  for (const [subIn, playerOut] of pendingSubs.value) {
-    const playerIndex = players.value.findIndex((p) => p.id === playerOut.id);
-    const subIndex = substitutes.value.findIndex((s) => s.id === subIn.id);
-
-    if (playerIndex === -1 || subIndex === -1) continue;
-    const player = players.value[playerIndex];
-    const sub = substitutes.value[subIndex];
-
-    if (!player || !sub) continue;
-    players.value[playerIndex] = sub;
-    substitutes.value[subIndex] = player;
-  }
-  updatePlayerPositions();
   pendingSubs.value = [];
-  // FIXME: Ideally shouldn't have to republish ActiveFormationUpdate, but this
-  // allows for the player positions to be sent to the server for now
-  publish(SocketMessage.ActiveFormationUpdate, {
-    data: {
-      location: props.location,
-      activeFormation: activeFormation.value,
-      players: players.value,
-    },
-  });
 }
 
 function onTeamSave(
@@ -213,8 +133,6 @@ function onTeamSave(
   players.value.splice(0, players.value.length, ...updatedPlayers);
   substitutes.value.splice(0, substitutes.value.length, ...updatedSubs);
 
-  updatePlayerPositions();
-
   publish(SocketMessage.TeamInfoUpdate, {
     data: {
       location: props.location,
@@ -224,21 +142,34 @@ function onTeamSave(
       captain: updatedCaptain,
     },
   });
+
+  dialogRef.value?.close();
+}
+
+function openDialog() {
+  dialogKey.value++;
+  dialogRef.value?.showModal();
 }
 </script>
 
 <template>
-  <div class="wrap" :style="layoutVars" @mouseup="stopDrag">
+  <div class="wrap" @mouseup="stopDrag">
     <div class="wrap row">
       <div>{{ props.name }}</div>
-      <EditTeamDialog
-        :players="players"
-        :substitutes="substitutes"
-        :manager="props.manager"
-        :location="props.location"
-        :captain="props.captain"
-        @save="onTeamSave"
-      />
+      <Button class="neutral" :location="props.location" @click="openDialog">
+        📝
+      </Button>
+      <dialog ref="dialogRef">
+        <EditTeamForm
+          :key="dialogKey"
+          :players="players"
+          :substitutes="substitutes"
+          :manager="props.manager"
+          :location="props.location"
+          :captain="props.captain"
+          @save="onTeamSave"
+        />
+      </dialog>
     </div>
 
     <!-- Controls -->
@@ -403,8 +334,7 @@ function onTeamSave(
 
       <!-- On-pitch players -->
       <button
-        v-if="activeFormation"
-        v-for="player in players"
+        v-for="(player, index) in players"
         :key="player.id"
         class="player"
         :title="`${player.forename} ${player.surname}`"
@@ -412,7 +342,7 @@ function onTeamSave(
           dragging: dragId === player.id && dragSource === 'pitch',
           'sub-target': hoveredPlayerId === player.id && draggedSub,
         }"
-        :style="{ left: player.x + 'px', top: player.y + 'px' }"
+        :style="getFormationPosition(activeFormation, index)"
         @mousedown.prevent="startPitchPlayerDrag($event, player)"
         @mouseenter="onPlayerMouseEnter(player)"
         @mouseleave="hoveredPlayerId = null"
@@ -471,8 +401,6 @@ function onTeamSave(
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: var(--pitch-width);
-  max-width: var(--pitch-width);
   user-select: none;
 
   .row {
@@ -483,8 +411,8 @@ function onTeamSave(
 
 .pitch {
   position: relative;
-  width: var(--pitch-width);
-  height: var(--pitch-height);
+  width: 250px;
+  height: 400px;
   background: var(--pitch-editor);
   overflow: hidden;
   border: 2px solid #1a2e1a;

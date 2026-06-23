@@ -7,10 +7,8 @@ export const playerSchema = z.object({
     id: z.string(),
     forename: z.string(),
     surname: z.string(),
-    number: z.number().min(1),
-    location: teamLocationSchema,
-    x: z.number().optional(),
-    y: z.number().optional()
+    number: z.number(),
+    location: teamLocationSchema
 });
 
 export const teamDataSchema = z.object({

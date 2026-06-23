@@ -2,16 +2,13 @@
 import gsap from "gsap";
 import { ref } from "vue";
 import type { TeamFormationProps } from "~/types";
-import { TeamFormationPitch } from "~~/shared/utils/constants";
+import { getFormationPosition } from "~/utils/getFormationPosition";
 
 const props = defineProps<TeamFormationProps>();
 
 const overlay = useTemplateRef("overlay");
 const rendered = ref(false);
 const captainId = computed(() => props.team.captain.id);
-
-const EDITOR_PITCH_W = TeamFormationPitch.Width;
-const EDITOR_PITCH_H = TeamFormationPitch.Height;
 
 const sortedSubs = computed(() =>
   [...props.team.substitutes].sort((a, b) => a.number - b.number),
@@ -46,20 +43,15 @@ function shirtName(player: { forename: string; surname: string }) {
 }
 
 const positionedPlayers = computed(() => {
-  return props.team.players.map((player) => {
-    const x = player.x ?? EDITOR_PITCH_W / 2;
-    const y = player.y ?? EDITOR_PITCH_H / 2;
+  const formation = props.team.activeFormation;
+  return props.team.players.map((player, index) => {
     const isGk = player.number === 1;
     const invert = player.location === "away" || isGk;
+    const style = formation
+      ? getFormationPosition(formation, index)
+      : { left: "50%", top: "50%" };
 
-    return {
-      player,
-      invert,
-      style: {
-        left: `${(x / EDITOR_PITCH_W) * 100}%`,
-        top: `${(y / EDITOR_PITCH_H) * 100}%`,
-      },
-    };
+    return { player, invert, style };
   });
 });
 

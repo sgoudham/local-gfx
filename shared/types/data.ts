@@ -4,12 +4,9 @@ export type Player = {
   id: string;
   forename: string;
   surname: string;
-  /** @minimum 1 */
   /** @integer */
   number: number;
   location: TeamLocation;
-  x?: number;
-  y?: number;
 };
 
 export type TeamData = {

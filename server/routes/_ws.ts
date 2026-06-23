@@ -8,6 +8,7 @@ import {
   OutputMessageSchema,
 } from "../schema/socket";
 import { ServerState } from "../state";
+import { PongMessage } from "~~/shared/utils/constants";
 
 const animateMatchTimerIn = async (serverState: ServerState) => {
   await serverState.patchState((s) => {
@@ -35,8 +36,6 @@ export default defineWebSocketHandler({
   },
 
   async message(peer, msg) {
-    console.log(`message=${msg.text()}`);
-
     const { serverState } = useNitroApp();
 
     const parsed = parseMessage(msg);
@@ -48,7 +47,11 @@ export default defineWebSocketHandler({
     serverState.setPeer(peer);
 
     switch (parsed.mode) {
+      case Mode.Heartbeat:
+        peer.send(JSON.stringify(PongMessage));
+        break;
       case Mode.Output:
+        console.log(`message=${msg.text()}`);
         switch (parsed.msg.type) {
           case SocketMessage.SessionRegister:
             peer.subscribe(Mode.Output);
@@ -57,6 +60,7 @@ export default defineWebSocketHandler({
         }
         break;
       case Mode.Control:
+        console.log(`message=${msg.text()}`);
         switch (parsed.msg.type) {
           case SocketMessage.SessionRegister:
             peer.subscribe(Mode.Control);
@@ -85,7 +89,11 @@ export default defineWebSocketHandler({
             const goalScoredData = parsed.msg.data;
             await serverState.patchState((s) => {
               s[goalScoredData.player.location].goals.push(goalScoredData);
-              s.events.push({ type: "goalScored", player: goalScoredData.player, matchTime: goalScoredData.matchTime });
+              s.events.push({
+                type: "goalScored",
+                player: goalScoredData.player,
+                matchTime: goalScoredData.matchTime,
+              });
             });
             break;
           case SocketMessage.MatchReset:
@@ -181,8 +189,6 @@ export default defineWebSocketHandler({
                 const player = s[data.location].players[playerIndex];
                 const sub = s[data.location].substitutes[subIndex];
                 if (sub && player) {
-                  sub.x = player.x;
-                  sub.y = player.y;
                   s[data.location].players[playerIndex] = sub;
                   s[data.location].substitutes[subIndex] = player;
                 }
@@ -190,7 +196,12 @@ export default defineWebSocketHandler({
               s.graphics.substitution.subs = data.subs;
               s.graphics.substitution.location = data.location;
               s.graphics.substitution.visible = true;
-              s.events.push({type:"substitution", location:data.location, subs: data.subs, matchTime: s.matchTime})
+              s.events.push({
+                type: "substitution",
+                location: data.location,
+                subs: data.subs,
+                matchTime: s.matchTime,
+              });
             });
             await new Promise((resolve) => setTimeout(resolve, 6500));
             await serverState.patchState(async (s) => {
@@ -199,13 +210,13 @@ export default defineWebSocketHandler({
               s.graphics.substitution.subs = [];
             });
             break;
-          
+
           case SocketMessage.HydrationBreakShow:
             await serverState.patchState((s) => {
               s.graphics.hydrationBreak.visible = true;
             });
             break;
-          
+
           case SocketMessage.HydrationBreakHide:
             await serverState.patchState((s) => {
               s.graphics.hydrationBreak.visible = false;
@@ -231,6 +242,7 @@ export default defineWebSocketHandler({
 
 type ParsedMessage =
   | { ok: false; error: string; issues: unknown[] }
+  | { ok: true; mode: typeof Mode.Heartbeat }
   | { ok: true; mode: typeof Mode.Control; msg: ControlMessage }
   | { ok: true; mode: typeof Mode.Output; msg: OutputMessage };
 
@@ -244,6 +256,10 @@ const parseMessage = (msg: Message): ParsedMessage => {
       error: "invalid_control_message",
       issues: mode.error.issues,
     };
+  }
+
+  if (mode.data.mode === Mode.Heartbeat) {
+    return { ok: true as const, mode: Mode.Heartbeat } as const;
   }
 
   if (mode.data.mode === Mode.Control) {

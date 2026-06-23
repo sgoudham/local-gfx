@@ -27,7 +27,7 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: ["zod", "gsap"],
+      include: ["zod", "gsap", "vue-draggable-plus"],
     },
   },
 

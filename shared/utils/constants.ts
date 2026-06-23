@@ -1,4 +1,4 @@
-const overlayMsg = <O extends Overlay, A extends "show" | "hide" | "update">(
+const overlayMsg = <O extends Overlay, A extends "show" | "hide">(
   overlayKey: O,
   action: A,
 ): `${O}.${A}` => `${overlayKey}.${action}`;
@@ -25,12 +25,6 @@ export const TeamLocation = {
   Away: "away",
 } as const;
 
-export const TeamFormationPitch = {
-  Width: 250,
-  Height: 400,
-  HorizontalPadding: 36,
-} as const;
-
 export const Overlay = {
   StartingSoon: "startingSoon",
   MatchScorecard: "matchScorecard",
@@ -45,8 +39,19 @@ export type Overlay = (typeof Overlay)[keyof typeof Overlay];
 export const Mode = {
   Control: "control",
   Output: "output",
+  Heartbeat: "heartbeat",
 } as const;
 export type Mode = (typeof Mode)[keyof typeof Mode];
+
+export const PingMessage = {
+  mode: Mode.Heartbeat,
+  type: "ping",
+} as const;
+
+export const PongMessage = {
+  mode: Mode.Heartbeat,
+  type: "pong",
+} as const;
 
 export const SocketMessage = {
   SessionRegister: "session.register",
