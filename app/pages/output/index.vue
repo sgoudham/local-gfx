@@ -93,6 +93,7 @@ const teamFormationData = computed<TeamFormationProps>(() => {
       name: state.value[location].name,
       shortName: state.value[location].shortName,
       manager: state.value[location].manager,
+      activeFormation: state.value[location].activeFormation,
       players: state.value[location].players,
       substitutes: state.value[location].substitutes,
       captain: state.value[location].captain,

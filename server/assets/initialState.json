@@ -6,6 +6,7 @@
   },
   "events": [],
   "home": {
+    "activeFormation": "3-5-2",
     "players": [
       { "id": "59192b96-09c6-4418-86b0-5c65c8e79d37", "number": 1 },
       { "id": "40f62868-47cc-4b98-96d9-065f0d18b997", "number": 0 },
@@ -30,6 +31,7 @@
     "penalties": [0, 0, 0, 0, 0]
   },
   "away": {
+    "activeFormation": "4-4-2",
     "players": [
       { "id": "cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d", "number": 1 },
       { "id": "4ddc7913-1c11-4596-be89-32108c476101", "number": 0 },

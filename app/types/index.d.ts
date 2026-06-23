@@ -48,6 +48,7 @@ export type TeamFormationProps = OverlayState & {
     name: TeamData["name"];
     shortName: TeamData["shortName"];
     manager: TeamData["manager"];
+    activeFormation: TeamComplete["activeFormation"];
     players: TeamComplete["players"];
     substitutes: TeamComplete["substitutes"];
     captain: TeamComplete["captain"];

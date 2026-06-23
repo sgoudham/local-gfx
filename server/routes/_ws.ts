@@ -189,8 +189,6 @@ export default defineWebSocketHandler({
                 const player = s[data.location].players[playerIndex];
                 const sub = s[data.location].substitutes[subIndex];
                 if (sub && player) {
-                  sub.x = player.x;
-                  sub.y = player.y;
                   s[data.location].players[playerIndex] = sub;
                   s[data.location].substitutes[subIndex] = player;
                 }

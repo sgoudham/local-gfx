@@ -7,8 +7,6 @@ export type Player = {
   /** @integer */
   number: number;
   location: TeamLocation;
-  x?: number;
-  y?: number;
 };
 
 export type TeamData = {

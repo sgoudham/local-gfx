@@ -107,7 +107,7 @@ export class ServerState {
       graphics: state.graphics,
       home: this.mergeTeam(data.home, state.home),
       away: this.mergeTeam(data.away, state.away),
-      events: state.events
+      events: state.events,
     };
   }
 
@@ -134,7 +134,7 @@ export class ServerState {
     return players.flatMap((playerState) => {
       const player = playersById.get(playerState.id);
       if (!player) return [];
-      return [{ ...player, x: playerState.x, y: playerState.y }];
+      return [player];
     });
   }
 
@@ -162,7 +162,7 @@ export class ServerState {
       graphics: state.graphics,
       home: this.extractTeamState(state.home),
       away: this.extractTeamState(state.away),
-      events: state.events
+      events: state.events,
     };
   }
 
@@ -182,8 +182,6 @@ export class ServerState {
     return {
       id: player.id,
       number: player.number,
-      x: player.x,
-      y: player.y,
     };
   }
 
