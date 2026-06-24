@@ -17,11 +17,11 @@ const charityName = "Refuweegee";
 // Not really sure what this nextTick() -> nextTick() stuff is about but progress bar was not appearing initially without it
 // Just wanted a quick solution so using AI answer for now
 async function show() {
-  await nextTick()
+  await nextTick();
 
-  rendered.value = true
+  rendered.value = true;
 
-  await nextTick()
+  await nextTick();
 
   if (overlay.value) {
     gsap.fromTo(
@@ -32,8 +32,8 @@ async function show() {
         y: 0,
         duration: 0.5,
         ease: "power2.out",
-      }
-    )
+      },
+    );
   }
 }
 
@@ -84,10 +84,10 @@ watch(
         <div class="stat-sponsor">
           <div class="stat-sponsor-qr">
             <img
-            src="/qrCode.png"
-            alt="QR Code"
-            style="width: 100%; height: 100%;"
-          />
+              src="/qrCode.png"
+              alt="QR Code"
+              style="width: 100%; height: 100%"
+            />
           </div>
         </div>
         <div class="donation-updates">
@@ -187,7 +187,7 @@ watch(
 }
 
 .stat-sponsor-qr::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -231,13 +231,12 @@ watch(
 }
 
 .red {
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--ribbon-colour), white 18%) 0%,
-      var(--ribbon-colour) 45%,
-      #520000 100%
-    );
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ribbon-colour), white 18%) 0%,
+    var(--ribbon-colour) 45%,
+    #520000 100%
+  );
 }
 
 .glossy {
@@ -254,18 +253,17 @@ watch(
 }
 
 .glossy::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -50% -80%;
 
-  background:
-    linear-gradient(
-      110deg,
-      transparent 35%,
-      rgba(255, 255, 255, 0.28) 48%,
-      rgba(255, 255, 255, 0.06) 55%,
-      transparent 70%
-    );
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.28) 48%,
+    rgba(255, 255, 255, 0.06) 55%,
+    transparent 70%
+  );
 
   transform: translateX(-60%);
   animation: glossy-shine 10s ease-in-out infinite;
@@ -274,27 +272,25 @@ watch(
 }
 
 .glossy::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 1px;
   border-radius: inherit;
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,0.22),
-      rgba(255,255,255,0.04) 35%,
-      transparent 65%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.04) 35%,
+    transparent 65%
+  );
 
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.22),
-    inset 0 1px 8px rgba(255,255,255,0.18),
-    inset 0 -1px 8px rgba(0,0,0,0.18);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+    inset 0 1px 8px rgba(255, 255, 255, 0.18),
+    inset 0 -1px 8px rgba(0, 0, 0, 0.18);
 
   mix-blend-mode: soft-light;
 
   pointer-events: none;
 }
-
 </style>
