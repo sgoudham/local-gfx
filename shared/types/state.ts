@@ -23,20 +23,22 @@ export type MatchTime = {
   formatted: string;
 };
 
-type MatchEvent = GoalScoredEvent | SubstitutionMadeEvent;
-
+type MatchEvent = GoalScoredEvent | SubstitutionMadeEvent | PenaltyShootoutEvent;
 type GoalScoredEvent = {
   type: "goalScored";
   player: Player;
   matchTime: MatchTime;
 };
-
 type SubstitutionMadeEvent = {
   type: "substitution";
   location: TeamLocation;
   subs: PendingSub[];
   matchTime: MatchTime;
 };
+type PenaltyShootoutEvent = {
+  type: "penaltyShootout"
+
+}
 
 export type Goal = {
   player: Player;

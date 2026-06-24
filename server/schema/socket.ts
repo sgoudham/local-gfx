@@ -54,7 +54,8 @@ const TeamFormationShowSchema = z.object({
 
 const MatchPenaltyShootoutUpdateSchema = z.object({
   location: teamLocationSchema,
-  penalties: z.array(penaltyGoalSchema)
+  index: z.int(),
+  penaltyGoal: penaltyGoalSchema
 })
 
 export const ControlMessageSchema = z.discriminatedUnion("type", [

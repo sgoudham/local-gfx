@@ -3,7 +3,7 @@ const overlayMsg = <O extends Overlay, A extends "show" | "hide">(
   action: A,
 ): `${O}.${A}` => `${overlayKey}.${action}`;
 
-export const PENALTY_SLOTS = 5;
+export const PENALTY_SLOTS = [0, 0, 0, 0, 0];
 
 export const PenaltyState = {
   NONE: 0,

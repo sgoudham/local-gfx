@@ -132,12 +132,10 @@ watch(
           </div>
           <ul class="pens-row">
             <li
-              v-for="index in PENALTY_SLOTS"
+              v-for="(_, index) in PENALTY_SLOTS"
               :key="index"
               class="pen"
-              :class="
-                getPenaltyClass(getPenaltyState(team.penalties, index - 1))
-              "
+              :class="getPenaltyClass(getPenaltyState(team.penalties, index))"
             ></li>
           </ul>
           <div class="score-box">

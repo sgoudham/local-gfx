@@ -99,8 +99,14 @@ export default defineWebSocketHandler({
           case SocketMessage.MatchPenaltyShootoutUpdate:
             const penaltyShootoutData = parsed.msg.data;
             await serverState.patchState((s) => {
-              s[penaltyShootoutData.location].penalties =
-                penaltyShootoutData.penalties;
+              const penalties = s[penaltyShootoutData.location].penalties;
+              let penaltyGoal = penalties[penaltyShootoutData.index];
+              if (!penaltyGoal) {
+                penalties.push(penaltyShootoutData.penaltyGoal);
+              } else {
+                penalties[penaltyShootoutData.index] =
+                  penaltyShootoutData.penaltyGoal;
+              }
             });
             break;
           case SocketMessage.MatchReset:

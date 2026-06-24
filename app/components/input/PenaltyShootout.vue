@@ -7,52 +7,98 @@ import { PENALTY_SLOTS } from "~~/shared/utils/constants";
 const { state, publish } = useControlSocket();
 
 const penaltyDialogRef = ref<HTMLDialogElement | null>(null);
-const penaltySlots = PENALTY_SLOTS;
+const BASE_SLOT_COUNT = PENALTY_SLOTS.length;
+const firstKickTeam = ref<TLocation>(TeamLocation.Home);
 
-const getPenaltyStates = (location: TLocation) =>
-  Array.from({ length: penaltySlots }, (_, i) => i + 1).map((_, index) => {
-    const penalty = state.value[location].penalties[index];
-    return penalty ? penalty.state : PenaltyState.NONE;
-  });
+const pendingStates = reactive<
+  Record<TLocation, Partial<Record<number, TPenaltyState>>>
+>({
+  [TeamLocation.Home]: {},
+  [TeamLocation.Away]: {},
+});
 
 const summary = computed(() => {
-  const homeStates = getPenaltyStates(TeamLocation.Home);
-  const awayStates = getPenaltyStates(TeamLocation.Away);
+  const compute = (location: TLocation) => {
+    const pens = state.value[location].penalties;
+    return {
+      kicksTaken: pens.filter((p) => p.state !== PenaltyState.NONE).length,
+      score: pens.filter((p) => p.state === PenaltyState.GOAL).length,
+    };
+  };
+  return { home: compute(TeamLocation.Home), away: compute(TeamLocation.Away) };
+});
+
+const displaySlotCount = computed(() => {
+  const { home, away } = summary.value;
+  const isSuddenDeath =
+    home.kicksTaken >= BASE_SLOT_COUNT &&
+    away.kicksTaken >= BASE_SLOT_COUNT &&
+    home.score === away.score;
+
+  if (isSuddenDeath) {
+    const completedRounds =
+      Math.min(home.kicksTaken, away.kicksTaken) - BASE_SLOT_COUNT;
+    return BASE_SLOT_COUNT + completedRounds + 1;
+  }
+
+  return Math.max(BASE_SLOT_COUNT, home.kicksTaken, away.kicksTaken);
+});
+
+const penaltyStates = computed(() => {
+  const getStates = (location: TLocation) =>
+    Array.from({ length: displaySlotCount.value }, (_, index) => {
+      const penalty = state.value[location].penalties[index];
+      return penalty ? penalty.state : PenaltyState.NONE;
+    });
   return {
-    home: {
-      states: homeStates,
-      kicksTaken: homeStates.filter((state) => state !== PenaltyState.NONE)
-        .length,
-      score: homeStates.filter((state) => state === PenaltyState.GOAL).length,
-    },
-    away: {
-      states: awayStates,
-      kicksTaken: awayStates.filter((state) => state !== PenaltyState.NONE)
-        .length,
-      score: awayStates.filter((state) => state === PenaltyState.GOAL).length,
-    },
+    home: getStates(TeamLocation.Home),
+    away: getStates(TeamLocation.Away),
   };
 });
 
-const setPenaltyOutcome = (
+const isSlotDisabled = (location: TLocation, index: number) => {
+  const isFirst = location === firstKickTeam.value;
+  const other =
+    location === TeamLocation.Home ? TeamLocation.Away : TeamLocation.Home;
+  const otherKicksTaken = summary.value[other].kicksTaken;
+  if (isFirst) {
+    return otherKicksTaken < index;
+  } else {
+    return otherKicksTaken < index + 1;
+  }
+};
+
+const getSlotState = (location: TLocation, index: number): TPenaltyState =>
+  pendingStates[location][index] ??
+  penaltyStates.value[location][index] ??
+  PenaltyState.NONE;
+
+const setPendingState = (
   location: TLocation,
   index: number,
   penaltyState: TPenaltyState,
 ) => {
-  const penalties = [...state.value[location].penalties];
-  if (!penalties[index]) {
-    penalties[index] = {
-      state: penaltyState,
-    };
-  } else {
-    penalties[index].state = penaltyState;
-  }
+  pendingStates[location][index] = penaltyState;
+};
+
+const publishWithPlayer = (
+  location: TLocation,
+  index: number,
+  playerId: string,
+) => {
+  const player = state.value[location].players.find((p) => p.id === playerId);
+  if (!player) return;
   publish(SocketMessage.MatchPenaltyShootoutUpdate, {
     data: {
       location,
-      penalties,
+      index,
+      penaltyGoal: {
+        state: getSlotState(location, index),
+        player,
+      },
     },
   });
+  delete pendingStates[location][index];
 };
 
 const openPenaltyDialog = () => {
@@ -78,11 +124,12 @@ const closePenaltyDialog = () => {
               {{ summary.home.score }} - {{ summary.away.score }}
             </div>
             <div class="penalty-meta">
-              Home {{ summary.home.kicksTaken }}/{{ penaltySlots }} | Away
-              {{ summary.away.kicksTaken }}/{{ penaltySlots }}
+              Home {{ summary.home.kicksTaken }}/{{ displaySlotCount }} | Away
+              {{ summary.away.kicksTaken }}/{{ displaySlotCount }}
             </div>
           </div>
           <ToggleOverlayButton
+            class="toggle-overlay-btn"
             v-bind="{
               val: Overlay.PenaltiesScorecard,
               name: state.graphics.penaltiesScorecard.name,
@@ -91,28 +138,48 @@ const closePenaltyDialog = () => {
             }"
           />
         </section>
-        <div class="penalty-columns">
+        <section class="coin-flip">
+          <span class="coin-flip-label">Kicks first</span>
+          <div class="coin-flip-options">
+            <button
+              type="button"
+              class="coin-flip-btn"
+              :class="{ active: firstKickTeam === TeamLocation.Home }"
+              @click="firstKickTeam = TeamLocation.Home"
+            >
+              Home
+            </button>
+            <button
+              type="button"
+              class="coin-flip-btn"
+              :class="{ active: firstKickTeam === TeamLocation.Away }"
+              @click="firstKickTeam = TeamLocation.Away"
+            >
+              Away
+            </button>
+          </div>
+        </section>
+        <section class="penalty-columns">
           <div class="penalty-column">
             <h4>Home</h4>
             <div
-              v-for="(slot, index) in penaltySlots"
-              :key="`home-${slot}`"
+              v-for="(_, index) in displaySlotCount"
+              :key="`home-${index}`"
               class="penalty-slot"
             >
-              <div class="penalty-slot-header">Kick {{ slot }}</div>
+              <div class="penalty-slot-header">Kick {{ index + 1 }}</div>
               <div class="penalty-state-row">
                 <button
                   type="button"
                   class="penalty-state"
                   :class="{
-                    goal: summary.home.states[index] === PenaltyState.GOAL,
-                  }"
-                  @click="
-                    setPenaltyOutcome(
-                      TeamLocation.Home,
-                      index,
+                    goal:
+                      getSlotState(TeamLocation.Home, index) ===
                       PenaltyState.GOAL,
-                    )
+                  }"
+                  :disabled="isSlotDisabled(TeamLocation.Home, index)"
+                  @click="
+                    setPendingState(TeamLocation.Home, index, PenaltyState.GOAL)
                   "
                 >
                   GOAL
@@ -121,14 +188,13 @@ const closePenaltyDialog = () => {
                   type="button"
                   class="penalty-state"
                   :class="{
-                    miss: summary.home.states[index] === PenaltyState.MISS,
-                  }"
-                  @click="
-                    setPenaltyOutcome(
-                      TeamLocation.Home,
-                      index,
+                    miss:
+                      getSlotState(TeamLocation.Home, index) ===
                       PenaltyState.MISS,
-                    )
+                  }"
+                  :disabled="isSlotDisabled(TeamLocation.Home, index)"
+                  @click="
+                    setPendingState(TeamLocation.Home, index, PenaltyState.MISS)
                   "
                 >
                   MISSED
@@ -137,42 +203,65 @@ const closePenaltyDialog = () => {
                   type="button"
                   class="penalty-state"
                   :class="{
-                    none: summary.home.states[index] === PenaltyState.NONE,
-                  }"
-                  @click="
-                    setPenaltyOutcome(
-                      TeamLocation.Home,
-                      index,
+                    none:
+                      getSlotState(TeamLocation.Home, index) ===
                       PenaltyState.NONE,
-                    )
+                  }"
+                  :disabled="isSlotDisabled(TeamLocation.Home, index)"
+                  @click="
+                    setPendingState(TeamLocation.Home, index, PenaltyState.NONE)
                   "
                 >
                   NONE
                 </button>
               </div>
+              <select
+                class="player-select"
+                :disabled="
+                  isSlotDisabled(TeamLocation.Home, index) ||
+                  getSlotState(TeamLocation.Home, index) === PenaltyState.NONE
+                "
+                :value="state.home.penalties[index]?.player?.id ?? ''"
+                @change="
+                  (e: Event) =>
+                    publishWithPlayer(
+                      TeamLocation.Home,
+                      index,
+                      (e.target as HTMLSelectElement).value,
+                    )
+                "
+              >
+                <option value="" disabled>Player...</option>
+                <option
+                  v-for="p in state.home.players"
+                  :key="p.id"
+                  :value="p.id"
+                >
+                  #{{ p.number }} {{ p.surname }}
+                </option>
+              </select>
             </div>
           </div>
           <div class="penalty-column">
             <h4>Away</h4>
             <div
-              v-for="(slot, index) in penaltySlots"
-              :key="`away-${slot}`"
+              v-for="(_, index) in displaySlotCount"
+              :key="`away-${index}`"
               class="penalty-slot"
             >
-              <div class="penalty-slot-header">Kick {{ slot }}</div>
+              <div class="penalty-slot-header">Kick {{ index + 1 }}</div>
               <div class="penalty-state-row">
                 <button
                   type="button"
                   class="penalty-state"
                   :class="{
-                    goal: summary.away.states[index] === PenaltyState.GOAL,
-                  }"
-                  @click="
-                    setPenaltyOutcome(
-                      TeamLocation.Away,
-                      index,
+                    goal:
+                      getSlotState(TeamLocation.Away, index) ===
                       PenaltyState.GOAL,
-                    )
+                  }"
+                  :disabled="isSlotDisabled(TeamLocation.Away, index)"
+                  @click="
+                    setPendingState(TeamLocation.Away, index, PenaltyState.GOAL)
                   "
                 >
                   GOAL
@@ -181,14 +270,13 @@ const closePenaltyDialog = () => {
                   type="button"
                   class="penalty-state"
                   :class="{
-                    miss: summary.away.states[index] === PenaltyState.MISS,
-                  }"
-                  @click="
-                    setPenaltyOutcome(
-                      TeamLocation.Away,
-                      index,
+                    miss:
+                      getSlotState(TeamLocation.Away, index) ===
                       PenaltyState.MISS,
-                    )
+                  }"
+                  :disabled="isSlotDisabled(TeamLocation.Away, index)"
+                  @click="
+                    setPendingState(TeamLocation.Away, index, PenaltyState.MISS)
                   "
                 >
                   MISSED
@@ -197,22 +285,46 @@ const closePenaltyDialog = () => {
                   type="button"
                   class="penalty-state"
                   :class="{
-                    none: summary.away.states[index] === PenaltyState.NONE,
-                  }"
-                  @click="
-                    setPenaltyOutcome(
-                      TeamLocation.Away,
-                      index,
+                    none:
+                      getSlotState(TeamLocation.Away, index) ===
                       PenaltyState.NONE,
-                    )
+                  }"
+                  :disabled="isSlotDisabled(TeamLocation.Away, index)"
+                  @click="
+                    setPendingState(TeamLocation.Away, index, PenaltyState.NONE)
                   "
                 >
                   NONE
                 </button>
               </div>
+              <select
+                class="player-select"
+                :disabled="
+                  isSlotDisabled(TeamLocation.Away, index) ||
+                  getSlotState(TeamLocation.Away, index) === PenaltyState.NONE
+                "
+                :value="state.away.penalties[index]?.player?.id ?? ''"
+                @change="
+                  (e: Event) =>
+                    publishWithPlayer(
+                      TeamLocation.Away,
+                      index,
+                      (e.target as HTMLSelectElement).value,
+                    )
+                "
+              >
+                <option value="" disabled>Player...</option>
+                <option
+                  v-for="p in state.away.players"
+                  :key="p.id"
+                  :value="p.id"
+                >
+                  #{{ p.number }} {{ p.surname }}
+                </option>
+              </select>
             </div>
           </div>
-        </div>
+        </section>
         <div class="penalty-actions">
           <Button type="button" class="item" @click="closePenaltyDialog">
             Close
@@ -238,6 +350,7 @@ const closePenaltyDialog = () => {
   border: 0;
   padding: 0;
   width: min(680px, 95vw);
+  height: min(550px, 95vw);
 }
 
 .penalty-dialog-content {
@@ -248,8 +361,45 @@ const closePenaltyDialog = () => {
 }
 
 .penalty-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.toggle-overlay-btn {
+  justify-self: end;
+}
+
+.coin-flip {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.coin-flip-label {
+  font-weight: 600;
+}
+
+.coin-flip-options {
+  display: flex;
+  gap: 4px;
+}
+
+.coin-flip-btn {
+  border: 1px solid #8b95a7;
+  background: #f3f4f6;
+  color: #1f2937;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.coin-flip-btn.active {
+  border-color: #1d4ed8;
+  background: #1d4ed8;
+  color: #ffffff;
 }
 
 .penalty-summary {
@@ -320,6 +470,11 @@ const closePenaltyDialog = () => {
     color 120ms ease;
 }
 
+.penalty-state:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .penalty-state.goal {
   border-color: #15803d;
   background: #15803d;
@@ -336,6 +491,19 @@ const closePenaltyDialog = () => {
   border-color: #1d4ed8;
   background: #1d4ed8;
   color: #ffffff;
+}
+
+.player-select {
+  border: 1px solid #8b95a7;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.player-select:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .penalty-actions {
