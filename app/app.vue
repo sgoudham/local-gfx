@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useSocketConnection } from "./composables/useSocketConnection";
+import { useClientState } from "./composables/useClientState";
 
 const state = useState<CompleteState>("state");
+const { donations } = useClientState();
 
 await callOnce("socket:init", async () => {
   state.value = await $fetch("/api/state");
@@ -20,6 +22,24 @@ if (import.meta.client) {
     } catch {
       // ignore malformed messages
     }
+  });
+
+  const refreshDonations = async () => {
+    try {
+      const data = await $fetch<Donation>("/api/donation");
+      console.log(data);
+      donations.value = data;
+    } catch (error) {
+      console.error("Failed to refresh donations", error);
+    }
+  };
+
+  await refreshDonations();
+
+  const interval = setInterval(refreshDonations, 60_000);
+
+  onUnmounted(() => {
+    clearInterval(interval);
   });
 }
 </script>

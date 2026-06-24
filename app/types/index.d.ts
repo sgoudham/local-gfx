@@ -61,3 +61,5 @@ export type StartingSoonProps = OverlayState & {
 export type SubstitutionProps = SubstitutionData;
 
 export type HydrationBreakProps = OverlayState;
+
+export type DonationUpdateProps = OverlayState;

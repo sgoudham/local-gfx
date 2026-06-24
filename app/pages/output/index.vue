@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { useOutputSocket } from "~/composables/useOutputSocket";
-import type {
-  BigMatchScorecardProps,
-  MatchScorecardProps,
-  PenaltiesScorecardProps,
-  StartingSoonProps,
-  SubstitutionProps,
-  TeamFormationProps,
-  HydrationBreakProps,
+import {
+  type BigMatchScorecardProps,
+  type MatchScorecardProps,
+  type PenaltiesScorecardProps,
+  type StartingSoonProps,
+  type SubstitutionProps,
+  type TeamFormationProps,
+  type HydrationBreakProps,
+  type DonationUpdateProps,
 } from "~/types";
 
 const { state, publish } = useOutputSocket();
@@ -110,6 +111,13 @@ const hydrationBreakData = computed<HydrationBreakProps>(() => {
     visible: state.value.graphics.hydrationBreak.visible,
   }
 });
+
+const donationUpdateData = computed<DonationUpdateProps>(() => {
+  return {
+    name: state.value.graphics.donationUpdate.name,
+    visible: state.value.graphics.donationUpdate.visible,
+  }
+});
 </script>
 
 <template>
@@ -119,6 +127,7 @@ const hydrationBreakData = computed<HydrationBreakProps>(() => {
   <OverlayTeamFormation v-bind="teamFormationData" />
   <OverlaySubstitution v-bind="substitutionData" />
   <OverlayHydrationBreak v-bind="hydrationBreakData" />
+  <OverlayDonationUpdate v-bind="donationUpdateData" />
   <OverlayStartingSoon v-bind="startingSoonData" />
 </template>
 

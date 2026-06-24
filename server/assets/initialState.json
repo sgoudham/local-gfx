@@ -97,6 +97,10 @@
     "hydrationBreak": {
       "name": "Hydration Break",
       "visible": false
+    },
+    "donationUpdate": {
+      "name": "DonationUpdate",
+      "visible": false
     }
   }
 }

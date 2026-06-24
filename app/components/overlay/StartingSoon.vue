@@ -2,17 +2,19 @@
 import gsap from "gsap";
 import type { StartingSoonProps } from "~/types";
 
-// Donations skeleton
-const donations = ref([])
+const { donations } = useClientState();
+const totalRaised = donations.value?.totalRaised ?? 0;
+const target = donations.value?.target ?? 0;
+const percentage = donations.value?.percentage ?? 0;
+let prevAmount = 0;
 
-setInterval(async () => {
-  // todo api call
-  donations.value = await $fetch("/api/donations");
-}, 60000);
-
-watch(donations, () => {
-  // show()
-})
+watch(donations.value, () => {
+  if (totalRaised !== prevAmount) {
+    prevAmount = totalRaised;
+    // send thank u message
+    console.log("new donation");
+  }
+});
 
 
 const props = defineProps<StartingSoonProps>();
@@ -167,7 +169,7 @@ const statPanels: StatPanel[] = [
   { id: "h2h",        label: "YCF Head-to-Head" },
   { id: "form",       label: "Recent Form"       },
   { id: "topscorers", label: "Top Scorers" },
-  { id: "fundraiser", label: "Charity Efforts" }
+  { id: "fundraiser", label: "Charity Effortssss" }
 ];
 
 const activePanelIndex = ref(0);
@@ -177,8 +179,8 @@ let panelTimer: ReturnType<typeof setInterval> | null = null;
 function startPanelTimer() {
   if (panelTimer) clearInterval(panelTimer);
   panelTimer = setInterval(() => {
-    activePanelIndex.value = (activePanelIndex.value + 1) % statPanels.length;
-  }, 8000);
+    activePanelIndex.value = 3;/* (activePanelIndex.value + 1) % statPanels.length; */
+  }, 1000);
 }
 
 onMounted(() => {
@@ -311,9 +313,9 @@ onMounted(() => {
         <div class="stat">
           <div class="fundraiser-charity">Refuweegee</div>
           <div class="fundraiser-total">
-            £450
+            £{{ totalRaised }}
           </div>
-          <div class="fundraiser-label">raised so far</div>
+          <div class="fundraiser-label">raised so far of £{{ target }} target</div>
         </div>
       </template>
 

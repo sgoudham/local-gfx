@@ -100,6 +100,7 @@ export type Graphics = {
   teamFormation: TeamFormationData;
   substitution: SubstitutionData;
   hydrationBreak: OverlayState;
+  donationUpdate: OverlayState;
 };
 
 export type InitialState = {

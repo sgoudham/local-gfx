@@ -92,8 +92,8 @@ const captainId = computed(() => props.captain.id);
   font-size: 10px;
   color: var(--text-color);
   padding: 1em;
-  background: var(--primary-colour);
-  color: var(--secondary-colour);
+  background: var(--secondary-colour);
+  color: var(--primary-colour);
   position: relative;
   overflow: hidden;
 }

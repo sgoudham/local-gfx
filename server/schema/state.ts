@@ -72,7 +72,8 @@ export const graphicsSchema = z.object({
     bigMatchScorecard: overlayStateSchema,
     teamFormation: teamFormationDataSchema,
     substitution: substitutionDataSchema,
-    hydrationBreak: overlayStateSchema
+    hydrationBreak: overlayStateSchema,
+    donationUpdate: overlayStateSchema
 });
 
 export const teamCompleteSchema = z.object({

@@ -41,6 +41,12 @@ const overlayToggles = computed(() => [
     name: state.value.graphics.hydrationBreak.name,
     showMessage: SocketMessage.HydrationBreakShow,
     hideMessage: SocketMessage.HydrationBreakHide,
+  },
+  {
+    val: Overlay.DonationUpdate,
+    name: state.value.graphics.donationUpdate.name,
+    showMessage: SocketMessage.DonationUpdateShow,
+    hideMessage: SocketMessage.DonationUpdateHide,
   }
 ]);
 

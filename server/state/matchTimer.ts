@@ -6,6 +6,8 @@ export class MatchTimer {
   private matchTime: MatchTime;
   private readonly ONE_SECOND_MS = 1000;
   private readonly FORTY_FIVE_MINUTES_MS = 2700000;
+  private donationCycleTimer: NodeJS.Timeout | null = null;
+  private donationHideTimer: NodeJS.Timeout | null = null;
   private timerId: NodeJS.Timeout | null = null;
 
   constructor(patchState: PatchState, matchTime: MatchTime) {
@@ -46,7 +48,7 @@ export class MatchTimer {
     this.matchTime.formatted = this.formatMatchTime();
     await this.stop();
     await this.updateState();
-    this.start()
+    this.start();
   }
 
   private async updateState() {
