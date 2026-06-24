@@ -96,6 +96,13 @@ export default defineWebSocketHandler({
               });
             });
             break;
+          case SocketMessage.MatchPenaltyShootoutUpdate:
+            const penaltyShootoutData = parsed.msg.data;
+            await serverState.patchState((s) => {
+              s[penaltyShootoutData.location].penalties =
+                penaltyShootoutData.penalties;
+            });
+            break;
           case SocketMessage.MatchReset:
             await serverState.clear();
             break;
@@ -155,6 +162,7 @@ export default defineWebSocketHandler({
           case SocketMessage.PenaltiesScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.penaltiesScorecard.visible = true;
+              s.graphics.matchScorecard.visible = false;
             });
             break;
           case SocketMessage.PenaltiesScorecardHide:

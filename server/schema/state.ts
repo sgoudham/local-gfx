@@ -26,6 +26,11 @@ export const goalSchema = z.object({
     matchTime: matchTimeSchema
 });
 
+export const penaltyGoalSchema = z.object({
+    state: penaltyStateSchema,
+    player: playerSchema.optional()
+});
+
 export const playerStateSchema = z.object({
     id: z.string(),
     number: z.number()
@@ -36,7 +41,7 @@ export const teamStateSchema = z.object({
     players: z.array(playerStateSchema),
     substitutes: z.array(playerStateSchema),
     goals: z.array(goalSchema),
-    penalties: z.tuple([penaltyStateSchema, penaltyStateSchema, penaltyStateSchema, penaltyStateSchema, penaltyStateSchema])
+    penalties: z.array(penaltyGoalSchema)
 });
 
 export const overlayStateSchema = z.object({
@@ -83,7 +88,7 @@ export const teamCompleteSchema = z.object({
     players: z.array(playerSchema),
     substitutes: z.array(playerSchema),
     goals: z.array(goalSchema),
-    penalties: z.tuple([penaltyStateSchema, penaltyStateSchema, penaltyStateSchema, penaltyStateSchema, penaltyStateSchema])
+    penalties: z.array(penaltyGoalSchema)
 });
 
 const substitutionMadeEventSchema = z.object({

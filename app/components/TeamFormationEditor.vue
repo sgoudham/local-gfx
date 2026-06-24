@@ -160,7 +160,7 @@ function openDialog() {
         📝
       </Button>
       <dialog ref="dialogRef">
-        <EditTeamForm
+        <InputEditTeam
           :key="dialogKey"
           :players="players"
           :substitutes="substitutes"

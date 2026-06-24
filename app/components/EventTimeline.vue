@@ -2,7 +2,7 @@
 import { ref, watch, nextTick } from "vue";
 import getMinutes from "~/utils/getMinutes";
 
-const { state, publish } = useOutputSocket();
+const { state } = useOutputSocket();
 
 const listRef = ref<HTMLElement | null>(null);
 
