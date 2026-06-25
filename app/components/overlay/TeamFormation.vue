@@ -8,7 +8,11 @@ const props = defineProps<TeamFormationProps>();
 
 const overlay = useTemplateRef("overlay");
 const rendered = ref(false);
-const captainId = computed(() => props.team.captain.id);
+
+let timeline: gsap.core.Timeline | null = null;
+const PLAYER_STAGGER = 0.15;
+const PLAYER_DURATION = 0.35;
+const ROW_OFFSET = 1.6;
 
 const sortedSubs = computed(() =>
   [...props.team.substitutes].sort((a, b) => a.number - b.number),
@@ -42,8 +46,25 @@ function shirtName(player: { forename: string; surname: string }) {
   return player.surname;
 }
 
+function formationToRows(formation: string | undefined): number[] {
+  return formation ? [1, ...formation.split("-").map(Number)] : [1];
+}
+
+function getRowIndex(playerIndex: number, rows: number[]): number {
+  let cumulativeIndex = 0;
+  for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+    const playersInRow = rows[rowIndex]!;
+    const endIndex = cumulativeIndex + playersInRow;
+    if (playerIndex < endIndex) return rowIndex;
+    cumulativeIndex = endIndex;
+  }
+  return rows.length - 1;
+}
+
 const positionedPlayers = computed(() => {
   const formation = props.team.activeFormation;
+  const rows = formationToRows(formation);
+
   return props.team.players.map((player, index) => {
     const isGk = player.number === 1;
     const invert = player.location === "away" || isGk;
@@ -51,25 +72,66 @@ const positionedPlayers = computed(() => {
       ? getFormationPosition(formation, index)
       : { left: "50%", top: "50%" };
 
-    return { player, invert, style };
+    return { player, invert, style, rowIndex: getRowIndex(index, rows) };
   });
 });
+
+function animateOverlay(tl: gsap.core.Timeline) {
+  tl.fromTo(
+    overlay.value,
+    { opacity: 0, y: -10 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      ease: "power2.out",
+    },
+    0,
+  );
+}
+
+function animatePlayers(tl: gsap.core.Timeline) {
+  const revealDelays = new Array<number>(positionedPlayers.value.length).fill(
+    0,
+  );
+  const rowCounts = new Map<number, number>();
+
+  positionedPlayers.value.forEach((entry, index) => {
+    const rowIndex = entry.rowIndex;
+    const indexInRow = rowCounts.get(rowIndex) ?? 0;
+    revealDelays[index] = rowIndex * ROW_OFFSET + indexInRow * PLAYER_STAGGER;
+    rowCounts.set(rowIndex, indexInRow + 1);
+  });
+
+  tl.fromTo(
+    ".player-shirt-container",
+    { autoAlpha: 0, y: 20, scale: 0.5 },
+    {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      delay: 0.6,
+      duration: PLAYER_DURATION,
+      ease: "power2.out",
+      stagger: (index: number) => revealDelays[index] ?? 0,
+    },
+    0,
+  );
+}
+
+function killTimeline() {
+  timeline?.kill();
+  timeline = null;
+}
 
 async function show() {
   rendered.value = true;
   nextTick(() => {
-    if (overlay.value) {
-      gsap.fromTo(
-        overlay.value,
-        { opacity: 0, y: -10 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          ease: "power2.out",
-        },
-      );
-    }
+    killTimeline();
+    if (!overlay.value) return;
+    timeline = gsap.timeline();
+    animateOverlay(timeline);
+    animatePlayers(timeline);
   });
 }
 
@@ -111,6 +173,17 @@ watch(
   },
   { immediate: true },
 );
+
+onMounted(async () => {
+  rendered.value = false;
+  if (props.visible) {
+    await show();
+  }
+});
+
+onUnmounted(() => {
+  killTimeline();
+});
 </script>
 
 <template>
@@ -267,7 +340,10 @@ watch(
                   <div class="shirt-name-container">
                     <div class="shirt-name">
                       {{ shirtName(entry.player) }}
-                      <div v-if="entry.player.id === captainId" class="captain">
+                      <div
+                        v-if="entry.player.id === team.captain.id"
+                        class="captain"
+                      >
                         C
                       </div>
                     </div>
