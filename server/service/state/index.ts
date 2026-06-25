@@ -181,7 +181,6 @@ export class ServerState {
   private extractPlayerState(player: Player): PlayerState {
     return {
       id: player.id,
-      number: player.number,
     };
   }
 

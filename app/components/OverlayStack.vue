@@ -31,6 +31,12 @@ const overlayToggles = computed(() => [
     hideMessage: SocketMessage.BigMatchScorecardHide,
   },
   {
+    val: Overlay.DonationUpdate,
+    name: state.value.graphics.donationUpdate.name,
+    showMessage: SocketMessage.DonationUpdateShow,
+    hideMessage: SocketMessage.DonationUpdateHide,
+  },
+  {
     val: Overlay.HydrationBreak,
     name: state.value.graphics.hydrationBreak.name,
     showMessage: SocketMessage.HydrationBreakShow,

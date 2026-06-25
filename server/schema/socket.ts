@@ -102,6 +102,8 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.SubstitutionHide),
   socketMsg(Mode.Control, SocketMessage.HydrationBreakShow),
   socketMsg(Mode.Control, SocketMessage.HydrationBreakHide),
+  socketMsg(Mode.Control, SocketMessage.DonationUpdateShow),
+  socketMsg(Mode.Control, SocketMessage.DonationUpdateHide),
 ]);
 export type ControlMessage = z.infer<typeof ControlMessageSchema>;
 

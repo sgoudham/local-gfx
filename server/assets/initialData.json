@@ -22,14 +22,15 @@
       { "id": "f2a0d680-03cf-4a31-88bf-78deabea514c", "forename": "Dominic", "surname": "McCullagh", "number": 15, "location": "home" },
       { "id": "e468c2f7-d374-4940-a175-38fea4114d9e", "forename": "Jacob", "surname": "Anderson", "number": 2, "location": "home" },
       { "id": "b0a636b4-bc29-410c-9e1d-611805ef7ec9", "forename": "Alex", "surname": "O'Donnell", "number": 27, "location": "home" },
-      { "id": "3d648f26-7338-4d32-9854-2bac7bf4dae7", "forename": "Brendon", "surname": "MacDonald", "number": 0, "location": "home" }
+      { "id": "3d648f26-7338-4d32-9854-2bac7bf4dae7", "forename": "Brendon", "surname": "MacDonald", "number": 0, "location": "home" },
+      { "id": "3f769c5c-50c6-4ce7-8f51-633f11e9e748", "forename": "Reece", "surname": "Sinclair", "number": 11, "location":"home" }
     ]
   },
   "away": {
     "location": "away",
     "name": "AC Malones",
     "shortName": "MAL",
-    "manager": "Vinnie Collins",
+    "manager": "Jamie Dunn",
     "captain": "432ab771-3f25-43fc-bebf-3fd61e5be9cc",
     "players": [
       { "id": "cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d", "forename": "Ciaran", "surname": "McKee", "number": 1, "location": "away" },
@@ -48,8 +49,7 @@
       { "id": "84384e63-83c6-40b3-b04f-ef69be7584eb", "forename": "Jamie", "surname": "Dunn", "number": 0, "location": "away" },
       { "id": "5d8cd745-a930-45e4-8944-e9052fbf0137", "forename": "Andy", "surname": "McGraw", "number": 26, "location": "away" },
       { "id": "f5b34f3b-f3a4-4ea3-8f87-fcb50b750361", "forename": "Thomas", "surname": "Scott", "number": 0, "location": "away" },
-      { "id": "eb73634d-6664-4de1-b6f3-41adf0071614", "forename": "Katie", "surname": "Keaney", "number": 0, "location": "away" },
-      { "id": "9c347a58-933d-4975-8b40-64191d5981f6", "forename": "Brendon", "surname": "McCormack", "number": 0, "location": "away" }
+      { "id": "eb73634d-6664-4de1-b6f3-41adf0071614", "forename": "Katie", "surname": "Keaney", "number": 0, "location": "away" }
     ]
   }
 }

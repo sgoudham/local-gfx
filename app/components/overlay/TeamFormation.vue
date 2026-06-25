@@ -22,7 +22,7 @@ const isHome = computed(() => props.team.location === "home");
 const images = computed(() => {
   return {
     badge: isHome.value ? "/homeBadge.png" : "/awayBadge.png",
-    manager: isHome.value ? "/homeManager.png" : "/awayManager.jpg",
+    manager: isHome.value ? "/homeManager.png" : "/awayManager.png",
   };
 });
 

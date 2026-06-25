@@ -7,6 +7,7 @@ import type {
   SubstitutionProps,
   TeamFormationProps,
   HydrationBreakProps,
+  DonationUpdateProps,
 } from "~/types";
 
 useSocket(Mode.Output);
@@ -110,6 +111,13 @@ const hydrationBreakData = computed<HydrationBreakProps>(() => {
     visible: state.value.graphics.hydrationBreak.visible,
   };
 });
+
+const donationUpdateData = computed<DonationUpdateProps>(() => {
+  return {
+    name: state.value.graphics.donationUpdate.name,
+    visible: state.value.graphics.donationUpdate.visible,
+  }
+});
 </script>
 
 <template>
@@ -119,6 +127,7 @@ const hydrationBreakData = computed<HydrationBreakProps>(() => {
   <OverlayTeamFormation v-bind="teamFormationData" />
   <OverlaySubstitution v-bind="substitutionData" />
   <OverlayHydrationBreak v-bind="hydrationBreakData" />
+  <OverlayDonationUpdate v-bind="donationUpdateData" />
   <OverlayStartingSoon v-bind="startingSoonData" />
 </template>
 

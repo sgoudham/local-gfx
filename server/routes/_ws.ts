@@ -287,6 +287,21 @@ export default defineWebSocketHandler({
               s.graphics.hydrationBreak.visible = false;
             });
             break;
+
+          case SocketMessage.DonationUpdateShow:
+            await serverState.patchState((s) => {
+              s.graphics.donationUpdate.visible = true;
+            });
+            await new Promise((resolve) => setTimeout(resolve, 6500));
+            await serverState.patchState((s) => {
+              s.graphics.donationUpdate.visible = false;
+            });
+            break;
+          case SocketMessage.DonationUpdateHide:
+            await serverState.patchState((s) => {
+              s.graphics.donationUpdate.visible = false;
+            });
+            break;
         }
         break;
     }

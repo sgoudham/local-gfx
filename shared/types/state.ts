@@ -56,7 +56,8 @@ export const isSubstitutionMadeEvent = (
 
 export const isPenaltyShootoutEvent = (
   event: MatchEvent,
-): event is PenaltyShootoutEvent => event.type === MatchEventKind.PenaltyShootout;
+): event is PenaltyShootoutEvent =>
+  event.type === MatchEventKind.PenaltyShootout;
 
 export type Goal = {
   player: Player;
@@ -70,8 +71,6 @@ export type PenaltyGoal = {
 
 export type PlayerState = {
   id: string;
-  /** @integer */
-  number: number;
 };
 
 export type TeamState = {
@@ -114,6 +113,7 @@ export type Graphics = {
   teamFormation: TeamFormationData;
   substitution: SubstitutionData;
   hydrationBreak: OverlayState;
+  donationUpdate: OverlayState;
 };
 
 export type InitialState = {

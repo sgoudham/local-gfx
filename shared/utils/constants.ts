@@ -43,6 +43,7 @@ export const Overlay = {
   TeamFormation: "teamFormation",
   Substitution: "substitution",
   HydrationBreak: "hydrationBreak",
+  DonationUpdate: "donationUpdate",
 } as const;
 export type Overlay = (typeof Overlay)[keyof typeof Overlay];
 
@@ -50,7 +51,7 @@ export const Mode = {
   Control: "control",
   Output: "output",
   Heartbeat: "heartbeat",
-  Donations: "donations"
+  Donations: "donations",
 } as const;
 export type Mode = (typeof Mode)[keyof typeof Mode];
 
@@ -95,5 +96,7 @@ export const SocketMessage = {
   SubstitutionHide: overlayMsg(Overlay.Substitution, "hide"),
   HydrationBreakShow: overlayMsg(Overlay.HydrationBreak, "show"),
   HydrationBreakHide: overlayMsg(Overlay.HydrationBreak, "hide"),
+  DonationUpdateShow: overlayMsg(Overlay.DonationUpdate, "show"),
+  DonationUpdateHide: overlayMsg(Overlay.DonationUpdate, "hide"),
 } as const;
 export type SocketMessage = (typeof SocketMessage)[keyof typeof SocketMessage];

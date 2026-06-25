@@ -32,8 +32,7 @@ export const goalSchema = z.object({
 });
 
 export const playerStateSchema = z.object({
-    id: z.string(),
-    number: z.number()
+    id: z.string()
 });
 
 export const teamStateSchema = z.object({
@@ -75,7 +74,8 @@ export const graphicsSchema = z.object({
     bigMatchScorecard: overlayStateSchema,
     teamFormation: teamFormationDataSchema,
     substitution: substitutionDataSchema,
-    hydrationBreak: overlayStateSchema
+    hydrationBreak: overlayStateSchema,
+    donationUpdate: overlayStateSchema
 });
 
 export const teamCompleteSchema = z.object({
