@@ -3,7 +3,8 @@ import { TeamLocation } from "#imports";
 import type { EditTeamFormProps } from "~/types";
 import type { TeamLocation as TLocation } from "~~/shared/types/data";
 
-const { state, publish } = useControlSocket();
+const { publish } = useSocket(Mode.Control);
+const { state } = useClientState();
 
 const activeTeam = ref<TLocation>(TeamLocation.Home);
 const saved = ref(false);

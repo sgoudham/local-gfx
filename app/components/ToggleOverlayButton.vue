@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { Overlay, SocketMessage } from "#imports";
 
-const { state, publish } = useControlSocket();
+const { publish } = useSocket(Mode.Control);
+const { state } = useClientState();
 
 const props = defineProps<{
   val: Overlay;

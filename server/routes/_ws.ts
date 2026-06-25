@@ -3,11 +3,13 @@ import type { Message } from "crossws";
 import {
   ControlMessage,
   ControlMessageSchema,
+  DonationMessage,
+  DonationMessageSchema,
   ModeEnvelopeSchema,
   OutputMessage,
   OutputMessageSchema,
 } from "../schema/socket";
-import { ServerState } from "../state";
+import { ServerState } from "../service/state";
 import { isGoalScoredEvent } from "~~/shared/types/state";
 import { PongMessage } from "~~/shared/utils/constants";
 
@@ -37,7 +39,7 @@ export default defineWebSocketHandler({
   },
 
   async message(peer, msg) {
-    const { serverState } = useNitroApp();
+    const { serverState, charity } = useNitroApp();
 
     const parsed = parseMessage(msg);
     if (!parsed.ok) {
@@ -46,10 +48,23 @@ export default defineWebSocketHandler({
     }
 
     serverState.setPeer(peer);
+    charity.setPeer(peer);
 
     switch (parsed.mode) {
       case Mode.Heartbeat:
         peer.send(JSON.stringify(PongMessage));
+        break;
+      case Mode.Donations:
+        console.log(`message=${msg.text()}`);
+        switch (parsed.msg.type) {
+          case SocketMessage.SessionRegister:
+            peer.subscribe(Mode.Donations);
+            charity.startFundraisingInfoPolling();
+            break;
+          case SocketMessage.SessionUnregister:
+            peer.unsubscribe(Mode.Donations);
+            break;
+        }
         break;
       case Mode.Output:
         console.log(`message=${msg.text()}`);
@@ -57,6 +72,9 @@ export default defineWebSocketHandler({
           case SocketMessage.SessionRegister:
             peer.subscribe(Mode.Output);
             await serverState.syncState([Mode.Output]);
+            break;
+          case SocketMessage.SessionUnregister:
+            peer.unsubscribe(Mode.Output);
             break;
         }
         break;
@@ -66,6 +84,9 @@ export default defineWebSocketHandler({
           case SocketMessage.SessionRegister:
             peer.subscribe(Mode.Control);
             await serverState.syncState([Mode.Control]);
+            break;
+          case SocketMessage.SessionUnregister:
+            peer.unsubscribe(Mode.Control);
             break;
 
           case SocketMessage.MatchTimerStart:
@@ -261,10 +282,24 @@ export default defineWebSocketHandler({
               s.graphics.hydrationBreak.visible = true;
             });
             break;
-
           case SocketMessage.HydrationBreakHide:
             await serverState.patchState((s) => {
               s.graphics.hydrationBreak.visible = false;
+            });
+            break;
+
+          case SocketMessage.DonationUpdateShow:
+            await serverState.patchState((s) => {
+              s.graphics.donationUpdate.visible = true;
+            });
+            await new Promise((resolve) => setTimeout(resolve, 6500));
+            await serverState.patchState((s) => {
+              s.graphics.donationUpdate.visible = false;
+            });
+            break;
+          case SocketMessage.DonationUpdateHide:
+            await serverState.patchState((s) => {
+              s.graphics.donationUpdate.visible = false;
             });
             break;
         }
@@ -278,6 +313,7 @@ export default defineWebSocketHandler({
     );
     peer.unsubscribe(Mode.Control);
     peer.unsubscribe(Mode.Output);
+    peer.unsubscribe(Mode.Donations);
   },
 
   error(peer, error) {
@@ -288,6 +324,7 @@ export default defineWebSocketHandler({
 type ParsedMessage =
   | { ok: false; error: string; issues: unknown[] }
   | { ok: true; mode: typeof Mode.Heartbeat }
+  | { ok: true; mode: typeof Mode.Donations; msg: DonationMessage }
   | { ok: true; mode: typeof Mode.Control; msg: ControlMessage }
   | { ok: true; mode: typeof Mode.Output; msg: OutputMessage };
 
@@ -305,6 +342,21 @@ const parseMessage = (msg: Message): ParsedMessage => {
 
   if (mode.data.mode === Mode.Heartbeat) {
     return { ok: true as const, mode: Mode.Heartbeat } as const;
+  }
+
+  if (mode.data.mode === Mode.Donations) {
+    const result = DonationMessageSchema.safeParse(json);
+    if (!result.success)
+      return {
+        ok: false,
+        error: "invalid_donation_message",
+        issues: result.error.issues,
+      };
+    return {
+      ok: true as const,
+      mode: Mode.Donations,
+      msg: result.data,
+    } as const;
   }
 
   if (mode.data.mode === Mode.Control) {

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useSocketConnection } from "./composables/useSocketConnection";
 
-const state = useState<CompleteState>("state");
+const { state, fundraisingInfo } = useClientState();
 
 await callOnce("socket:init", async () => {
   state.value = await $fetch("/api/state");
+  fundraisingInfo.value = await $fetch("/api/fundraisingInfo");
 });
 
 if (import.meta.client) {
@@ -16,6 +17,9 @@ if (import.meta.client) {
       const parsed = JSON.parse(raw);
       if (parsed.type === SocketMessage.SessionStateSync) {
         state.value = parsed.data;
+      }
+      if (parsed.type === SocketMessage.AlertNewDonation) {
+        fundraisingInfo.value = parsed.data;
       }
     } catch {
       // ignore malformed messages

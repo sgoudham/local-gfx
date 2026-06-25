@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { state } = useControlSocket();
+useSocket(Mode.Control);
+const { state } = useClientState();
 const isDev = import.meta.dev;
 </script>
 

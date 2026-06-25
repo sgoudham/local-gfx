@@ -7,7 +7,7 @@ import {
   isSubstitutionMadeEvent,
 } from "~~/shared/types/state";
 
-const { state } = useOutputSocket();
+const { state } = useClientState();
 
 const listRef = ref<HTMLElement | null>(null);
 

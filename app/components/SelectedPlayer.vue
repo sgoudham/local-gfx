@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { SocketMessage } from "#imports";
 
-const { state, publish } = useControlSocket();
-const { selectedPlayer } = useClientState();
+const { publish } = useSocket(Mode.Control);
+const { state, selectedPlayer } = useClientState();
 
 const placeholderPlayer: Player = {
   id: "placeholder",

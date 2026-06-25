@@ -1,8 +1,7 @@
 import type { Mode } from "#imports";
 import { useSocketConnection } from "./useSocketConnection";
 
-export const useSession = (mode: Mode) => {
-  const state = useState<CompleteState>("state");
+export const useSocket = (mode: Mode) => {
   const ws = import.meta.client ? useSocketConnection() : null;
 
   const publish = (type: string, data?: Record<string, unknown>) => {
@@ -12,7 +11,8 @@ export const useSession = (mode: Mode) => {
 
   if (ws) {
     onMounted(() => ws.register(mode));
+    onUnmounted(() => ws.unregister(mode));
   }
 
-  return { publish, state, ws };
+  return { publish, ws };
 };

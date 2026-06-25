@@ -7,8 +7,8 @@ import type {
   TeamState,
 } from "~~/shared/types/state";
 import { Mode } from "~~/shared/utils/constants";
-import { matchDataSchema } from "../schema/data";
-import { initialStateSchema } from "../schema/state";
+import { matchDataSchema } from "../../schema/data";
+import { initialStateSchema } from "../../schema/state";
 import { MatchTimer } from "./matchTimer";
 
 export type StateMutator = (state: CompleteState) => void;
@@ -181,7 +181,6 @@ export class ServerState {
   private extractPlayerState(player: Player): PlayerState {
     return {
       id: player.id,
-      number: player.number,
     };
   }
 
