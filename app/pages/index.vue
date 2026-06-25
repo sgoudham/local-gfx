@@ -23,6 +23,7 @@ const isDev = import.meta.dev;
 .frame {
   display: flex;
   align-self: center;
+  width: 500px;
 }
 .control {
   display: flex;

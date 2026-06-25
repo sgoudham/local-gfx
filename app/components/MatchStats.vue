@@ -4,6 +4,9 @@ const { state } = useOutputSocket();
 
 <template>
   <section class="match-stats-panel">
+    <WindowFrame src="/output" class="frame">
+      <h2 class="preview">Graphics Preview</h2>
+    </WindowFrame>
     <div class="container">
       <div class="match-timer">
         {{ state.matchTime.formatted }}
@@ -75,11 +78,23 @@ const { state } = useOutputSocket();
 </template>
 
 <style lang="css" scoped>
+.frame {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  align-self: center;
+  align-items: center;
+}
+.frame .preview {
+  margin: 0;
+}
+
 .match-stats-panel {
   --base-font-size: 20px;
 
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
+  flex-direction: column;
   font-size: var(--base-font-size);
   font-family: var(--font-display);
 }
