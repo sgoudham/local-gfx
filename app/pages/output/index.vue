@@ -9,7 +9,9 @@ import type {
   HydrationBreakProps,
 } from "~/types";
 
-const { state } = useOutputSocket();
+useSocket(Mode.Output);
+useSocket(Mode.Donations);
+const { state } = useClientState();
 
 const matchScorecardData = computed<MatchScorecardProps>(() => {
   return {
@@ -106,7 +108,7 @@ const hydrationBreakData = computed<HydrationBreakProps>(() => {
   return {
     name: state.value.graphics.hydrationBreak.name,
     visible: state.value.graphics.hydrationBreak.visible,
-  }
+  };
 });
 </script>
 

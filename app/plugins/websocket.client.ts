@@ -2,6 +2,7 @@ import { Mode, PingMessage, PongMessage } from "~~/shared/utils/constants";
 
 export type SharedSocketConnection = ReturnType<typeof useWebSocket<string>> & {
   register: (mode: Mode) => void;
+  unregister: (mode: Mode) => void;
 };
 
 export default defineNuxtPlugin(() => {
@@ -20,16 +21,31 @@ export default defineNuxtPlugin(() => {
     },
   });
 
-  const currentMode = ref<Mode | null>(null);
+  const activeModes = ref(new Set<Mode>());
+
+  const sendRegister = (mode: Mode) => {
+    ws.send(
+      JSON.stringify({
+        mode,
+        type: SocketMessage.SessionRegister,
+      }),
+    );
+  };
+
+  const sendUnregister = (mode: Mode) => {
+    ws.send(
+      JSON.stringify({
+        mode,
+        type: SocketMessage.SessionUnregister,
+      }),
+    );
+  };
 
   watch(ws.status, (status) => {
-    if (status === "OPEN" && currentMode.value) {
-      ws.send(
-        JSON.stringify({
-          mode: currentMode.value,
-          type: SocketMessage.SessionRegister,
-        }),
-      );
+    if (status === "OPEN") {
+      for (const mode of activeModes.value) {
+        sendRegister(mode);
+      }
     }
   });
 
@@ -40,13 +56,24 @@ export default defineNuxtPlugin(() => {
   });
 
   const register = (mode: Mode) => {
-    currentMode.value = mode;
+    const wasAlreadyActive = activeModes.value.has(mode);
+    activeModes.value.add(mode);
+
+    if (!wasAlreadyActive && ws.status.value === "OPEN") {
+      sendRegister(mode);
+    }
+  };
+
+  const unregister = (mode: Mode) => {
+    if (!activeModes.value.has(mode)) return;
+
+    activeModes.value.delete(mode);
     if (ws.status.value === "OPEN") {
-      ws.send(JSON.stringify({ mode, type: SocketMessage.SessionRegister }));
+      sendUnregister(mode);
     }
   };
 
   return {
-    provide: { ws: { ...ws, register } },
+    provide: { ws: { ...ws, register, unregister } },
   };
 });

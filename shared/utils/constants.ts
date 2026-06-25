@@ -50,6 +50,7 @@ export const Mode = {
   Control: "control",
   Output: "output",
   Heartbeat: "heartbeat",
+  Donations: "donations"
 } as const;
 export type Mode = (typeof Mode)[keyof typeof Mode];
 
@@ -64,7 +65,10 @@ export const PongMessage = {
 } as const;
 
 export const SocketMessage = {
+  AlertNewDonation: "alert.newDonation",
+
   SessionRegister: "session.register",
+  SessionUnregister: "session.unregister",
   SessionStateSync: "session.state.sync",
   MatchTimerStart: "match.timer.start",
   MatchTimerStop: "match.timer.stop",
@@ -72,11 +76,10 @@ export const SocketMessage = {
   MatchKickoffTimeUpdated: "match.kickoffTime.update",
   MatchReset: "match.reset",
   MatchGoalScored: "match.goalScored",
+  UndoMatchGoalScored: "undo.match.goalScored",
   MatchPenaltyShootoutUpdate: "match.penaltyShootout.update",
   ActiveFormationUpdate: "activeFormation.update",
   TeamInfoUpdate: "team.info.update",
-
-  UndoMatchGoalScored: "undo.match.goalScored",
 
   StartingSoonShow: overlayMsg(Overlay.StartingSoon, "show"),
   StartingSoonHide: overlayMsg(Overlay.StartingSoon, "hide"),

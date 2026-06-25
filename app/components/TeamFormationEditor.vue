@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getFormationPosition } from "~/utils/getFormationPosition";
-const { state, publish } = useControlSocket();
-const { selectedPlayer } = useClientState();
+const { publish } = useSocket(Mode.Control);
+const { state, selectedPlayer } = useClientState();
 
 const props = defineProps<TeamComplete>();
 

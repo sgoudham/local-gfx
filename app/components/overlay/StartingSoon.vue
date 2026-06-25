@@ -8,6 +8,8 @@ const overlay = useTemplateRef("overlay");
 const rendered = ref(false);
 const showMainScreen = true;
 
+const { fundraisingInfo } = useClientState();
+
 const kickoffTimeString = computed(() => props.kickoffTime);
 
 function parseKickoffTime(timeString: string) {
@@ -15,7 +17,12 @@ function parseKickoffTime(timeString: string) {
     .split(":")
     .map((value) => Number(value));
   const kickoff = new Date();
-  kickoff.setHours(Number.isFinite(hour) ? hour : 15, Number.isFinite(minute) ? minute : 0, 0, 0);
+  kickoff.setHours(
+    Number.isFinite(hour) ? hour : 15,
+    Number.isFinite(minute) ? minute : 0,
+    0,
+    0,
+  );
   return kickoff;
 }
 
@@ -107,7 +114,7 @@ function updateClocks() {
   ].join(":");
 }
 
-let timer: ReturnType<typeof setInterval>;
+let timer: NodeJS.Timeout;
 
 onMounted(() => {
   updateClocks();
@@ -119,7 +126,8 @@ onUnmounted(() => {
   if (panelTimer) clearInterval(panelTimer);
 });
 
-const headline = "Dunterlie Dynamos and AC Malones face off in the third annual Y'morzin Cup Final"
+const headline =
+  "Dunterlie Dynamos and AC Malones face off in the third annual Y'morzin Cup Final";
 
 const tickerItems = [
   {
@@ -223,7 +231,6 @@ onMounted(() => {
 
       <Transition name="panel-fade" mode="out-in">
         <div :key="activePanelIndex" class="stat-panel-body">
-
           <!-- H2H panel -->
           <template v-if="activePanel.id === 'h2h'">
             <div class="stat">
@@ -253,7 +260,8 @@ onMounted(() => {
                   :key="i"
                   class="form-result"
                   :class="r.toLowerCase()"
-                >{{ r }}</span>
+                  >{{ r }}</span
+                >
               </div>
               <div class="form-row">
                 <span class="form-team">MAL</span>
@@ -262,7 +270,8 @@ onMounted(() => {
                   :key="i"
                   class="form-result"
                   :class="r.toLowerCase()"
-                >{{ r }}</span>
+                  >{{ r }}</span
+                >
               </div>
             </div>
           </template>
@@ -293,27 +302,30 @@ onMounted(() => {
             </div>
           </template>
 
-        <!-- Fundraiser panel -->
-      <template v-else-if="activePanel.id === 'fundraiser'">
-        <div class="stat">
-          <div class="fundraiser-charity">Refuweegee</div>
-          <div class="fundraiser-total">
-            £450
-          </div>
-          <div class="fundraiser-label">raised so far</div>
-        </div>
-      </template>
-
+          <!-- Fundraiser panel -->
+          <template
+            v-else-if="activePanel.id === 'fundraiser' && fundraisingInfo"
+          >
+            <div class="stat">
+              <div class="fundraiser-charity">Refuweegee</div>
+              <div class="fundraiser-total">
+                £{{ fundraisingInfo.totalRaised }}
+              </div>
+              <div class="fundraiser-label">
+                raised so far of £{{ fundraisingInfo.target }} target
+              </div>
+            </div>
+          </template>
         </div>
       </Transition>
 
       <div class="stat-sponsor">
         <div class="stat-sponsor-qr">
           <img
-          src="/qrCode.png"
-          alt="QR Code"
-          style="width: 100%; height: 100%;"
-        />
+            src="/qrCode.png"
+            alt="QR Code"
+            style="width: 100%; height: 100%"
+          />
         </div>
         <img
           class="stat-sponsor-logo"
@@ -333,7 +345,9 @@ onMounted(() => {
       <div class="info-bottom-row">
         <div class="ycf-news">
           <div class="ycf-news-name">
-            <div class="ycf-news-ycf">YCF</div>news</div>
+            <div class="ycf-news-ycf">YCF</div>
+            news
+          </div>
           <div class="time">{{ time }}</div>
         </div>
         <div class="ticker glossy">
@@ -400,7 +414,6 @@ onMounted(() => {
   pointer-events: none;
 }
 
-
 .main-screen::before {
   content: "";
   position: absolute;
@@ -436,11 +449,12 @@ onMounted(() => {
 }
 
 @keyframes panelGlow {
-  0%,100% {
-    box-shadow: 0 0 20px rgba(255,255,255,0.08);
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
   }
   50% {
-    box-shadow: 0 0 40px rgba(255,255,255,0.18);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.18);
   }
 }
 
@@ -629,9 +643,18 @@ onMounted(() => {
   font-weight: bold;
 }
 
-.form-result.w { background: #2ecc71; color: #fff; }
-.form-result.d { background: #888;    color: #fff; }
-.form-result.l { background: #e74c3c; color: #fff; }
+.form-result.w {
+  background: #2ecc71;
+  color: #fff;
+}
+.form-result.d {
+  background: #888;
+  color: #fff;
+}
+.form-result.l {
+  background: #e74c3c;
+  color: #fff;
+}
 
 /* Top scorers */
 .scorer-row {
@@ -712,7 +735,7 @@ onMounted(() => {
 }
 
 .stat-sponsor-qr::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -852,13 +875,12 @@ onMounted(() => {
   position: absolute;
   inset: 0;
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,0.18) 0%,
-      rgba(255,255,255,0.08) 10%,
-      transparent 35%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.08) 10%,
+    transparent 35%
+  );
 
   pointer-events: none;
 }
@@ -880,17 +902,17 @@ onMounted(() => {
   background:
     radial-gradient(
       circle at 50% 40%,
-      rgba(70,120,255,0.25),
+      rgba(70, 120, 255, 0.25),
       transparent 50%
     ),
     radial-gradient(
       circle at 20% 20%,
-      rgba(255,255,255,0.06),
+      rgba(255, 255, 255, 0.06),
       transparent 40%
     ),
     radial-gradient(
       circle at 80% 80%,
-      rgba(255,255,255,0.04),
+      rgba(255, 255, 255, 0.04),
       transparent 40%
     ),
     linear-gradient(
@@ -905,14 +927,13 @@ onMounted(() => {
   content: "";
   position: absolute;
 
-  background:
-    repeating-linear-gradient(
-      -35deg,
-      transparent 0,
-      transparent 180px,
-      rgba(255,255,255,0.025) 180px,
-      rgba(255,255,255,0.025) 220px
-    );
+  background: repeating-linear-gradient(
+    -35deg,
+    transparent 0,
+    transparent 180px,
+    rgba(255, 255, 255, 0.025) 180px,
+    rgba(255, 255, 255, 0.025) 220px
+  );
 
   animation: streakDrift 30s linear infinite;
 }
@@ -933,14 +954,10 @@ onMounted(() => {
   inset: 0;
 
   background:
-    radial-gradient(
-      circle at 0% 0%,
-      rgba(80,140,255,0.18),
-      transparent 35%
-    ),
+    radial-gradient(circle at 0% 0%, rgba(80, 140, 255, 0.18), transparent 35%),
     radial-gradient(
       circle at 100% 100%,
-      rgba(80,140,255,0.15),
+      rgba(80, 140, 255, 0.15),
       transparent 35%
     );
 
@@ -948,13 +965,12 @@ onMounted(() => {
 }
 
 .red {
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--ribbon-colour), white 18%) 0%,
-      var(--ribbon-colour) 45%,
-      #520000 100%
-    );
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ribbon-colour), white 18%) 0%,
+    var(--ribbon-colour) 45%,
+    #520000 100%
+  );
 }
 
 .glossy {
@@ -971,18 +987,17 @@ onMounted(() => {
 }
 
 .glossy::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -50% -80%;
 
-  background:
-    linear-gradient(
-      110deg,
-      transparent 35%,
-      rgba(255, 255, 255, 0.28) 48%,
-      rgba(255, 255, 255, 0.06) 55%,
-      transparent 70%
-    );
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.28) 48%,
+    rgba(255, 255, 255, 0.06) 55%,
+    transparent 70%
+  );
 
   transform: translateX(-60%);
   animation: glossy-shine 10s ease-in-out infinite;
@@ -991,23 +1006,22 @@ onMounted(() => {
 }
 
 .glossy::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 1px;
   border-radius: inherit;
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,0.22),
-      rgba(255,255,255,0.04) 35%,
-      transparent 65%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.04) 35%,
+    transparent 65%
+  );
 
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.22),
-    inset 0 1px 8px rgba(255,255,255,0.18),
-    inset 0 -1px 8px rgba(0,0,0,0.18);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
+    inset 0 1px 8px rgba(255, 255, 255, 0.18),
+    inset 0 -1px 8px rgba(0, 0, 0, 0.18);
 
   mix-blend-mode: soft-light;
 
@@ -1015,11 +1029,13 @@ onMounted(() => {
 }
 
 @keyframes glossy-shine {
-  0%, 35% {
+  0%,
+  35% {
     transform: translateX(-60%);
   }
 
-  65%, 100% {
+  65%,
+  100% {
     transform: translateX(60%);
   }
 }
@@ -1028,36 +1044,29 @@ onMounted(() => {
   position: relative;
   overflow: hidden;
 
-  background:
-    linear-gradient(
-      180deg,
-      #3a3a3a 0%,
-      #151515 45%,
-      #050505 100%
-    );
+  background: linear-gradient(180deg, #3a3a3a 0%, #151515 45%, #050505 100%);
 
   border: 1px solid rgba(255, 255, 255, 0.22);
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.28),
-    inset 0 0 18px rgba(255,255,255,0.08),
-    inset 0 -8px 18px rgba(0,0,0,0.65),
-    0 8px 20px rgba(0,0,0,0.25);
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 18px rgba(255, 255, 255, 0.08),
+    inset 0 -8px 18px rgba(0, 0, 0, 0.65),
+    0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .dark-glossy::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -60% -80%;
 
-  background:
-    linear-gradient(
-      115deg,
-      transparent 35%,
-      rgba(255,255,255,0.35) 48%,
-      rgba(255,255,255,0.08) 55%,
-      transparent 70%
-    );
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.35) 48%,
+    rgba(255, 255, 255, 0.08) 55%,
+    transparent 70%
+  );
 
   transform: translateX(-60%);
   animation: dark-glossy-shine 8s ease-in-out infinite;
@@ -1066,23 +1075,22 @@ onMounted(() => {
 }
 
 .dark-glossy::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 1px;
   border-radius: inherit;
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,0.18),
-      rgba(255,255,255,0.03) 35%,
-      transparent 60%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.03) 35%,
+    transparent 60%
+  );
 
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.12),
-    inset 0 2px 8px rgba(255,255,255,0.12),
-    inset 0 -2px 10px rgba(0,0,0,0.5);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 2px 8px rgba(255, 255, 255, 0.12),
+    inset 0 -2px 10px rgba(0, 0, 0, 0.5);
 
   mix-blend-mode: screen;
 
@@ -1090,11 +1098,13 @@ onMounted(() => {
 }
 
 @keyframes dark-glossy-shine {
-  0%, 35% {
+  0%,
+  35% {
     transform: translateX(-60%);
   }
 
-  65%, 100% {
+  65%,
+  100% {
     transform: translateX(60%);
   }
 }
@@ -1103,5 +1113,4 @@ onMounted(() => {
   border: none !important;
   box-shadow: none !important;
 }
-
 </style>

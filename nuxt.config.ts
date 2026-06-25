@@ -8,6 +8,10 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
 
+  runtimeConfig: {
+    justGivingApiKey: process.env.JUSTGIVING_API_KEY,
+  },
+
   nitro: {
     experimental: {
       websocket: true,

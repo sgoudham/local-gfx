@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { state } = useOutputSocket();
+useSocket(Mode.Output);
+const { state } = useClientState();
 </script>
 
 <template>

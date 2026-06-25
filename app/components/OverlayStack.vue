@@ -3,8 +3,8 @@ import { SocketMessage, Overlay } from "#imports";
 import ToggleOverlayButton from "./ToggleOverlayButton.vue";
 import SelectedPlayer from "./SelectedPlayer.vue";
 
-const { state, publish } = useControlSocket();
-const { selectedPlayer } = useClientState();
+const { state, selectedPlayer } = useClientState();
+const { publish } = useSocket(Mode.Control);
 
 const isDev = import.meta.dev;
 

@@ -5,3 +5,4 @@ _store
 .output
 data.json
 node_modules/
+.env

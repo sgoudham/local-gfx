@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { PenaltyState, TeamLocation } from "#imports";
+import { useSocket } from "~/composables/useSession";
 import type { TeamLocation as TLocation } from "~~/shared/types/data";
 import type { TPenaltyState } from "~~/shared/types/state";
 import { PENALTY_SLOTS } from "~~/shared/utils/constants";
 
-const { state, publish } = useControlSocket();
+const { state } = useClientState();
+const { publish } = useSocket(Mode.Control);
 
 const penaltyDialogRef = ref<HTMLDialogElement | null>(null);
 const BASE_SLOT_COUNT = PENALTY_SLOTS.length;

@@ -31,6 +31,7 @@ function socketMsg<M extends Mode, T extends string, E extends z.ZodRawShape>(
 
 export const OutputMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Output, SocketMessage.SessionRegister),
+  socketMsg(Mode.Output, SocketMessage.SessionUnregister),
 ]);
 export type OutputMessage = z.infer<typeof OutputMessageSchema>;
 
@@ -60,6 +61,7 @@ const MatchPenaltyShootoutUpdateSchema = z.object({
 
 export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.SessionRegister),
+  socketMsg(Mode.Control, SocketMessage.SessionUnregister),
   socketMsg(Mode.Control, SocketMessage.MatchTimerStart),
   socketMsg(Mode.Control, SocketMessage.MatchTimerStop),
   socketMsg(Mode.Control, SocketMessage.MatchTimerHalfTime),
@@ -107,7 +109,13 @@ export const HeartbeatMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Heartbeat, PingMessage.type),
 ]);
 
+export const DonationMessageSchema = z.discriminatedUnion("type", [
+  socketMsg(Mode.Donations, SocketMessage.SessionRegister),
+  socketMsg(Mode.Donations, SocketMessage.SessionUnregister),
+]);
+export type DonationMessage = z.infer<typeof DonationMessageSchema>;
+
 export const ModeEnvelopeSchema = z.object({
-  mode: z.enum([Mode.Control, Mode.Output, Mode.Heartbeat]),
+  mode: z.enum([Mode.Control, Mode.Output, Mode.Heartbeat, Mode.Donations]),
 });
 export type ModeEnvelope = z.infer<typeof ModeEnvelopeSchema>;
