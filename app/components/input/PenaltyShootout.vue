@@ -9,9 +9,10 @@ const { state, publish } = useControlSocket();
 const penaltyDialogRef = ref<HTMLDialogElement | null>(null);
 const BASE_SLOT_COUNT = PENALTY_SLOTS.length;
 const firstKickTeam = ref<TLocation>(TeamLocation.Home);
+type PendingSlot = { state: TPenaltyState; playerId: string };
 
-const pendingStates = reactive<
-  Record<TLocation, Partial<Record<number, TPenaltyState>>>
+const pendingData = reactive<
+  Record<TLocation, Partial<Record<number, PendingSlot>>>
 >({
   [TeamLocation.Home]: {},
   [TeamLocation.Away]: {},
@@ -44,18 +45,6 @@ const displaySlotCount = computed(() => {
   return Math.max(BASE_SLOT_COUNT, home.kicksTaken, away.kicksTaken);
 });
 
-const penaltyStates = computed(() => {
-  const getStates = (location: TLocation) =>
-    Array.from({ length: displaySlotCount.value }, (_, index) => {
-      const penalty = state.value[location].penalties[index];
-      return penalty ? penalty.state : PenaltyState.NONE;
-    });
-  return {
-    home: getStates(TeamLocation.Home),
-    away: getStates(TeamLocation.Away),
-  };
-});
-
 const isSlotDisabled = (location: TLocation, index: number) => {
   const isFirst = location === firstKickTeam.value;
   const other =
@@ -68,9 +57,9 @@ const isSlotDisabled = (location: TLocation, index: number) => {
   }
 };
 
-const getSlotState = (location: TLocation, index: number): TPenaltyState =>
-  pendingStates[location][index] ??
-  penaltyStates.value[location][index] ??
+const getPendingState = (location: TLocation, index: number): TPenaltyState =>
+  pendingData[location][index]?.state ??
+  state.value[location].penalties[index]?.state ??
   PenaltyState.NONE;
 
 const setPendingState = (
@@ -78,27 +67,42 @@ const setPendingState = (
   index: number,
   penaltyState: TPenaltyState,
 ) => {
-  pendingStates[location][index] = penaltyState;
+  const existing = pendingData[location][index];
+  if (existing) {
+    existing.state = penaltyState;
+  } else {
+    pendingData[location][index] = { state: penaltyState, playerId: "" };
+  }
 };
 
-const publishWithPlayer = (
-  location: TLocation,
-  index: number,
-  playerId: string,
-) => {
-  const player = state.value[location].players.find((p) => p.id === playerId);
+const selectPlayer = (location: TLocation, index: number, playerId: string) => {
+  const existing = pendingData[location][index];
+  if (existing) {
+    existing.playerId = playerId;
+  } else {
+    pendingData[location][index] = {
+      state: state.value[location].penalties[index]?.state ?? PenaltyState.NONE,
+      playerId,
+    };
+  }
+
+  const pending = pendingData[location][index]!;
+  if (pending.state === PenaltyState.NONE || !pending.playerId) return;
+
+  const player = state.value[location].players.find(
+    (p) => p.id === pending.playerId,
+  );
   if (!player) return;
+
   publish(SocketMessage.MatchPenaltyShootoutUpdate, {
     data: {
       location,
       index,
-      penaltyGoal: {
-        state: getSlotState(location, index),
-        player,
-      },
+      penaltyGoal: { state: pending.state, player },
     },
   });
-  delete pendingStates[location][index];
+
+  delete pendingData[location][index];
 };
 
 const openPenaltyDialog = () => {
@@ -174,7 +178,7 @@ const closePenaltyDialog = () => {
                   class="penalty-state"
                   :class="{
                     goal:
-                      getSlotState(TeamLocation.Home, index) ===
+                      getPendingState(TeamLocation.Home, index) ===
                       PenaltyState.GOAL,
                   }"
                   :disabled="isSlotDisabled(TeamLocation.Home, index)"
@@ -189,7 +193,7 @@ const closePenaltyDialog = () => {
                   class="penalty-state"
                   :class="{
                     miss:
-                      getSlotState(TeamLocation.Home, index) ===
+                      getPendingState(TeamLocation.Home, index) ===
                       PenaltyState.MISS,
                   }"
                   :disabled="isSlotDisabled(TeamLocation.Home, index)"
@@ -204,7 +208,7 @@ const closePenaltyDialog = () => {
                   class="penalty-state"
                   :class="{
                     none:
-                      getSlotState(TeamLocation.Home, index) ===
+                      getPendingState(TeamLocation.Home, index) ===
                       PenaltyState.NONE,
                   }"
                   :disabled="isSlotDisabled(TeamLocation.Home, index)"
@@ -219,12 +223,17 @@ const closePenaltyDialog = () => {
                 class="player-select"
                 :disabled="
                   isSlotDisabled(TeamLocation.Home, index) ||
-                  getSlotState(TeamLocation.Home, index) === PenaltyState.NONE
+                  getPendingState(TeamLocation.Home, index) ===
+                    PenaltyState.NONE
                 "
-                :value="state.home.penalties[index]?.player?.id ?? ''"
+                :value="
+                  pendingData[TeamLocation.Home][index]?.playerId ??
+                  state.home.penalties[index]?.player?.id ??
+                  ''
+                "
                 @change="
                   (e: Event) =>
-                    publishWithPlayer(
+                    selectPlayer(
                       TeamLocation.Home,
                       index,
                       (e.target as HTMLSelectElement).value,
@@ -237,7 +246,7 @@ const closePenaltyDialog = () => {
                   :key="p.id"
                   :value="p.id"
                 >
-                  #{{ p.number }} {{ p.surname }}
+                  {{ p.number }}' {{ p.surname }}
                 </option>
               </select>
             </div>
@@ -256,7 +265,7 @@ const closePenaltyDialog = () => {
                   class="penalty-state"
                   :class="{
                     goal:
-                      getSlotState(TeamLocation.Away, index) ===
+                      getPendingState(TeamLocation.Away, index) ===
                       PenaltyState.GOAL,
                   }"
                   :disabled="isSlotDisabled(TeamLocation.Away, index)"
@@ -271,7 +280,7 @@ const closePenaltyDialog = () => {
                   class="penalty-state"
                   :class="{
                     miss:
-                      getSlotState(TeamLocation.Away, index) ===
+                      getPendingState(TeamLocation.Away, index) ===
                       PenaltyState.MISS,
                   }"
                   :disabled="isSlotDisabled(TeamLocation.Away, index)"
@@ -286,7 +295,7 @@ const closePenaltyDialog = () => {
                   class="penalty-state"
                   :class="{
                     none:
-                      getSlotState(TeamLocation.Away, index) ===
+                      getPendingState(TeamLocation.Away, index) ===
                       PenaltyState.NONE,
                   }"
                   :disabled="isSlotDisabled(TeamLocation.Away, index)"
@@ -301,12 +310,17 @@ const closePenaltyDialog = () => {
                 class="player-select"
                 :disabled="
                   isSlotDisabled(TeamLocation.Away, index) ||
-                  getSlotState(TeamLocation.Away, index) === PenaltyState.NONE
+                  getPendingState(TeamLocation.Away, index) ===
+                    PenaltyState.NONE
                 "
-                :value="state.away.penalties[index]?.player?.id ?? ''"
+                :value="
+                  pendingData[TeamLocation.Away][index]?.playerId ??
+                  state.away.penalties[index]?.player?.id ??
+                  ''
+                "
                 @change="
                   (e: Event) =>
-                    publishWithPlayer(
+                    selectPlayer(
                       TeamLocation.Away,
                       index,
                       (e.target as HTMLSelectElement).value,
@@ -319,7 +333,7 @@ const closePenaltyDialog = () => {
                   :key="p.id"
                   :value="p.id"
                 >
-                  #{{ p.number }} {{ p.surname }}
+                  {{ p.number }}' {{ p.surname }}
                 </option>
               </select>
             </div>
@@ -350,7 +364,7 @@ const closePenaltyDialog = () => {
   border: 0;
   padding: 0;
   width: min(680px, 95vw);
-  height: min(550px, 95vw);
+  height: min(680px, 95vw);
 }
 
 .penalty-dialog-content {

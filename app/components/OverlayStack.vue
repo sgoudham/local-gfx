@@ -88,6 +88,9 @@ const matchReset = () => {
       <Button @click="matchReset" class="item action">Reset</Button>
     </li>
     <li class="overlay-list-item">
+      <InputPenaltyShootout />
+    </li>
+    <li class="overlay-list-item">
       <Button
         @click="toggleMatchTimer"
         :class="[isTimerRunning ? 'hide' : 'show', 'item', 'action']"
@@ -101,9 +104,6 @@ const matchReset = () => {
       >
         Start Half
       </Button>
-    </li>
-    <li class="overlay-list-item">
-      <InputPenaltyShootout />
     </li>
     <li
       v-for="overlay in overlayToggles"

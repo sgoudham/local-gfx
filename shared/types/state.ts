@@ -47,7 +47,7 @@ export type Goal = {
 
 export type PenaltyGoal = {
   state: TPenaltyState;
-  player?: Player;
+  player: Player;
 };
 
 export type PlayerState = {

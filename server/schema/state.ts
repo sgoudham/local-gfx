@@ -32,7 +32,7 @@ export const goalSchema = z.object({
 
 export const penaltyGoalSchema = z.object({
     state: tPenaltyStateSchema,
-    player: playerSchema.optional()
+    player: playerSchema
 });
 
 export const playerStateSchema = z.object({

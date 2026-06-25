@@ -18,22 +18,34 @@ const teamSlots = [
   },
 ] as const;
 
+const BASE_SLOT_COUNT = PENALTY_SLOTS.length;
+
+const windowStart = computed(() => {
+  const maxLen = Math.max(
+    props.home.penalties.length,
+    props.away.penalties.length,
+  );
+  return Math.max(0, maxLen - BASE_SLOT_COUNT);
+});
+
 const teams = computed(() =>
   teamSlots.map((slot) => {
     const team = props[slot.id];
+    const start = windowStart.value;
+    const displayPenalties = Array.from(
+      { length: BASE_SLOT_COUNT },
+      (_, i) => team.penalties[start + i]?.state ?? PenaltyState.NONE,
+    );
     return {
       key: team.location,
       abbreviation: team.shortName,
       penalties: team.penalties,
+      displayPenalties,
       panelClass: slot.panelClass,
       backgroundClass: slot.backgroundClass,
     };
   }),
 );
-
-function getPenaltyState(penalties: PenaltyGoal[], index: number) {
-  return penalties[index] ? penalties[index].state : PenaltyState.NONE;
-}
 
 function getPenaltyClass(penalty: number) {
   if (penalty === PenaltyState.MISS) {
@@ -132,10 +144,10 @@ watch(
           </div>
           <ul class="pens-row">
             <li
-              v-for="(_, index) in PENALTY_SLOTS"
+              v-for="(penState, index) in team.displayPenalties"
               :key="index"
               class="pen"
-              :class="getPenaltyClass(getPenaltyState(team.penalties, index))"
+              :class="getPenaltyClass(penState)"
             ></li>
           </ul>
           <div class="score-box">
