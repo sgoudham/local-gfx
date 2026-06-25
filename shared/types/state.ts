@@ -41,6 +41,7 @@ type SubstitutionMadeEvent = {
 type PenaltyShootoutEvent = {
   type: "penaltyShootout";
   goal: PenaltyGoal;
+  slotIndex: number;
   matchTime: MatchTime;
 };
 

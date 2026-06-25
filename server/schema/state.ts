@@ -101,6 +101,7 @@ const substitutionMadeEventSchema = z.object({
 const penaltyShootoutEventSchema = z.object({
     type: z.literal("penaltyShootout"),
     goal: penaltyGoalSchema,
+    slotIndex: z.number(),
     matchTime: matchTimeSchema
 });
 

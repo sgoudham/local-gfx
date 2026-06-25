@@ -100,18 +100,31 @@ export default defineWebSocketHandler({
             const penaltyShootoutData = parsed.msg.data;
             await serverState.patchState((s) => {
               const penalties = s[penaltyShootoutData.location].penalties;
-              let penaltyGoal = penalties[penaltyShootoutData.index];
-              if (!penaltyGoal) {
-                penalties.push(penaltyShootoutData.penaltyGoal);
+              penalties[penaltyShootoutData.index] =
+                penaltyShootoutData.penaltyGoal;
+
+              const eventIndex = s.events.findIndex(
+                (event) =>
+                  event.type === "penaltyShootout" &&
+                  event.goal.player.location === penaltyShootoutData.location &&
+                  event.slotIndex === penaltyShootoutData.index,
+              );
+
+              if (eventIndex >= 0) {
+                s.events[eventIndex] = {
+                  type: "penaltyShootout",
+                  goal: penaltyShootoutData.penaltyGoal,
+                  slotIndex: penaltyShootoutData.index,
+                  matchTime: s.matchTime,
+                };
               } else {
-                penalties[penaltyShootoutData.index] =
-                  penaltyShootoutData.penaltyGoal;
+                s.events.push({
+                  type: "penaltyShootout",
+                  goal: penaltyShootoutData.penaltyGoal,
+                  slotIndex: penaltyShootoutData.index,
+                  matchTime: s.matchTime,
+                });
               }
-              s.events.push({
-                type: "penaltyShootout",
-                goal: penaltyShootoutData.penaltyGoal,
-                matchTime: s.matchTime,
-              });
             });
             break;
           case SocketMessage.MatchReset:
