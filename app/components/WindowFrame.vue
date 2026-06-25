@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    title?: string;
     src: string;
     baseWidth?: number;
     baseHeight?: number;
@@ -14,28 +13,56 @@ const props = withDefaults(
 
 const viewport = ref<HTMLElement | null>(null);
 const scale = ref(1);
+let resizeObserver: ResizeObserver | null = null;
 
 function updateScale() {
   if (!viewport.value) {
     return;
   }
 
-  const widthRatio = viewport.value.clientWidth / props.baseWidth;
-  const heightRatio = viewport.value.clientHeight / props.baseHeight;
+  const baseWidth = Math.max(1, props.baseWidth);
+  const baseHeight = Math.max(1, props.baseHeight);
+  const widthRatio = viewport.value.clientWidth / baseWidth;
+  const heightRatio = viewport.value.clientHeight / baseHeight;
   scale.value = Math.max(0.01, Math.min(widthRatio, heightRatio));
 }
 
 onMounted(() => {
   nextTick(() => {
     updateScale();
+
+    if (!viewport.value) {
+      return;
+    }
+
+    resizeObserver = new ResizeObserver(() => {
+      updateScale();
+    });
+    resizeObserver.observe(viewport.value);
   });
 });
+
+onUnmounted(() => {
+  resizeObserver?.disconnect();
+  resizeObserver = null;
+});
+
+watch(
+  () => [props.baseWidth, props.baseHeight],
+  () => {
+    updateScale();
+  },
+);
 </script>
 
 <template>
   <div class="preview-card">
-    <h2 v-if="title">{{ title }}</h2>
-    <div ref="viewport" class="frame-viewport">
+    <slot />
+    <div
+      ref="viewport"
+      class="frame-viewport"
+      :style="{ '--frame-aspect': `${baseWidth} / ${baseHeight}` }"
+    >
       <div
         class="frame-stage"
         :style="{
@@ -51,14 +78,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.preview-card {
-  width: 500px;
-}
-
 .frame-viewport {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: var(--frame-aspect, 16 / 9);
   overflow: hidden;
   border-radius: 4px;
   border: 2px solid #11111b;
