@@ -1,9 +1,8 @@
-import type { PenaltyState } from "../utils/constants";
 import type { Player, TeamLocation } from "./data";
 
 // ts-to-zod seemingly can't resolve these types if they are defined in another file
 // not happy about the duplication but unsure if there's a different way around this
-export type PenaltyState = 0 | 1 | 2;
+export type TPenaltyState = 0 | 1 | 2;
 export type FormationKey =
   | "3-4-3"
   | "3-5-2"
@@ -24,24 +23,36 @@ export type MatchTime = {
   formatted: string;
 };
 
-type MatchEvent = GoalScoredEvent | SubstitutionMadeEvent;
-
+type MatchEvent =
+  | GoalScoredEvent
+  | SubstitutionMadeEvent
+  | PenaltyShootoutEvent;
 type GoalScoredEvent = {
   type: "goalScored";
   player: Player;
   matchTime: MatchTime;
-}
-
+};
 type SubstitutionMadeEvent = {
   type: "substitution";
   location: TeamLocation;
   subs: PendingSub[];
   matchTime: MatchTime;
 };
+type PenaltyShootoutEvent = {
+  type: "penaltyShootout";
+  goal: PenaltyGoal;
+  slotIndex: number;
+  matchTime: MatchTime;
+};
 
 export type Goal = {
   player: Player;
   matchTime: MatchTime;
+};
+
+export type PenaltyGoal = {
+  state: TPenaltyState;
+  player: Player;
 };
 
 export type PlayerState = {
@@ -55,14 +66,7 @@ export type TeamState = {
   players: PlayerState[];
   substitutes: PlayerState[];
   goals: Goal[];
-  /** @minItems 5 @maxItems 5 */
-  penalties: [
-    PenaltyState,
-    PenaltyState,
-    PenaltyState,
-    PenaltyState,
-    PenaltyState,
-  ];
+  penalties: PenaltyGoal[];
 };
 
 export type OverlayState = {
@@ -117,13 +121,7 @@ export type TeamComplete = {
   players: Player[];
   substitutes: Player[];
   goals: Goal[];
-  penalties: [
-    PenaltyState,
-    PenaltyState,
-    PenaltyState,
-    PenaltyState,
-    PenaltyState,
-  ];
+  penalties: PenaltyGoal[];
 };
 
 export type CompleteState = {

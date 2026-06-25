@@ -96,6 +96,37 @@ export default defineWebSocketHandler({
               });
             });
             break;
+          case SocketMessage.MatchPenaltyShootoutUpdate:
+            const penaltyShootoutData = parsed.msg.data;
+            await serverState.patchState((s) => {
+              const penalties = s[penaltyShootoutData.location].penalties;
+              penalties[penaltyShootoutData.index] =
+                penaltyShootoutData.penaltyGoal;
+
+              const eventIndex = s.events.findIndex(
+                (event) =>
+                  event.type === "penaltyShootout" &&
+                  event.goal.player.location === penaltyShootoutData.location &&
+                  event.slotIndex === penaltyShootoutData.index,
+              );
+
+              if (eventIndex >= 0) {
+                s.events[eventIndex] = {
+                  type: "penaltyShootout",
+                  goal: penaltyShootoutData.penaltyGoal,
+                  slotIndex: penaltyShootoutData.index,
+                  matchTime: s.matchTime,
+                };
+              } else {
+                s.events.push({
+                  type: "penaltyShootout",
+                  goal: penaltyShootoutData.penaltyGoal,
+                  slotIndex: penaltyShootoutData.index,
+                  matchTime: s.matchTime,
+                });
+              }
+            });
+            break;
           case SocketMessage.MatchReset:
             await serverState.clear();
             break;
@@ -155,6 +186,7 @@ export default defineWebSocketHandler({
           case SocketMessage.PenaltiesScorecardShow:
             await serverState.patchState((s) => {
               s.graphics.penaltiesScorecard.visible = true;
+              s.graphics.matchScorecard.visible = false;
             });
             break;
           case SocketMessage.PenaltiesScorecardHide:

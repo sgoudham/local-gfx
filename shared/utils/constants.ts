@@ -3,6 +3,8 @@ const overlayMsg = <O extends Overlay, A extends "show" | "hide">(
   action: A,
 ): `${O}.${A}` => `${overlayKey}.${action}`;
 
+export const PENALTY_SLOTS = [0, 0, 0, 0, 0];
+
 export const PenaltyState = {
   NONE: 0,
   GOAL: 1,
@@ -62,6 +64,7 @@ export const SocketMessage = {
   MatchKickoffTimeUpdated: "match.kickoffTime.update",
   MatchReset: "match.reset",
   MatchGoalScored: "match.goalScored",
+  MatchPenaltyShootoutUpdate: "match.penaltyShootout.update",
   ActiveFormationUpdate: "activeFormation.update",
   TeamInfoUpdate: "team.info.update",
   StartingSoonShow: overlayMsg(Overlay.StartingSoon, "show"),

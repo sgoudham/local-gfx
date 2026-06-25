@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { TeamLocation } from "#imports";
-import EditTeamForm from "~/components/EditTeamForm.vue";
 import type { EditTeamFormProps } from "~/types";
 import type { TeamLocation as TLocation } from "~~/shared/types/data";
 
@@ -41,7 +40,12 @@ function onTeamSave(
 
 <template>
   <main>
-    <EditTeamForm :key="activeTeam" v-bind="data" :saved="saved" @save="onTeamSave" />
+    <InputEditTeam
+      :key="activeTeam"
+      v-bind="data"
+      :saved="saved"
+      @save="onTeamSave"
+    />
   </main>
 
   <nav class="tabs" :data-location="activeTeam">

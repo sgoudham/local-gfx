@@ -31,19 +31,12 @@ const overlayToggles = computed(() => [
     hideMessage: SocketMessage.BigMatchScorecardHide,
   },
   {
-    val: Overlay.PenaltiesScorecard,
-    name: state.value.graphics.penaltiesScorecard.name,
-    showMessage: SocketMessage.PenaltiesScorecardShow,
-    hideMessage: SocketMessage.PenaltiesScorecardHide,
-  },
-  {
     val: Overlay.HydrationBreak,
     name: state.value.graphics.hydrationBreak.name,
     showMessage: SocketMessage.HydrationBreakShow,
     hideMessage: SocketMessage.HydrationBreakHide,
-  }
+  },
 ]);
-
 
 const kickoffTime = ref(state.value.graphics.startingSoon.kickoffTime);
 watch(
@@ -92,7 +85,10 @@ const matchReset = () => {
       />
     </li>
     <li class="overlay-list-item" v-if="isDev">
-      <Button @click="matchReset" class="item action"> Reset </Button>
+      <Button @click="matchReset" class="item action">Reset</Button>
+    </li>
+    <li class="overlay-list-item">
+      <InputPenaltyShootout />
     </li>
     <li class="overlay-list-item">
       <Button

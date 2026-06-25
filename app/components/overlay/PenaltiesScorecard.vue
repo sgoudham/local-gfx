@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import type { PenaltiesScorecardProps } from "~/types";
+import { PENALTY_SLOTS } from "~~/shared/utils/constants";
 
 const props = defineProps<PenaltiesScorecardProps>();
 
@@ -17,13 +18,29 @@ const teamSlots = [
   },
 ] as const;
 
+const BASE_SLOT_COUNT = PENALTY_SLOTS.length;
+
+const windowStart = computed(() => {
+  const maxLen = Math.max(
+    props.home.penalties.length,
+    props.away.penalties.length,
+  );
+  return Math.max(0, maxLen - BASE_SLOT_COUNT);
+});
+
 const teams = computed(() =>
   teamSlots.map((slot) => {
     const team = props[slot.id];
+    const start = windowStart.value;
+    const displayPenalties = Array.from(
+      { length: BASE_SLOT_COUNT },
+      (_, i) => team.penalties[start + i]?.state ?? PenaltyState.NONE,
+    );
     return {
       key: team.location,
       abbreviation: team.shortName,
       penalties: team.penalties,
+      displayPenalties,
       panelClass: slot.panelClass,
       backgroundClass: slot.backgroundClass,
     };
@@ -40,8 +57,9 @@ function getPenaltyClass(penalty: number) {
   return "";
 }
 
-function getGoalCount(penalties: number[]) {
-  return penalties.filter((penalty) => penalty === PenaltyState.GOAL).length;
+function getGoalCount(penalties: PenaltyGoal[]) {
+  return penalties.filter((penalty) => penalty.state === PenaltyState.GOAL)
+    .length;
 }
 
 const overlay = useTemplateRef("overlay");
@@ -126,10 +144,10 @@ watch(
           </div>
           <ul class="pens-row">
             <li
-              v-for="(pen, index) in team.penalties"
+              v-for="(penState, index) in team.displayPenalties"
               :key="index"
               class="pen"
-              :class="getPenaltyClass(pen)"
+              :class="getPenaltyClass(penState)"
             ></li>
           </ul>
           <div class="score-box">

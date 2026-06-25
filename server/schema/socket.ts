@@ -4,6 +4,7 @@ import { playerSchema, teamLocationSchema } from "./data";
 import {
   formationKeySchema,
   goalSchema,
+  penaltyGoalSchema,
   startingSoonDataUpdateSchema,
   substitutionDataUpdateSchema,
 } from "./state";
@@ -51,6 +52,12 @@ const TeamFormationShowSchema = z.object({
   location: teamLocationSchema,
 });
 
+const MatchPenaltyShootoutUpdateSchema = z.object({
+  location: teamLocationSchema,
+  index: z.int(),
+  penaltyGoal: penaltyGoalSchema
+})
+
 export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.SessionRegister),
   socketMsg(Mode.Control, SocketMessage.MatchTimerStart),
@@ -62,6 +69,9 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.MatchReset),
   socketMsg(Mode.Control, SocketMessage.MatchGoalScored, {
     data: goalSchema,
+  }),
+  socketMsg(Mode.Control, SocketMessage.MatchPenaltyShootoutUpdate, {
+    data: MatchPenaltyShootoutUpdateSchema,
   }),
   socketMsg(Mode.Control, SocketMessage.ActiveFormationUpdate, {
     data: ActiveFormationUpdateSchema,

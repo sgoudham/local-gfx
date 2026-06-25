@@ -2,9 +2,22 @@
 import { ref, watch, nextTick } from "vue";
 import getMinutes from "~/utils/getMinutes";
 
-const { state, publish } = useOutputSocket();
+const { state } = useOutputSocket();
 
 const listRef = ref<HTMLElement | null>(null);
+
+const getState = (state: TPenaltyState) => {
+  if (state === PenaltyState.GOAL) {
+    return "SCORED";
+  }
+  if (state === PenaltyState.MISS) {
+    return "MISSED";
+  }
+  return "NOT TAKEN";
+};
+
+const getPlayer = (player: Player) =>
+  `(${player.number}) ${player.forename} ${player.surname}`;
 
 const scrollToTop = async () => {
   await nextTick();
@@ -18,7 +31,7 @@ watch(
   () => state.value.events.length,
   () => {
     scrollToTop();
-  }
+  },
 );
 </script>
 
@@ -33,24 +46,30 @@ watch(
               <div>
                 {{ state[e.player.location].shortName }}
               </div>
-              <div>
-                {{ getMinutes(e.matchTime) }}'
-              </div>
+              <div>{{ getMinutes(e.matchTime) }}'</div>
             </div>
-            ⚽️ GOAL: ({{ e.player.number }})
-            {{ e.player.forename }}
-            {{ e.player.surname }}
+            ⚽️ GOAL: {{ getPlayer(e.player) }}
           </div>
+
+          <div v-if="e.type === 'penaltyShootout'">
+            <div :class="['event-header', e.goal.player.location]">
+              <div>
+                {{ state[e.goal.player.location].shortName }}
+              </div>
+              <div>{{ getMinutes(e.matchTime) }}'</div>
+            </div>
+            ⚽️ PENALTY GOAL {{ getState(e.goal.state) }}:
+            {{ getPlayer(e.goal.player) }}
+          </div>
+
           <div v-if="e.type === 'substitution'">
             <div :class="['event-header', e.location]">
               <div>
                 {{ state[e.location].shortName }}
               </div>
-              <div>
-                {{ getMinutes(e.matchTime) }}'
-              </div>
+              <div>{{ getMinutes(e.matchTime) }}'</div>
             </div>
-            🔺🔻 {{ getMinutes(e.matchTime) }}' - Substitution:
+            🔺🔻 Substitution:
           </div>
           <div v-if="e.type === 'substitution'" class="substitution-details">
             <div class="sub-group off-group">
@@ -63,7 +82,7 @@ watch(
               >
                 <span class="arrow">▼</span>
                 <span>
-                  ({{ sub[1].number }}) {{ sub[1].forename }} {{ sub[1].surname }}
+                  {{ getPlayer(sub[1]) }}
                 </span>
               </div>
             </div>
@@ -78,7 +97,7 @@ watch(
               >
                 <span class="arrow">▲</span>
                 <span>
-                  ({{ sub[0].number }}) {{ sub[0].forename }} {{ sub[0].surname }}
+                  {{ getPlayer(sub[0]) }}
                 </span>
               </div>
             </div>
@@ -90,8 +109,6 @@ watch(
 </template>
 
 <style lang="css" scoped>
-
-
 .events-panel {
   --base-font-size: 20px;
 
@@ -238,12 +255,11 @@ li:last-child {
 
 .home {
   background: var(--home-colour-1);
-  color: var(--home-colour-2)
+  color: var(--home-colour-2);
 }
 
 .away {
   background: var(--away-colour-1);
-  color: var(--away-colour-2)
+  color: var(--away-colour-2);
 }
-
 </style>
