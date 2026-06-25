@@ -88,6 +88,14 @@ const matchReset = () => {
       <Button @click="matchReset" class="item action">Reset</Button>
     </li>
     <li class="overlay-list-item">
+      <Button
+        @click="publish(SocketMessage.UndoMatchGoalScored)"
+        class="item action"
+      >
+        Undo Last Goal
+      </Button>
+    </li>
+    <li class="overlay-list-item">
       <InputPenaltyShootout />
     </li>
     <li class="overlay-list-item">

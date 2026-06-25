@@ -55,8 +55,8 @@ const TeamFormationShowSchema = z.object({
 const MatchPenaltyShootoutUpdateSchema = z.object({
   location: teamLocationSchema,
   index: z.int(),
-  penaltyGoal: penaltyGoalSchema
-})
+  penaltyGoal: penaltyGoalSchema,
+});
 
 export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.SessionRegister),
@@ -79,6 +79,9 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.TeamInfoUpdate, {
     data: TeamInfoUpdateSchema,
   }),
+
+  socketMsg(Mode.Control, SocketMessage.UndoMatchGoalScored),
+
   socketMsg(Mode.Control, SocketMessage.StartingSoonShow),
   socketMsg(Mode.Control, SocketMessage.StartingSoonHide),
   socketMsg(Mode.Control, SocketMessage.MatchScorecardShow),

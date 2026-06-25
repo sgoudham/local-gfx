@@ -6,8 +6,8 @@ const { state } = useOutputSocket();
   <main class="page">
     <CommsPlayers v-bind="state.home" class="team team-home" />
 
-    <MatchStats class="match-stats" />
-    <EventTimeline v-bind="state.home" class="match-events" />
+    <CommsMatchStats class="match-stats" />
+    <CommsEventTimeline v-bind="state.home" class="match-events" />
 
     <CommsPlayers v-bind="state.away" class="team team-away" />
   </main>
