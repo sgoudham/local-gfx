@@ -19,20 +19,16 @@ const goalScoredEventSchema = z.object({
     matchTime: matchTimeSchema
 });
 
-const penaltyShootoutEventSchema = z.object({
-    type: z.literal("penaltyShootout")
-});
-
 export const pendingSubSchema = z.tuple([playerSchema, playerSchema]);
-
-export const goalSchema = z.object({
-    player: playerSchema,
-    matchTime: matchTimeSchema
-});
 
 export const penaltyGoalSchema = z.object({
     state: tPenaltyStateSchema,
     player: playerSchema
+});
+
+export const goalSchema = z.object({
+    player: playerSchema,
+    matchTime: matchTimeSchema
 });
 
 export const playerStateSchema = z.object({
@@ -99,6 +95,12 @@ const substitutionMadeEventSchema = z.object({
     type: z.literal("substitution"),
     location: teamLocationSchema,
     subs: z.array(pendingSubSchema),
+    matchTime: matchTimeSchema
+});
+
+const penaltyShootoutEventSchema = z.object({
+    type: z.literal("penaltyShootout"),
+    goal: penaltyGoalSchema,
     matchTime: matchTimeSchema
 });
 

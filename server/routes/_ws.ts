@@ -107,6 +107,11 @@ export default defineWebSocketHandler({
                 penalties[penaltyShootoutData.index] =
                   penaltyShootoutData.penaltyGoal;
               }
+              s.events.push({
+                type: "penaltyShootout",
+                goal: penaltyShootoutData.penaltyGoal,
+                matchTime: s.matchTime,
+              });
             });
             break;
           case SocketMessage.MatchReset:
