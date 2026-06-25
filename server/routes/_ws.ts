@@ -8,6 +8,7 @@ import {
   OutputMessageSchema,
 } from "../schema/socket";
 import { ServerState } from "../state";
+import { isGoalScoredEvent } from "~~/shared/types/state";
 import { PongMessage } from "~~/shared/utils/constants";
 
 const animateMatchTimerIn = async (serverState: ServerState) => {
@@ -55,7 +56,7 @@ export default defineWebSocketHandler({
         switch (parsed.msg.type) {
           case SocketMessage.SessionRegister:
             peer.subscribe(Mode.Output);
-            serverState.syncState([Mode.Output]);
+            await serverState.syncState([Mode.Output]);
             break;
         }
         break;
@@ -64,7 +65,7 @@ export default defineWebSocketHandler({
         switch (parsed.msg.type) {
           case SocketMessage.SessionRegister:
             peer.subscribe(Mode.Control);
-            serverState.syncState([Mode.Control]);
+            await serverState.syncState([Mode.Control]);
             break;
 
           case SocketMessage.MatchTimerStart:
@@ -129,6 +130,18 @@ export default defineWebSocketHandler({
             break;
           case SocketMessage.MatchReset:
             await serverState.clear();
+            break;
+
+          case SocketMessage.UndoMatchGoalScored:
+            await serverState.patchState((s) => {
+              const goalEventIndex = s.events.findLastIndex(isGoalScoredEvent);
+              if (goalEventIndex >= 0) {
+                const [event] = s.events.splice(goalEventIndex, 1);
+                if (event && isGoalScoredEvent(event)) {
+                  s[event.player.location].goals.pop();
+                }
+              }
+            });
             break;
 
           case SocketMessage.ActiveFormationUpdate:

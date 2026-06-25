@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
 import getMinutes from "~/utils/getMinutes";
+import {
+  isGoalScoredEvent,
+  isPenaltyShootoutEvent,
+  isSubstitutionMadeEvent,
+} from "~~/shared/types/state";
 
 const { state } = useOutputSocket();
 
 const listRef = ref<HTMLElement | null>(null);
+
+const events = computed(() => [...state.value.events].reverse());
 
 const getState = (state: TPenaltyState) => {
   if (state === PenaltyState.GOAL) {
@@ -40,8 +47,8 @@ watch(
     <div class="container">
       <p class="events-heading">Match Events</p>
       <ul ref="listRef" class="overlay-list">
-        <li v-for="e in [...state.events].reverse()" class="event">
-          <div v-if="e.type === 'goalScored'">
+        <li v-for="e in events" class="event">
+          <div v-if="isGoalScoredEvent(e)">
             <div :class="['event-header', e.player.location]">
               <div>
                 {{ state[e.player.location].shortName }}
@@ -51,7 +58,7 @@ watch(
             ⚽️ GOAL: {{ getPlayer(e.player) }}
           </div>
 
-          <div v-if="e.type === 'penaltyShootout'">
+          <div v-if="isPenaltyShootoutEvent(e)">
             <div :class="['event-header', e.goal.player.location]">
               <div>
                 {{ state[e.goal.player.location].shortName }}
@@ -62,46 +69,48 @@ watch(
             {{ getPlayer(e.goal.player) }}
           </div>
 
-          <div v-if="e.type === 'substitution'">
-            <div :class="['event-header', e.location]">
-              <div>
-                {{ state[e.location].shortName }}
+          <template v-if="isSubstitutionMadeEvent(e)">
+            <div>
+              <div :class="['event-header', e.location]">
+                <div>
+                  {{ state[e.location].shortName }}
+                </div>
+                <div>{{ getMinutes(e.matchTime) }}'</div>
               </div>
-              <div>{{ getMinutes(e.matchTime) }}'</div>
+              🔺🔻 Substitution:
             </div>
-            🔺🔻 Substitution:
-          </div>
-          <div v-if="e.type === 'substitution'" class="substitution-details">
-            <div class="sub-group off-group">
-              <p class="group-label">Off</p>
+            <div class="substitution-details">
+              <div class="sub-group off-group">
+                <p class="group-label">Off</p>
 
-              <div
-                v-for="(sub, idx) in e.subs"
-                :key="`off-${idx}`"
-                class="sub-item"
-              >
-                <span class="arrow">▼</span>
-                <span>
-                  {{ getPlayer(sub[1]) }}
-                </span>
+                <div
+                  v-for="(sub, idx) in e.subs"
+                  :key="`off-${idx}`"
+                  class="sub-item"
+                >
+                  <span class="arrow">▼</span>
+                  <span>
+                    {{ getPlayer(sub[1]) }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="sub-group on-group">
+                <p class="group-label">On</p>
+
+                <div
+                  v-for="(sub, idx) in e.subs"
+                  :key="`on-${idx}`"
+                  class="sub-item"
+                >
+                  <span class="arrow">▲</span>
+                  <span>
+                    {{ getPlayer(sub[0]) }}
+                  </span>
+                </div>
               </div>
             </div>
-
-            <div class="sub-group on-group">
-              <p class="group-label">On</p>
-
-              <div
-                v-for="(sub, idx) in e.subs"
-                :key="`on-${idx}`"
-                class="sub-item"
-              >
-                <span class="arrow">▲</span>
-                <span>
-                  {{ getPlayer(sub[0]) }}
-                </span>
-              </div>
-            </div>
-          </div>
+          </template>
         </li>
       </ul>
     </div>

@@ -27,6 +27,14 @@ export const TeamLocation = {
   Away: "away",
 } as const;
 
+export const MatchEventKind = {
+  GoalScored: "goalScored",
+  Substitution: "substitution",
+  PenaltyShootout: "penaltyShootout",
+} as const;
+export type MatchEventType =
+  (typeof MatchEventKind)[keyof typeof MatchEventKind];
+
 export const Overlay = {
   StartingSoon: "startingSoon",
   MatchScorecard: "matchScorecard",
@@ -67,6 +75,9 @@ export const SocketMessage = {
   MatchPenaltyShootoutUpdate: "match.penaltyShootout.update",
   ActiveFormationUpdate: "activeFormation.update",
   TeamInfoUpdate: "team.info.update",
+
+  UndoMatchGoalScored: "undo.match.goalScored",
+
   StartingSoonShow: overlayMsg(Overlay.StartingSoon, "show"),
   StartingSoonHide: overlayMsg(Overlay.StartingSoon, "hide"),
   MatchScorecardShow: overlayMsg(Overlay.MatchScorecard, "show"),

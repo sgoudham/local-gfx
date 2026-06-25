@@ -11,9 +11,9 @@ const props = defineProps<{
 <template>
   <button
     :data-location="props.location"
-    :class="['button', { disabled: disabled }]"
-    @click="onClick"
-    :disabled
+    :class="['button', { disabled: props.disabled }]"
+    @click="props.onClick"
+    :disabled="props.disabled"
   >
     <slot />
   </button>
@@ -29,6 +29,7 @@ const props = defineProps<{
   --primary-colour: var(--away-colour-1);
   --secondary-colour: var(--away-colour-2);
 }
+
 .button {
   background: #d32f2f;
   border: 0;
