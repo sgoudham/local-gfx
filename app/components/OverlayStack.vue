@@ -2,8 +2,10 @@
 import { SocketMessage, Overlay } from "#imports";
 import ToggleOverlayButton from "./ToggleOverlayButton.vue";
 import SelectedPlayer from "./SelectedPlayer.vue";
+import PendingSubList from "./PendingSubList.vue";
+import type { TeamLocation } from "~~/shared/types/data.js";
 
-const { state, selectedPlayer } = useClientState();
+const { state, selectedPlayer, pendingSubs } = useClientState();
 const { publish } = useSocket(Mode.Control);
 
 const isDev = import.meta.dev;
@@ -71,6 +73,12 @@ const matchReset = () => {
   selectedPlayer.value = undefined;
   publish(SocketMessage.MatchReset);
 };
+
+function cancelPendingSub(index: number, location: TeamLocation) {
+  pendingSubs.value[location] = pendingSubs.value[location].filter(
+    (_, i) => i !== index,
+  );
+}
 </script>
 
 <template>
@@ -126,8 +134,24 @@ const matchReset = () => {
     >
       <ToggleOverlayButton v-bind="overlay" class="item" />
     </li>
-    <li class="overlay-list-item" style="margin-top: 8px">
+    <li class="overlay-list-item">
       <SelectedPlayer />
+    </li>
+    <li class="overlay-list-item pending-list-item">
+      <PendingSubList
+        v-if="pendingSubs.home.length > 0"
+        class="item"
+        :location="TeamLocation.Home"
+        :subs="pendingSubs.home"
+        @cancel="(index) => cancelPendingSub(index, TeamLocation.Home)"
+      />
+      <PendingSubList
+        v-if="pendingSubs.away.length > 0"
+        class="item"
+        :location="TeamLocation.Away"
+        :subs="pendingSubs.away"
+        @cancel="(index) => cancelPendingSub(index, TeamLocation.Away)"
+      />
     </li>
   </ul>
 </template>
@@ -150,6 +174,11 @@ const matchReset = () => {
   width: 100%;
   gap: 2px;
 }
+
+.pending-list-item {
+  flex-direction: column;
+}
+
 .item {
   flex-grow: 1;
   gap: 2px;

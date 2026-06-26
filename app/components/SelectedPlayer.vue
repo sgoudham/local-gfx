@@ -4,21 +4,8 @@ import { SocketMessage } from "#imports";
 const { publish } = useSocket(Mode.Control);
 const { state, selectedPlayer } = useClientState();
 
-const placeholderPlayer: Player = {
-  id: "placeholder",
-  number: 0,
-  forename: "Awaiting",
-  surname: "Selection",
-  location: "home",
-};
-
-const displayPlayer = computed(() => selectedPlayer.value || placeholderPlayer);
-const isPlaceholderPlayer = computed(
-  () => displayPlayer.value === placeholderPlayer,
-);
-
 const handleGoal = () => {
-  if (isPlaceholderPlayer.value || !selectedPlayer.value) return;
+  if (!selectedPlayer.value) return;
   publish(SocketMessage.MatchGoalScored, {
     data: {
       player: selectedPlayer.value,
@@ -28,55 +15,57 @@ const handleGoal = () => {
 };
 
 const handleYellowCard = () => {
-  if (isPlaceholderPlayer.value || !selectedPlayer.value) return;
+  if (!selectedPlayer.value) return;
   // TODO
 };
 
 const handleRedCard = () => {
-  if (isPlaceholderPlayer.value || !selectedPlayer.value) return;
+  if (!selectedPlayer.value) return;
   // TODO
 };
 </script>
 
 <template>
-  <div class="selected-player" :data-location="displayPlayer.location">
-    <div class="player-row">
-      <div class="player-line">
-        {{ displayPlayer.number }}' {{ displayPlayer.forename }}
-        {{ displayPlayer.surname }}
+  <template v-if="selectedPlayer">
+    <div class="selected-player" :data-location="selectedPlayer.location">
+      <div class="player-row">
+        <div class="player-line">
+          {{ selectedPlayer.number }}' {{ selectedPlayer.forename }}
+          {{ selectedPlayer.surname }}
+        </div>
+        <span class="team-label">
+          {{ state[selectedPlayer.location].shortName }}
+        </span>
       </div>
-      <span class="team-label">
-        {{ state[displayPlayer.location].shortName }}
-      </span>
-    </div>
 
-    <div class="actions">
-      <button
-        class="action-button goal"
-        @click="handleGoal"
-        :disabled="isPlaceholderPlayer"
-        title="Goal"
-      >
-        ⚽
-      </button>
-      <button
-        class="action-button yellow-card"
-        @click="handleYellowCard"
-        disabled
-        title="Yellow Card"
-      >
-        🟨
-      </button>
-      <button
-        class="action-button red-card"
-        @click="handleRedCard"
-        disabled
-        title="Red Card"
-      >
-        🟥
-      </button>
+      <div class="actions">
+        <button
+          class="action-button goal"
+          @click="handleGoal"
+          :disabled="!selectedPlayer"
+          title="Goal"
+        >
+          ⚽
+        </button>
+        <button
+          class="action-button yellow-card"
+          @click="handleYellowCard"
+          disabled
+          title="Yellow Card"
+        >
+          🟨
+        </button>
+        <button
+          class="action-button red-card"
+          @click="handleRedCard"
+          disabled
+          title="Red Card"
+        >
+          🟥
+        </button>
+      </div>
     </div>
-  </div>
+  </template>
 </template>
 
 <style lang="css" scoped>
@@ -131,10 +120,7 @@ const handleRedCard = () => {
 
 .team-label {
   flex: 0 0 auto;
-  font-size: 1.1em;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  opacity: 0.9;
 }
 
 .number-row {
@@ -147,17 +133,14 @@ const handleRedCard = () => {
 .player-line {
   flex: 1 1 auto;
   min-width: 0;
-  font-size: 1.2em;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  opacity: 0.95;
 }
 
 .player-number {
-  font-size: 1em;
   font-weight: 700;
   line-height: 1;
   opacity: 0.9;
@@ -173,10 +156,10 @@ const handleRedCard = () => {
 .action-button {
   flex: 1 1 0;
   min-width: 0;
-  height: 2.75em;
+  height: 2em;
   border: none;
   border-radius: 0.5em;
-  font-size: 1.25em;
+  font-size: 1em;
   cursor: pointer;
   background: var(--team-button-colour);
   color: inherit;

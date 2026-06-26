@@ -8,6 +8,11 @@ import type {
   TeamState,
 } from "../../shared/types/state";
 
+export type PendingSubs = {
+  home: PendingSub[];
+  away: PendingSub[];
+};
+
 export type EditTeamFormProps = Pick<
   TeamComplete,
   "location" | "players" | "substitutes" | "manager" | "captain"
