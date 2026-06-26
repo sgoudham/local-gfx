@@ -9,7 +9,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "gen": "ts-to-zod --all",
-    "gen:state": "tsx scripts/extractPlayerIds.ts server/assets/initialData.json"
+    "gen:state": "node scripts/extractPlayerIds.js server/assets/initialData.json"
   },
   "dependencies": {
     "@nuxt/fonts": "0.14.0",
@@ -24,7 +24,6 @@
     "@types/node": "^25.7.0",
     "prettier": "3.8.3",
     "ts-to-zod": "^5.1.0",
-    "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   }
 }

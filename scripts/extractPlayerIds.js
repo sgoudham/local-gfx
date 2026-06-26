@@ -1,22 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
 
-interface Player {
-  id: string;
-}
-
-interface PlayerIdOutput {
-  players: Array<{ id: string }>;
-  substitutes: Array<{ id: string }>;
-}
-
 const inputFile = process.argv[2];
 
 try {
   for (const team of ["home", "away"]) {
     const filePath = path.resolve(inputFile);
     console.log(filePath);
-    const data: Player[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
     const playerIds = data[team].players.map((player) => ({
       id: player.id,
