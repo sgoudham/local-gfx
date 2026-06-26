@@ -132,7 +132,7 @@ const headline =
 const tickerItems = [
   {
     id: 1,
-    text: "Malones goalkeeper, Danny Kelly, ruled out for final after sustaining stair-related arm injury. He is set to be replaced by Ciaran McKee.",
+    text: "Malones goalkeeper, Danny Kelly, ruled out for final after sustaining stair-related arm injury. He will be replaced by Ciaran McKee.",
   },
   {
     id: 2,
@@ -140,8 +140,16 @@ const tickerItems = [
   },
   {
     id: 3,
-    text: "In a shock announcement, Malones manager Vinnie Collins stepping down and will be replaced by ex-manager Jamie Dunn.",
+    text: "In a shock announcement, Malones manager Vinnie Collins has been replaced by former manager Jamie Dunn.",
   },
+  {
+    id: 4,
+    text: "Malones star, James Hazlett, unavailable for the game and will miss out on a chance to extend his lead as top scorer.",
+  },
+  {
+    id: 5,
+    text: "Afters to take place at 19:00 Seventy Three, 73 Bath Street, Glasgow City Centre."
+  }
 ];
 
 // --- Stat panels ---
