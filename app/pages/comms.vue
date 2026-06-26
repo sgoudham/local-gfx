@@ -1,5 +1,6 @@
 <script setup lang="ts">
 useSocket(Mode.Output);
+useSocket(Mode.Donations);
 const { state } = useClientState();
 </script>
 

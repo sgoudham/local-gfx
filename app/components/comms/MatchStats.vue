@@ -1,13 +1,15 @@
 <script setup lang="ts">
-const { state } = useClientState();
+const { state, fundraisingInfo } = useClientState();
 </script>
 
 <template>
   <section class="match-stats-panel">
-    <WindowFrame src="/output" class="frame">
-      <h2 class="preview">Graphics Preview</h2>
-    </WindowFrame>
     <div class="container">
+      <div class="donation-info">
+        <p>Total Raised: £{{ fundraisingInfo.totalRaised }}</p>
+        <p>Target: £{{ fundraisingInfo.target }}</p>
+      </div>
+
       <div class="match-timer">
         {{ state.matchTime.formatted }}
       </div>
@@ -74,6 +76,9 @@ const { state } = useClientState();
         </div>
       </div>
     </div>
+    <WindowFrame src="/output" class="frame">
+      <h2 class="preview">Graphics Preview</h2>
+    </WindowFrame>
   </section>
 </template>
 
@@ -108,6 +113,13 @@ const { state } = useClientState();
   justify-content: center;
   flex-direction: column;
   gap: 2dvh;
+}
+
+.donation-info {
+  font-size:  calc(var(--base-font-size) + 10px);
+  p {
+    margin: 0;
+  }
 }
 
 .match-timer {
