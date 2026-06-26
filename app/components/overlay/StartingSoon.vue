@@ -132,7 +132,7 @@ const headline =
 const tickerItems = [
   {
     id: 1,
-    text: "Malones goalkeeper, Danny Kelly, ruled out for final after sustaining stair-related arm injury. He is set to be replaced by ...",
+    text: "Malones goalkeeper, Danny Kelly, ruled out for final after sustaining stair-related arm injury. He is set to be replaced by Ciaran McKee.",
   },
   {
     id: 2,
@@ -140,15 +140,7 @@ const tickerItems = [
   },
   {
     id: 3,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien augue. Donec vel sapien augue.",
-  },
-  {
-    id: 4,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien augue. Donec vel sapien augue.",
-  },
-  {
-    id: 5,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel sapien augue. Donec vel sapien augue.",
+    text: "In a shock announcement, Malones manager Vinnie Collins stepping down and will be replaced by ex-manager Jamie Dunn.",
   },
 ];
 
