@@ -21,7 +21,7 @@ async function show() {
         {
           opacity: 1,
           y: 0,
-          duration: 0.5,
+          duration: 0.75,
           ease: "power2.out",
         },
       );
@@ -44,7 +44,7 @@ async function hide() {
         {
           opacity: 0,
           y: -10,
-          duration: 0.5,
+          duration: 0.75,
           ease: "power2.out",
           onComplete: () => {
             rendered.value = false;
@@ -251,6 +251,7 @@ watch(
   content: "";
   position: absolute;
   inset: -50% -80%;
+  z-index: 1;
 
   background: linear-gradient(
     110deg,
@@ -261,7 +262,7 @@ watch(
   );
 
   transform: translateX(-60%);
-  animation: glossy-shine 10s ease-in-out infinite;
+  animation: glossy-shine 7s ease-in-out infinite;
 
   pointer-events: none;
 }
@@ -271,6 +272,7 @@ watch(
   position: absolute;
   inset: 1px;
   border-radius: inherit;
+  z-index: 2;
 
   background: linear-gradient(
     180deg,
@@ -287,5 +289,19 @@ watch(
   mix-blend-mode: soft-light;
 
   pointer-events: none;
+}
+
+@keyframes glossy-shine {
+  0% {
+    transform: translateX(-60%);
+  }
+
+  70% {
+    transform: translateX(120%);
+  }
+
+  100% {
+    transform: translateX(120%);
+  }
 }
 </style>

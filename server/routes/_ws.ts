@@ -292,7 +292,7 @@ export default defineWebSocketHandler({
             await serverState.patchState((s) => {
               s.graphics.donationUpdate.visible = true;
             });
-            await new Promise((resolve) => setTimeout(resolve, 6500));
+            await new Promise((resolve) => setTimeout(resolve, 15000));
             await serverState.patchState((s) => {
               s.graphics.donationUpdate.visible = false;
             });

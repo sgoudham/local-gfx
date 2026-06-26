@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { getFormationPosition } from "~/utils/getFormationPosition";
+
 const { publish } = useSocket(Mode.Control);
-const { state, selectedPlayer } = useClientState();
+const { state, selectedPlayer, pendingSubs } = useClientState();
 
 const props = defineProps<TeamComplete>();
 
@@ -12,9 +13,10 @@ const sortedSubs = computed(() =>
     .filter((s) => s.forename && s.surname)
     .sort((a, b) => a.number - b.number),
 );
-const pendingSubs = ref<PendingSub[]>([]);
 const hoveredPlayerId = ref<string | null>(null);
-const hasPendingSubs = computed(() => pendingSubs.value.length === 0);
+const hasPendingSubs = computed(
+  () => pendingSubs.value[props.location].length === 0,
+);
 const activeFormation = computed(() => props.activeFormation);
 
 const dragId = ref<string | null>(null);
@@ -24,7 +26,7 @@ const dialogRef = ref<HTMLDialogElement | null>(null);
 const dialogKey = ref(0);
 
 function isPendingLocked(playerId: string) {
-  return pendingSubs.value.some(
+  return pendingSubs.value[props.location].some(
     ([subIn, playerOut]) => subIn.id === playerId || playerOut.id === playerId,
   );
 }
@@ -86,7 +88,7 @@ function stopDrag(_e: MouseEvent) {
           });
         }
       } else {
-        pendingSubs.value.push([draggedSub.value, target]);
+        pendingSubs.value[props.location].push([draggedSub.value, target]);
       }
     }
   }
@@ -98,10 +100,6 @@ function stopDrag(_e: MouseEvent) {
 }
 
 // ── Substitution ─────────────────────────────────────────────
-
-function cancelPendingSub(index: number) {
-  pendingSubs.value = pendingSubs.value.filter((_, i) => i !== index);
-}
 
 function onPlayerMouseEnter(player: Player) {
   if (!draggedSub.value) return;
@@ -118,10 +116,10 @@ function performSub() {
   publish(SocketMessage.SubstitutionShow, {
     data: {
       location: props.location,
-      subs: pendingSubs.value,
+      subs: pendingSubs.value[props.location],
     },
   });
-  pendingSubs.value = [];
+  pendingSubs.value[props.location] = [];
 }
 
 function onTeamSave(
@@ -350,25 +348,6 @@ function openDialog() {
       >
         {{ player.number }}
       </button>
-
-      <div v-if="pendingSubs.length > 0" class="pending-subs">
-        <ul class="pending-list">
-          <li
-            v-for="(item, index) in pendingSubs"
-            :key="`${item[0].id}-${item[1].id}-${index}`"
-            class="pending-item"
-          >
-            <span>
-              {{ item[0].number }}: {{ item[0].forename }}
-              {{ item[0].surname }} -> {{ item[1].number }}:
-              {{ item[1].forename }} {{ item[1].surname }}
-            </span>
-            <Button class="pending-cancel" v-on:click="cancelPendingSub(index)">
-              Cancel
-            </Button>
-          </li>
-        </ul>
-      </div>
     </div>
 
     <!-- Bench -->
@@ -512,61 +491,6 @@ function openDialog() {
   gap: 10px;
   flex-wrap: nowrap;
   padding-bottom: 4px;
-}
-
-.pending-subs {
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  bottom: 8px;
-  max-height: 92px;
-  overflow-y: auto;
-  padding: 6px 8px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.72);
-  color: #fff;
-}
-
-.pending-subs p {
-  margin: 0 0 4px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.pending-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.pending-item {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.3;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  gap: 8px;
-}
-
-.pending-item span {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.pending-cancel {
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 4px;
-  background: transparent;
-  font-size: 11px;
-  line-height: 1;
-  white-space: nowrap;
-  align-self: start;
-  padding: 3px 6px;
-  cursor: pointer;
 }
 
 .sub {
