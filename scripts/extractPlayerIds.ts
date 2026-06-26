@@ -23,10 +23,13 @@ try {
     const players = playerIds.slice(0, 11);
     const substitutes = playerIds.slice(11);
 
-    console.log(`--- ${team} players ---`)
-    console.log(JSON.stringify(players));
-    console.log(`--- ${team} subs ---`)
-    console.log(JSON.stringify(substitutes));
+    const output = {
+      players,
+      substitutes
+    }
+
+    console.log(`--- ${team} ---`)
+    console.log(JSON.stringify(output));
   }
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error);
