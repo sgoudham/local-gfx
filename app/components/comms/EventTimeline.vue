@@ -69,6 +69,17 @@ watch(
             {{ getPlayer(e.goal.player) }}
           </div>
 
+          <div v-if="isCardGivenEvent(e)">
+            <div :class="['event-header', e.player.location]">
+              <div>
+                {{ state[e.player.location].shortName }}
+              </div>
+              <div>{{ getMinutes(e.matchTime) }}'</div>
+            </div>
+            {{ e.card === Card.Yellow ? `🟨 YELLOW CARD` : `🟥 RED CARD` }}:
+            {{ getPlayer(e.player) }}
+          </div>
+
           <template v-if="isSubstitutionMadeEvent(e)">
             <div>
               <div :class="['event-header', e.location]">

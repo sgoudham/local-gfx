@@ -5,7 +5,7 @@ import SelectedPlayer from "./SelectedPlayer.vue";
 import PendingSubList from "./PendingSubList.vue";
 import type { TeamLocation } from "~~/shared/types/data.js";
 
-const { state, selectedPlayer, pendingSubs } = useClientState();
+const { state, selectedPlayerId, pendingSubs } = useClientState();
 const { publish } = useSocket(Mode.Control);
 
 const isDev = import.meta.dev;
@@ -70,7 +70,7 @@ const startHalfMatchTimer = () => {
   publish(SocketMessage.MatchTimerHalfTime);
 };
 const matchReset = () => {
-  selectedPlayer.value = undefined;
+  selectedPlayerId.value = undefined;
   publish(SocketMessage.MatchReset);
 };
 

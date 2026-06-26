@@ -134,7 +134,7 @@ export class ServerState {
     return players.flatMap((playerState) => {
       const player = playersById.get(playerState.id);
       if (!player) return [];
-      return [player];
+      return [{ ...player, cards: playerState.cards }];
     });
   }
 
@@ -181,6 +181,7 @@ export class ServerState {
   private extractPlayerState(player: Player): PlayerState {
     return {
       id: player.id,
+      cards: player.cards
     };
   }
 

@@ -1,4 +1,5 @@
 export type TeamLocation = "home" | "away";
+export type Card = "yellow" | "red";
 
 export type Player = {
   id: string;
@@ -6,6 +7,7 @@ export type Player = {
   surname: string;
   /** @integer */
   number: number;
+  cards: Card[]
   location: TeamLocation;
 };
 

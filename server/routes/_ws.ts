@@ -112,10 +112,38 @@ export default defineWebSocketHandler({
             await serverState.patchState((s) => {
               s[goalScoredData.player.location].goals.push(goalScoredData);
               s.events.push({
-                type: "goalScored",
+                type: MatchEventKind.GoalScored,
                 player: goalScoredData.player,
                 matchTime: goalScoredData.matchTime,
               });
+            });
+            break;
+          case SocketMessage.UndoMatchGoalScored:
+            await serverState.patchState((s) => {
+              const goalEventIndex = s.events.findLastIndex(isGoalScoredEvent);
+              if (goalEventIndex >= 0) {
+                const [event] = s.events.splice(goalEventIndex, 1);
+                if (event && isGoalScoredEvent(event)) {
+                  s[event.player.location].goals.pop();
+                }
+              }
+            });
+            break;
+          case SocketMessage.MatchCardGiven:
+            const cardData = parsed.msg.data;
+            await serverState.patchState((s) => {
+              const player = s[cardData.player.location].players.find(
+                (p) => p.id === cardData.player.id,
+              );
+              if (player) {
+                player.cards.push(cardData.card);
+                s.events.push({
+                  type: MatchEventKind.CardGiven,
+                  card: cardData.card,
+                  player: cardData.player,
+                  matchTime: s.matchTime,
+                });
+              }
             });
             break;
           case SocketMessage.MatchPenaltyShootoutUpdate:
@@ -127,21 +155,21 @@ export default defineWebSocketHandler({
 
               const eventIndex = s.events.findIndex(
                 (event) =>
-                  event.type === "penaltyShootout" &&
+                  isPenaltyShootoutEvent(event) &&
                   event.goal.player.location === penaltyShootoutData.location &&
                   event.slotIndex === penaltyShootoutData.index,
               );
 
               if (eventIndex >= 0) {
                 s.events[eventIndex] = {
-                  type: "penaltyShootout",
+                  type: MatchEventKind.PenaltyShootout,
                   goal: penaltyShootoutData.penaltyGoal,
                   slotIndex: penaltyShootoutData.index,
                   matchTime: s.matchTime,
                 };
               } else {
                 s.events.push({
-                  type: "penaltyShootout",
+                  type: MatchEventKind.PenaltyShootout,
                   goal: penaltyShootoutData.penaltyGoal,
                   slotIndex: penaltyShootoutData.index,
                   matchTime: s.matchTime,
@@ -151,18 +179,6 @@ export default defineWebSocketHandler({
             break;
           case SocketMessage.MatchReset:
             await serverState.clear();
-            break;
-
-          case SocketMessage.UndoMatchGoalScored:
-            await serverState.patchState((s) => {
-              const goalEventIndex = s.events.findLastIndex(isGoalScoredEvent);
-              if (goalEventIndex >= 0) {
-                const [event] = s.events.splice(goalEventIndex, 1);
-                if (event && isGoalScoredEvent(event)) {
-                  s[event.player.location].goals.pop();
-                }
-              }
-            });
             break;
 
           case SocketMessage.ActiveFormationUpdate:

@@ -29,7 +29,7 @@ const captainId = computed(() => props.captain.id);
           <ul>
             <li v-for="player in visiblePlayers" :key="player.id">
               {{ player.number }}. {{ player.forename }} {{ player.surname }}
-              {{ player.id === captainId ? "(C)" : "" }}
+              {{ player.id === captainId ? "(C)" : "" }} {{ formatCards(player.cards) }}
             </li>
           </ul>
           <h2>Substitutes</h2>
