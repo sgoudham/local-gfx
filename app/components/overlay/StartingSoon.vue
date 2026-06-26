@@ -822,7 +822,7 @@ onMounted(() => {
   white-space: nowrap;
   min-width: max-content;
   flex-shrink: 0;
-  animation: scroll-left 60s linear infinite;
+  animation: scroll-left 70s linear infinite;
 }
 
 .ticker-text {
