@@ -14,6 +14,7 @@ const sortedSubs = computed(() =>
     .sort((a, b) => a.number - b.number),
 );
 const hoveredPlayerId = ref<string | null>(null);
+const hoveredSubId = ref<string | null>(null);
 const hasPendingSubs = computed(
   () => pendingSubs.value[props.location].length === 0,
 );
@@ -93,10 +94,23 @@ function stopDrag(_e: MouseEvent) {
     }
   }
 
+  if (draggedSub.value && hoveredSubId.value && dragSource.value === "pitch") {
+    const benchTarget = sortedSubs.value.find((s) => s.id === hoveredSubId.value);
+
+    if (
+      benchTarget &&
+      !isPendingLocked(draggedSub.value.id) &&
+      !isPendingLocked(benchTarget.id)
+    ) {
+      pendingSubs.value[props.location].push([benchTarget, draggedSub.value]);
+    }
+  }
+
   dragId.value = null;
   dragSource.value = null;
   draggedSub.value = null;
   hoveredPlayerId.value = null;
+  hoveredSubId.value = null;
 }
 
 // ── Substitution ─────────────────────────────────────────────
@@ -110,6 +124,19 @@ function onPlayerMouseEnter(player: Player) {
   }
 
   hoveredPlayerId.value = player.id;
+  hoveredSubId.value = null;
+}
+
+function onBenchMouseEnter(sub: Player) {
+  if (!draggedSub.value || dragSource.value !== "pitch") return;
+
+  if (isPendingLocked(sub.id) || isPendingLocked(draggedSub.value.id)) {
+    hoveredSubId.value = null;
+    return;
+  }
+
+  hoveredSubId.value = sub.id;
+  hoveredPlayerId.value = null;
 }
 
 function performSub() {
@@ -361,8 +388,11 @@ function openDialog() {
           :class="{
             dragging: dragId === sub.id && dragSource === 'bench',
             'pending-locked': isPendingLocked(sub.id),
+            'sub-target': hoveredSubId === sub.id && dragSource === 'pitch',
           }"
           @mousedown.prevent="startBenchDrag($event, sub)"
+          @mouseenter="onBenchMouseEnter(sub)"
+          @mouseleave="hoveredSubId = null"
         >
           {{ sub.number }}
         </div>
@@ -491,6 +521,7 @@ function openDialog() {
   gap: 10px;
   flex-wrap: nowrap;
   padding-bottom: 4px;
+  padding-top: 4px;
 }
 
 .sub {
@@ -518,5 +549,10 @@ function openDialog() {
 .sub.pending-locked {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.sub.sub-target {
+  outline: 2px solid #000000;
+  transform: scale(1.12);
 }
 </style>
