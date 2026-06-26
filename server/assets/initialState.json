@@ -12,7 +12,7 @@
       { "id": "40f62868-47cc-4b98-96d9-065f0d18b997", "cards": [] },
       { "id": "6f93466d-933a-4053-8788-d76e65ea2279", "cards": [] },
       { "id": "5d91cf9b-3d2a-4276-963b-711725ec0c5d", "cards": [] },
-      { "id": "ca82ac5d-5221-48ca-bd09-6f90f97bf078", "cards": [] },
+      { "id": "bb4ef152-efcb-472e-aead-a1ed0c10b921", "cards": [] },
       { "id": "5eff02e2-04f0-41c4-974f-7f9c64e0c53f", "cards": [] },
       { "id": "47ef94c8-14a6-43c8-b181-50d4f908106b", "cards": [] },
       { "id": "84a92695-b1d3-4324-b18a-aa477c798ffa", "cards": [] },
@@ -21,12 +21,11 @@
       { "id": "b126d1b1-eb56-4944-9088-171845e61df8", "cards": [] }
     ],
     "substitutes": [
-      { "id": "bb4ef152-efcb-472e-aead-a1ed0c10b921", "cards": [] },
-      { "id": "f2a0d680-03cf-4a31-88bf-78deabea514c", "cards": [] },
       { "id": "e468c2f7-d374-4940-a175-38fea4114d9e", "cards": [] },
       { "id": "b0a636b4-bc29-410c-9e1d-611805ef7ec9", "cards": [] },
       { "id": "3d648f26-7338-4d32-9854-2bac7bf4dae7", "cards": [] },
-      { "id": "3f769c5c-50c6-4ce7-8f51-633f11e9e748", "cards": [] }
+      { "id": "3f769c5c-50c6-4ce7-8f51-633f11e9e748", "cards": [] },
+      { "id": "bc1f4a08-dd46-46ef-bcf9-4d63e107227d", "cards": [] }
     ],
     "goals": [],
     "penalties": []
@@ -50,7 +49,9 @@
       { "id": "d53bf826-2cb7-4d15-8675-d0a17abab03e", "cards": [] },
       { "id": "5d8cd745-a930-45e4-8944-e9052fbf0137", "cards": [] },
       { "id": "f5b34f3b-f3a4-4ea3-8f87-fcb50b750361", "cards": [] },
-      { "id": "eb73634d-6664-4de1-b6f3-41adf0071614", "cards": [] }
+      { "id": "eb73634d-6664-4de1-b6f3-41adf0071614", "cards": [] },
+      { "id": "f2a0d680-03cf-4a31-88bf-78deabea514c", "cards": [] },
+      { "id": "ca82ac5d-5221-48ca-bd09-6f90f97bf078", "cards": [] }
     ],
     "goals": [],
     "penalties": []
