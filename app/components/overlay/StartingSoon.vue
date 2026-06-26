@@ -148,8 +148,8 @@ const tickerItems = [
   },
   {
     id: 5,
-    text: "Afters to take place at 19:00 Seventy Three, 73 Bath Street, Glasgow City Centre."
-  }
+    text: "Afters to take place at 19:00 Seventy Three, 73 Bath Street, Glasgow City Centre.",
+  },
 ];
 
 // --- Stat panels ---
@@ -159,10 +159,9 @@ interface StatPanel {
 }
 
 const statPanels: StatPanel[] = [
-  { id: "h2h",        label: "YCF Head-to-Head" },
-  { id: "form",       label: "Recent Form"       },
+  { id: "h2h", label: "YCF Head-to-Head" },
   { id: "topscorers", label: "Top Scorers" },
-  { id: "fundraiser", label: "Charity Efforts" }
+  { id: "fundraiser", label: "Charity Efforts" },
 ];
 
 const activePanelIndex = ref(0);
@@ -236,43 +235,21 @@ onMounted(() => {
             <div class="stat">
               <div class="stat-label">2024</div>
               <div class="stat-h2h">
+                <span class="form-result w">W</span>
                 <div class="stat-h2h-team">MAL</div>
                 <div class="stat-h2h-score">5 - 4</div>
                 <div class="stat-h2h-team">DUN</div>
+                <span class="form-result l">L</span>
               </div>
               <div class="stat-label">2025</div>
               <div class="stat-h2h">
+                <span class="form-result w">W</span>
                 <div class="stat-h2h-team">MAL</div>
                 <div class="stat-h2h-score">0 - 0</div>
                 <div class="stat-h2h-team">DUN</div>
+                <span class="form-result l">L</span>
               </div>
               <div class="stat-label-pens">(MAL won 4-3 on pens)</div>
-            </div>
-          </template>
-
-          <!-- Form guide panel -->
-          <template v-else-if="activePanel.id === 'form'">
-            <div class="stat">
-              <div class="form-row">
-                <span class="form-team">DUN</span>
-                <span
-                  v-for="(r, i) in ['L', 'L']"
-                  :key="i"
-                  class="form-result"
-                  :class="r.toLowerCase()"
-                  >{{ r }}</span
-                >
-              </div>
-              <div class="form-row">
-                <span class="form-team">MAL</span>
-                <span
-                  v-for="(r, i) in ['W', 'W']"
-                  :key="i"
-                  class="form-result"
-                  :class="r.toLowerCase()"
-                  >{{ r }}</span
-                >
-              </div>
             </div>
           </template>
 
@@ -306,15 +283,23 @@ onMounted(() => {
           <template
             v-else-if="activePanel.id === 'fundraiser' && fundraisingInfo"
           >
-            <div class="stat">
+            <section class="fundraiser">
               <div class="fundraiser-charity">Refuweegee</div>
-              <div class="fundraiser-total">
-                £{{ fundraisingInfo.totalRaised }}
+              <div class="stat">
+                <div class="fundraiser-total">
+                  £{{ fundraisingInfo.totalRaised }}
+                </div>
+                <div class="fundraiser-label">
+                  raised so far of £{{ fundraisingInfo.target }} target
+                </div>
               </div>
-              <div class="fundraiser-label">
-                raised so far of £{{ fundraisingInfo.target }} target
+              <div class="stat">
+                <div class="fundraiser-total">
+                  {{ fundraisingInfo.donationCount }}
+                </div>
+                <div class="fundraiser-label">total donations so far</div>
               </div>
-            </div>
+            </section>
           </template>
         </div>
       </Transition>
@@ -584,7 +569,8 @@ onMounted(() => {
   padding: 15px;
   border-radius: 8px;
   align-items: center;
-  max-height: 80%;
+  max-height: 90%;
+  min-width: 90%;
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: none;
@@ -592,7 +578,7 @@ onMounted(() => {
 
 .stat-label {
   color: var(--text-color);
-  margin: 10px 0 -10px 0;
+  margin: 5px 0 -5px 0;
 }
 
 .stat-h2h {
@@ -693,9 +679,11 @@ onMounted(() => {
   font-weight: bold;
 }
 
-.fundraiser-charity {
-  font-size: 0.8em;
-  opacity: 0.65;
+.fundraiser {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
 }
 
 .fundraiser-total {

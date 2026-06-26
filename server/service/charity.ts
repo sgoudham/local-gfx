@@ -73,6 +73,7 @@ export class Charity {
         totalRaised: 0,
         target: 0,
         percentage: 0,
+        donationCount: 0
       };
     }
 
@@ -92,6 +93,7 @@ export class Charity {
       totalRaised: data.grandTotalRaisedExcludingGiftAid,
       target: data.fundraisingTarget,
       percentage: data.totalRaisedPercentageOfFundraisingTarget,
+      donationCount: data.donationCount
     };
   }
 }
