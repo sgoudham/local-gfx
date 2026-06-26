@@ -2,10 +2,8 @@
 import { SocketMessage, Overlay } from "#imports";
 import ToggleOverlayButton from "./ToggleOverlayButton.vue";
 import SelectedPlayer from "./SelectedPlayer.vue";
-import PendingSubList from "./PendingSubList.vue";
-import type { TeamLocation } from "~~/shared/types/data.js";
 
-const { state, selectedPlayerId, pendingSubs } = useClientState();
+const { state, selectedPlayerId } = useClientState();
 const { publish } = useSocket(Mode.Control);
 
 const isDev = import.meta.dev;
@@ -74,11 +72,6 @@ const matchReset = () => {
   publish(SocketMessage.MatchReset);
 };
 
-function cancelPendingSub(index: number, location: TeamLocation) {
-  pendingSubs.value[location] = pendingSubs.value[location].filter(
-    (_, i) => i !== index,
-  );
-}
 </script>
 
 <template>
@@ -136,22 +129,6 @@ function cancelPendingSub(index: number, location: TeamLocation) {
     </li>
     <li class="overlay-list-item">
       <SelectedPlayer />
-    </li>
-    <li class="overlay-list-item pending-list-item">
-      <PendingSubList
-        v-if="pendingSubs.home.length > 0"
-        class="item"
-        :location="TeamLocation.Home"
-        :subs="pendingSubs.home"
-        @cancel="(index) => cancelPendingSub(index, TeamLocation.Home)"
-      />
-      <PendingSubList
-        v-if="pendingSubs.away.length > 0"
-        class="item"
-        :location="TeamLocation.Away"
-        :subs="pendingSubs.away"
-        @cancel="(index) => cancelPendingSub(index, TeamLocation.Away)"
-      />
     </li>
   </ul>
 </template>

@@ -36,9 +36,14 @@ const formatSubstitution = (sub: PendingSub) =>
         class="pending-item"
       >
         <span class="pending-text" :title="formatSubstitution(item)">
-          <span class="pending-off">▼ {{ formatPlayer(item[1]) }}</span>
-          <span class="pending-divider">|</span>
-          <span class="pending-on">▲ {{ formatPlayer(item[0]) }}</span>
+          <div class="pending-line">
+            <span class="pending-divider">▼</span>
+            <span class="pending-off">{{ formatPlayer(item[1]) }}</span>
+          </div>
+          <div class="pending-line">
+            <span class="pending-divider">▲</span>
+            <span class="pending-off">{{ formatPlayer(item[0]) }}</span>
+          </div>
         </span>
         <Button
           class="pending-cancel"

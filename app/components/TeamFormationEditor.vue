@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getFormationPosition } from "~/utils/getFormationPosition";
+import type { TeamLocation } from "~~/shared/types/data";
 
 const { publish } = useSocket(Mode.Control);
 const { state, selectedPlayerId, pendingSubs } = useClientState();
@@ -32,6 +33,11 @@ function isPendingLocked(playerId: string) {
   );
 }
 
+function cancelPendingSub(index: number, location: TeamLocation) {
+  pendingSubs.value[location] = pendingSubs.value[location].filter(
+    (_, i) => i !== index,
+  );
+}
 // ── Formations ──────────────────────────────────────────────
 
 function applyFormation(key: FormationKey) {
@@ -95,7 +101,9 @@ function stopDrag(_e: MouseEvent) {
   }
 
   if (draggedSub.value && hoveredSubId.value && dragSource.value === "pitch") {
-    const benchTarget = sortedSubs.value.find((s) => s.id === hoveredSubId.value);
+    const benchTarget = sortedSubs.value.find(
+      (s) => s.id === hoveredSubId.value,
+    );
 
     if (
       benchTarget &&
@@ -398,6 +406,14 @@ function openDialog() {
         </div>
       </div>
     </div>
+
+    <PendingSubList
+      v-if="pendingSubs[props.location].length > 0"
+      class="item"
+      :location="props.location"
+      :subs="pendingSubs[props.location]"
+      @cancel="(index) => cancelPendingSub(index, props.location)"
+    />
   </div>
 </template>
 
