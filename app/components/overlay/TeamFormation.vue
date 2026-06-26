@@ -11,7 +11,7 @@ const rendered = ref(false);
 
 let timeline: gsap.core.Timeline | null = null;
 const PLAYER_STAGGER = 0.15;
-const PLAYER_DURATION = 0.35;
+const PLAYER_DURATION = 0.45;
 const ROW_OFFSET = 1.6;
 
 const sortedSubs = computed(() =>
@@ -83,7 +83,7 @@ function animateOverlay(tl: gsap.core.Timeline) {
     {
       opacity: 1,
       y: 0,
-      duration: 0.5,
+      duration: 0.75,
       ease: "power2.out",
     },
     0,
@@ -150,7 +150,7 @@ async function hide() {
         {
           opacity: 0,
           y: -10,
-          duration: 0.5,
+          duration: 0.75,
           ease: "power2.out",
           onComplete: () => {
             rendered.value = false;
