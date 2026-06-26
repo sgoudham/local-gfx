@@ -1,6 +1,6 @@
 import z from "zod";
 import { Mode, PingMessage, SocketMessage } from "~~/shared/utils/constants";
-import { playerSchema, teamLocationSchema } from "./data";
+import { cardSchema, playerSchema, teamLocationSchema } from "./data";
 import {
   formationKeySchema,
   goalSchema,
@@ -59,6 +59,11 @@ const MatchPenaltyShootoutUpdateSchema = z.object({
   penaltyGoal: penaltyGoalSchema,
 });
 
+const MatchPlayerCardSchema = z.object({
+  player: playerSchema,
+  card: cardSchema
+})
+
 export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.SessionRegister),
   socketMsg(Mode.Control, SocketMessage.SessionUnregister),
@@ -72,6 +77,10 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.MatchGoalScored, {
     data: goalSchema,
   }),
+  socketMsg(Mode.Control, SocketMessage.UndoMatchGoalScored),
+  socketMsg(Mode.Control, SocketMessage.MatchCardGiven, {
+    data: MatchPlayerCardSchema
+  }),
   socketMsg(Mode.Control, SocketMessage.MatchPenaltyShootoutUpdate, {
     data: MatchPenaltyShootoutUpdateSchema,
   }),
@@ -81,8 +90,6 @@ export const ControlMessageSchema = z.discriminatedUnion("type", [
   socketMsg(Mode.Control, SocketMessage.TeamInfoUpdate, {
     data: TeamInfoUpdateSchema,
   }),
-
-  socketMsg(Mode.Control, SocketMessage.UndoMatchGoalScored),
 
   socketMsg(Mode.Control, SocketMessage.StartingSoonShow),
   socketMsg(Mode.Control, SocketMessage.StartingSoonHide),

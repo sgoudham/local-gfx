@@ -8,25 +8,25 @@
   "home": {
     "activeFormation": "3-5-2",
     "players": [
-      { "id": "59192b96-09c6-4418-86b0-5c65c8e79d37" },
-      { "id": "40f62868-47cc-4b98-96d9-065f0d18b997" },
-      { "id": "6f93466d-933a-4053-8788-d76e65ea2279" },
-      { "id": "5d91cf9b-3d2a-4276-963b-711725ec0c5d" },
-      { "id": "ca82ac5d-5221-48ca-bd09-6f90f97bf078" },
-      { "id": "5eff02e2-04f0-41c4-974f-7f9c64e0c53f" },
-      { "id": "47ef94c8-14a6-43c8-b181-50d4f908106b" },
-      { "id": "84a92695-b1d3-4324-b18a-aa477c798ffa" },
-      { "id": "19bb70de-26ad-48cb-9a98-86ee02214aec" },
-      { "id": "5dd336f2-f576-4534-a0ea-ffe651256ac7" },
-      { "id": "b126d1b1-eb56-4944-9088-171845e61df8" }
+      { "id": "59192b96-09c6-4418-86b0-5c65c8e79d37", "cards": [] },
+      { "id": "40f62868-47cc-4b98-96d9-065f0d18b997", "cards": [] },
+      { "id": "6f93466d-933a-4053-8788-d76e65ea2279", "cards": [] },
+      { "id": "5d91cf9b-3d2a-4276-963b-711725ec0c5d", "cards": [] },
+      { "id": "ca82ac5d-5221-48ca-bd09-6f90f97bf078", "cards": [] },
+      { "id": "5eff02e2-04f0-41c4-974f-7f9c64e0c53f", "cards": [] },
+      { "id": "47ef94c8-14a6-43c8-b181-50d4f908106b", "cards": [] },
+      { "id": "84a92695-b1d3-4324-b18a-aa477c798ffa", "cards": [] },
+      { "id": "19bb70de-26ad-48cb-9a98-86ee02214aec", "cards": [] },
+      { "id": "5dd336f2-f576-4534-a0ea-ffe651256ac7", "cards": [] },
+      { "id": "b126d1b1-eb56-4944-9088-171845e61df8", "cards": [] }
     ],
     "substitutes": [
-      { "id": "bb4ef152-efcb-472e-aead-a1ed0c10b921" },
-      { "id": "f2a0d680-03cf-4a31-88bf-78deabea514c" },
-      { "id": "e468c2f7-d374-4940-a175-38fea4114d9e" },
-      { "id": "b0a636b4-bc29-410c-9e1d-611805ef7ec9" },
-      { "id": "3d648f26-7338-4d32-9854-2bac7bf4dae7" },
-      { "id": "3f769c5c-50c6-4ce7-8f51-633f11e9e748" }
+      { "id": "bb4ef152-efcb-472e-aead-a1ed0c10b921", "cards": [] },
+      { "id": "f2a0d680-03cf-4a31-88bf-78deabea514c", "cards": [] },
+      { "id": "e468c2f7-d374-4940-a175-38fea4114d9e", "cards": [] },
+      { "id": "b0a636b4-bc29-410c-9e1d-611805ef7ec9", "cards": [] },
+      { "id": "3d648f26-7338-4d32-9854-2bac7bf4dae7", "cards": [] },
+      { "id": "3f769c5c-50c6-4ce7-8f51-633f11e9e748", "cards": [] }
     ],
     "goals": [],
     "penalties": []
@@ -34,23 +34,23 @@
   "away": {
     "activeFormation": "4-4-2",
     "players": [
-      { "id": "cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d" },
-      { "id": "4ddc7913-1c11-4596-be89-32108c476101" },
-      { "id": "84cbd624-d399-4406-b902-e9c61a7e3f09" },
-      { "id": "e4fa8c38-38e4-4d26-9434-d90e5bfc0479" },
-      { "id": "b9f95965-c2af-4716-8825-3b1a64b926cc" },
-      { "id": "39c09ef3-609d-48aa-9919-2a78b0843162" },
-      { "id": "3dbcb9f3-9106-4516-ad65-6c788a95105f" },
-      { "id": "33944913-b2db-4012-ade4-38fae96c969a" },
-      { "id": "222bda56-3584-404b-b7b2-b3fa9f57349d" },
-      { "id": "323d18b3-97b3-4381-803c-2df65a13d4e5" },
-      { "id": "432ab771-3f25-43fc-bebf-3fd61e5be9cc" }
+      { "id": "cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d", "cards": [] },
+      { "id": "4ddc7913-1c11-4596-be89-32108c476101", "cards": [] },
+      { "id": "84cbd624-d399-4406-b902-e9c61a7e3f09", "cards": [] },
+      { "id": "e4fa8c38-38e4-4d26-9434-d90e5bfc0479", "cards": [] },
+      { "id": "b9f95965-c2af-4716-8825-3b1a64b926cc", "cards": [] },
+      { "id": "39c09ef3-609d-48aa-9919-2a78b0843162", "cards": [] },
+      { "id": "3dbcb9f3-9106-4516-ad65-6c788a95105f", "cards": [] },
+      { "id": "33944913-b2db-4012-ade4-38fae96c969a", "cards": [] },
+      { "id": "222bda56-3584-404b-b7b2-b3fa9f57349d", "cards": [] },
+      { "id": "323d18b3-97b3-4381-803c-2df65a13d4e5", "cards": [] },
+      { "id": "432ab771-3f25-43fc-bebf-3fd61e5be9cc", "cards": [] }
     ],
     "substitutes": [
-      { "id": "d53bf826-2cb7-4d15-8675-d0a17abab03e" },
-      { "id": "5d8cd745-a930-45e4-8944-e9052fbf0137" },
-      { "id": "f5b34f3b-f3a4-4ea3-8f87-fcb50b750361" },
-      { "id": "eb73634d-6664-4de1-b6f3-41adf0071614" }
+      { "id": "d53bf826-2cb7-4d15-8675-d0a17abab03e", "cards": [] },
+      { "id": "5d8cd745-a930-45e4-8944-e9052fbf0137", "cards": [] },
+      { "id": "f5b34f3b-f3a4-4ea3-8f87-fcb50b750361", "cards": [] },
+      { "id": "eb73634d-6664-4de1-b6f3-41adf0071614", "cards": [] }
     ],
     "goals": [],
     "penalties": []

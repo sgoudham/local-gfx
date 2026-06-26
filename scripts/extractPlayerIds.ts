@@ -18,17 +18,20 @@ try {
     console.log(filePath);
     const data: Player[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
-    const playerIds = data[team].players.map((player) => ({ id: player.id }));
+    const playerIds = data[team].players.map((player) => ({
+      id: player.id,
+      cards: [],
+    }));
 
     const players = playerIds.slice(0, 11);
     const substitutes = playerIds.slice(11);
 
     const output = {
       players,
-      substitutes
-    }
+      substitutes,
+    };
 
-    console.log(`--- ${team} ---`)
+    console.log(`--- ${team} ---`);
     console.log(JSON.stringify(output));
   }
 } catch (error) {

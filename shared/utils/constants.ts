@@ -11,6 +11,11 @@ export const PenaltyState = {
   MISS: 2,
 } as const;
 
+export const Card = {
+  Yellow: "yellow",
+  Red: "red",
+} as const;
+
 export const Formation = {
   "3-4-3": "3-4-3",
   "3-5-2": "3-5-2",
@@ -31,6 +36,7 @@ export const MatchEventKind = {
   GoalScored: "goalScored",
   Substitution: "substitution",
   PenaltyShootout: "penaltyShootout",
+  CardGiven: "cardGiven",
 } as const;
 export type MatchEventType =
   (typeof MatchEventKind)[keyof typeof MatchEventKind];
@@ -78,6 +84,7 @@ export const SocketMessage = {
   MatchReset: "match.reset",
   MatchGoalScored: "match.goalScored",
   UndoMatchGoalScored: "undo.match.goalScored",
+  MatchCardGiven: "match.cardGiven",
   MatchPenaltyShootoutUpdate: "match.penaltyShootout.update",
   ActiveFormationUpdate: "activeFormation.update",
   TeamInfoUpdate: "team.info.update",

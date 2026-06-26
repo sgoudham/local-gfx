@@ -1,5 +1,5 @@
 import { MatchEventKind } from "../utils/constants";
-import type { Player, TeamLocation } from "./data";
+import type { Player, TeamLocation, Card } from "./data";
 
 // ts-to-zod seemingly can't resolve these types if they are defined in another file
 // not happy about the duplication but unsure if there's a different way around this
@@ -27,7 +27,8 @@ export type MatchTime = {
 export type MatchEvent =
   | GoalScoredEvent
   | SubstitutionMadeEvent
-  | PenaltyShootoutEvent;
+  | PenaltyShootoutEvent
+  | CardGivenEvent;
 export type GoalScoredEvent = {
   type: "goalScored";
   player: Player;
@@ -45,6 +46,12 @@ export type PenaltyShootoutEvent = {
   slotIndex: number;
   matchTime: MatchTime;
 };
+export type CardGivenEvent = {
+  type: "cardGiven";
+  player: Player;
+  card: Card;
+  matchTime: MatchTime;
+};
 
 export const isGoalScoredEvent = (
   event: MatchEvent,
@@ -59,6 +66,11 @@ export const isPenaltyShootoutEvent = (
 ): event is PenaltyShootoutEvent =>
   event.type === MatchEventKind.PenaltyShootout;
 
+export const isCardGivenEvent = (
+  event: MatchEvent,
+): event is CardGivenEvent =>
+  event.type === MatchEventKind.CardGiven;
+
 export type Goal = {
   player: Player;
   matchTime: MatchTime;
@@ -71,6 +83,7 @@ export type PenaltyGoal = {
 
 export type PlayerState = {
   id: string;
+  cards: Card[];
 };
 
 export type TeamState = {

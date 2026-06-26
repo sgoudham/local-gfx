@@ -248,7 +248,7 @@ const closePenaltyDialog = () => {
                   :key="p.id"
                   :value="p.id"
                 >
-                  {{ p.number }}' {{ p.surname }}
+                  {{ p.number }}' {{ p.forename }} {{ p.surname }}
                 </option>
               </select>
             </div>
@@ -335,7 +335,7 @@ const closePenaltyDialog = () => {
                   :key="p.id"
                   :value="p.id"
                 >
-                  {{ p.number }}' {{ p.surname }}
+                  {{ p.number }}' {{ p.forename }} {{ p.surname }}
                 </option>
               </select>
             </div>

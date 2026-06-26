@@ -2,7 +2,15 @@
 import { SocketMessage } from "#imports";
 
 const { publish } = useSocket(Mode.Control);
-const { state, selectedPlayer } = useClientState();
+const { state, selectedPlayerId } = useClientState();
+
+const selectedPlayer = computed(() => {
+  if (!selectedPlayerId.value) return undefined;
+  return (
+    state.value.home.players.find((p) => p.id === selectedPlayerId.value) ??
+    state.value.away.players.find((p) => p.id === selectedPlayerId.value)
+  );
+});
 
 const handleGoal = () => {
   if (!selectedPlayer.value) return;
@@ -16,12 +24,22 @@ const handleGoal = () => {
 
 const handleYellowCard = () => {
   if (!selectedPlayer.value) return;
-  // TODO
+  publish(SocketMessage.MatchCardGiven, {
+    data: {
+      player: selectedPlayer.value,
+      card: Card.Yellow,
+    },
+  });
 };
 
 const handleRedCard = () => {
   if (!selectedPlayer.value) return;
-  // TODO
+  publish(SocketMessage.MatchCardGiven, {
+    data: {
+      player: selectedPlayer.value,
+      card: Card.Red,
+    },
+  });
 };
 </script>
 
@@ -31,7 +49,7 @@ const handleRedCard = () => {
       <div class="player-row">
         <div class="player-line">
           {{ selectedPlayer.number }}' {{ selectedPlayer.forename }}
-          {{ selectedPlayer.surname }}
+          {{ selectedPlayer.surname }} {{ formatCards(selectedPlayer.cards) }}
         </div>
         <span class="team-label">
           {{ state[selectedPlayer.location].shortName }}
@@ -50,7 +68,6 @@ const handleRedCard = () => {
         <button
           class="action-button yellow-card"
           @click="handleYellowCard"
-          disabled
           title="Yellow Card"
         >
           🟨
@@ -58,7 +75,6 @@ const handleRedCard = () => {
         <button
           class="action-button red-card"
           @click="handleRedCard"
-          disabled
           title="Red Card"
         >
           🟥

@@ -3,11 +3,14 @@ import { z } from "zod";
 
 export const teamLocationSchema = z.union([z.literal("home"), z.literal("away")]);
 
+export const cardSchema = z.union([z.literal("yellow"), z.literal("red")]);
+
 export const playerSchema = z.object({
     id: z.string(),
     forename: z.string(),
     surname: z.string(),
     number: z.number(),
+    cards: z.array(cardSchema),
     location: teamLocationSchema
 });
 

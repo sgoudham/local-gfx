@@ -9,6 +9,8 @@ declare module "nitropack" {
 }
 
 export default defineNitroPlugin(async (nitroApp) => {
-  nitroApp.serverState = await new ServerState().init();
-  nitroApp.charity = await new Charity().init();
+  [nitroApp.serverState, nitroApp.charity] = await Promise.all([
+    new ServerState().init(),
+    new Charity().init(),
+  ]);
 });

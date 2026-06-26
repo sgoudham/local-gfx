@@ -2,7 +2,7 @@
 import { getFormationPosition } from "~/utils/getFormationPosition";
 
 const { publish } = useSocket(Mode.Control);
-const { state, selectedPlayer, pendingSubs } = useClientState();
+const { state, selectedPlayerId, pendingSubs } = useClientState();
 
 const props = defineProps<TeamComplete>();
 
@@ -344,7 +344,7 @@ function openDialog() {
         @mousedown.prevent="startPitchPlayerDrag($event, player)"
         @mouseenter="onPlayerMouseEnter(player)"
         @mouseleave="hoveredPlayerId = null"
-        @click="() => (selectedPlayer = player)"
+        @click="() => (selectedPlayerId = player.id)"
       >
         {{ player.number }}
       </button>
