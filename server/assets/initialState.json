@@ -31,19 +31,19 @@
     "penalties": []
   },
   "away": {
-    "activeFormation": "4-4-2",
+    "activeFormation": "4-3-3",
     "players": [
       { "id": "cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d", "cards": [] },
-      { "id": "4ddc7913-1c11-4596-be89-32108c476101", "cards": [] },
+      { "id": "b9f95965-c2af-4716-8825-3b1a64b926cc", "cards": [] },
       { "id": "84cbd624-d399-4406-b902-e9c61a7e3f09", "cards": [] },
       { "id": "e4fa8c38-38e4-4d26-9434-d90e5bfc0479", "cards": [] },
-      { "id": "b9f95965-c2af-4716-8825-3b1a64b926cc", "cards": [] },
+      { "id": "4ddc7913-1c11-4596-be89-32108c476101", "cards": [] },
       { "id": "39c09ef3-609d-48aa-9919-2a78b0843162", "cards": [] },
-      { "id": "3dbcb9f3-9106-4516-ad65-6c788a95105f", "cards": [] },
       { "id": "33944913-b2db-4012-ade4-38fae96c969a", "cards": [] },
-      { "id": "222bda56-3584-404b-b7b2-b3fa9f57349d", "cards": [] },
+      { "id": "3dbcb9f3-9106-4516-ad65-6c788a95105f", "cards": [] },
+      { "id": "432ab771-3f25-43fc-bebf-3fd61e5be9cc", "cards": [] },
       { "id": "323d18b3-97b3-4381-803c-2df65a13d4e5", "cards": [] },
-      { "id": "432ab771-3f25-43fc-bebf-3fd61e5be9cc", "cards": [] }
+      { "id": "222bda56-3584-404b-b7b2-b3fa9f57349d", "cards": [] }
     ],
     "substitutes": [
       { "id": "d53bf826-2cb7-4d15-8675-d0a17abab03e", "cards": [] },
