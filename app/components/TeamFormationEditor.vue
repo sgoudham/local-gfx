@@ -186,12 +186,10 @@ function openDialog() {
 </script>
 
 <template>
-  <div class="wrap" @mouseup="stopDrag">
-    <div class="wrap row">
-      <div>{{ props.name }}</div>
-      <Button class="neutral" :location="props.location" @click="openDialog">
-        📝
-      </Button>
+  <div class="wrap" @mouseup="stopDrag" :data-location="props.location">
+    <div class="wrap row team-header">
+      <h4 class="team-name">{{ props.name }}</h4>
+      <Button class="neutral" @click="openDialog"> 📝 </Button>
       <dialog ref="dialogRef">
         <InputEditTeam
           :key="dialogKey"
@@ -422,16 +420,51 @@ function openDialog() {
   box-sizing: border-box;
 }
 
+.wrap[data-location="home"] {
+  --team-colour-1: var(--home-colour-1);
+  --team-colour-2: var(--home-colour-2);
+  --team-text-colour: var(--text-color-secondary);
+  --team-gradient-deg: 180deg;
+}
+
+.wrap[data-location="away"] {
+  --team-colour-1: var(--away-colour-1);
+  --team-colour-2: var(--away-colour-2);
+  --team-text-colour: var(--text-color);
+  --team-gradient-deg: 0deg;
+}
+
 .wrap {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
   user-select: none;
 
   .row {
     flex-direction: row;
     justify-content: space-between;
   }
+}
+
+.team-header {
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: linear-gradient(
+    var(--team-gradient-deg),
+    color-mix(in srgb, var(--team-colour-1) 88%, #000000 12%) 0%,
+    color-mix(in srgb, var(--team-colour-2) 92%, #000000 8%) 100%
+  );
+}
+
+.team-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--team-text-colour);
+  text-wrap: balance;
 }
 
 .pitch {

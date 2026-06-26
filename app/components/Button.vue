@@ -60,8 +60,12 @@ const props = defineProps<{
 .action {
   background-color: #1e66f5;
 }
-.neutral {
+.team {
   background-color: var(--primary-colour);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.neutral {
+  background-color: rgba(255, 255, 255, 0.2);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 </style>

@@ -59,10 +59,6 @@ const formatSubstitution = (sub: PendingSub) =>
 
 <style scoped>
 .pending-subs {
-  --team-colour-1: var(--home-colour-1);
-  --team-colour-2: var(--home-colour-2);
-  --team-text-colour: var(--text-color-secondary);
-  --team-gradient-deg: 180deg;
   --team-button-colour: rgba(255, 255, 255, 0.24);
   --team-button-hover-colour: rgba(255, 255, 255, 0.34);
   --team-button-active-colour: rgba(255, 255, 255, 0.28);

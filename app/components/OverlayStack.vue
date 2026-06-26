@@ -71,69 +71,84 @@ const matchReset = () => {
   selectedPlayerId.value = undefined;
   publish(SocketMessage.MatchReset);
 };
-
 </script>
 
 <template>
-  <ul class="overlay-list">
-    <li class="overlay-list-item">
-      Match Time: {{ state.matchTime.formatted }}
-    </li>
-    <li class="overlay-list-item">
-      Match Score: {{ state.home.goals.length }} - {{ state.away.goals.length }}
-    </li>
-    <li class="overlay-list-item">
-      <p>Kickoff Time:</p>
-      <input
-        type="time"
-        v-model="kickoffTime"
-        @change="updateKickoffTime"
-        class="item"
-      />
-    </li>
-    <li class="overlay-list-item" v-if="isDev">
-      <Button @click="matchReset" class="item action">Reset</Button>
-    </li>
-    <li class="overlay-list-item">
-      <Button
-        @click="publish(SocketMessage.UndoMatchGoalScored)"
-        class="item action"
+  <section class="overlay-lists">
+    <ul class="overlay-list">
+      <li class="overlay-list-item">
+        Match Time: {{ state.matchTime.formatted }}
+      </li>
+      <li class="overlay-list-item">
+        Match Score: {{ state.home.goals.length }} -
+        {{ state.away.goals.length }}
+      </li>
+      <li class="overlay-list-item">
+        <p>Kickoff Time:</p>
+        <input
+          type="time"
+          v-model="kickoffTime"
+          @change="updateKickoffTime"
+          class="item"
+        />
+      </li>
+    </ul>
+    <ul class="overlay-list">
+      <li class="overlay-list-item" v-if="isDev">
+        <Button @click="matchReset" class="item action">Reset</Button>
+      </li>
+      <li class="overlay-list-item">
+        <Button
+          @click="publish(SocketMessage.UndoMatchGoalScored)"
+          class="item action"
+        >
+          Undo Last Goal
+        </Button>
+      </li>
+      <li class="overlay-list-item">
+        <InputPenaltyShootout />
+      </li>
+      <li class="overlay-list-item">
+        <Button
+          @click="toggleMatchTimer"
+          :class="[isTimerRunning ? 'hide' : 'show', 'item', 'action']"
+        >
+          {{ isTimerRunning ? "Stop Match Timer" : "Start Match Timer" }}
+        </Button>
+        <Button
+          @click="startHalfMatchTimer"
+          :disabled="isTimerRunning"
+          :class="[isTimerRunning ? 'disabled' : 'show', 'item', 'action']"
+        >
+          Start Half
+        </Button>
+      </li>
+    </ul>
+    <ul class="overlay-list">
+      <li
+        v-for="overlay in overlayToggles"
+        :key="overlay.val"
+        class="overlay-list-item"
       >
-        Undo Last Goal
-      </Button>
-    </li>
-    <li class="overlay-list-item">
-      <InputPenaltyShootout />
-    </li>
-    <li class="overlay-list-item">
-      <Button
-        @click="toggleMatchTimer"
-        :class="[isTimerRunning ? 'hide' : 'show', 'item', 'action']"
-      >
-        {{ isTimerRunning ? "Stop Match Timer" : "Start Match Timer" }}
-      </Button>
-      <Button
-        @click="startHalfMatchTimer"
-        :disabled="isTimerRunning"
-        :class="[isTimerRunning ? 'disabled' : 'show', 'item', 'action']"
-      >
-        Start Half
-      </Button>
-    </li>
-    <li
-      v-for="overlay in overlayToggles"
-      :key="overlay.val"
-      class="overlay-list-item"
-    >
-      <ToggleOverlayButton v-bind="overlay" class="item" />
-    </li>
-    <li class="overlay-list-item">
-      <SelectedPlayer />
-    </li>
-  </ul>
+        <ToggleOverlayButton v-bind="overlay" class="item" />
+      </li>
+    </ul>
+    <ul class="overlay-list">
+      <li class="overlay-list-item">
+        <SelectedPlayer />
+      </li>
+    </ul>
+  </section>
 </template>
 
 <style scoped>
+.overlay-lists {
+  padding: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 10px;
+}
 .overlay-list {
   list-style: none;
   margin: 0;
