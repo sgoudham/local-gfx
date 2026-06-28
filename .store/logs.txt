@@ -1,0 +1,354 @@
+event=open id=9a269a74-8b58-4e9c-9c17-778f89a10fd8 connected_clients=1
+message={"mode":"control","type":"session.register"}
+event=open id=ff038bd1-8cc9-4113-8e18-4d6f7a65826f connected_clients=2
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+message="fetched donation data" prev=1910.89 next=1910.89
+message="fetched donation data" prev=1910.89 next=1910.89
+event=open id=00268e27-2efd-4f16-97b1-e28a7557eb4d connected_clients=3
+message={"mode":"control","type":"session.register"}
+event=close id=00268e27-2efd-4f16-97b1-e28a7557eb4d code=1000 connected_clients=2
+event=open id=0333bc46-bd73-4fb6-a362-93eefcf395fa connected_clients=3
+message={"mode":"control","type":"session.register"}
+event=close id=0333bc46-bd73-4fb6-a362-93eefcf395fa code=1006 connected_clients=2
+message="fetched donation data" prev=1910.89 next=1910.89
+message="fetched donation data" prev=1910.89 next=1910.89
+event=open id=06083173-1b8e-4c1a-ae75-37744c3de9f7 connected_clients=3
+message={"mode":"control","type":"session.register"}
+message="fetched donation data" prev=1910.89 next=1910.89
+message="fetched donation data" prev=1910.89 next=1910.89
+message={"mode":"control","type":"team.info.update","data":{"location":"home","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":27,"cards":[],"location":"home"},{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":10,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":22,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"}],"substitutes":[{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"3d648f26-7338-4d32-9854-2bac7bf4dae7","forename":"Brendon","surname":"MacDonald","number":0,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":11,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"}],"manager":"Anthony Collins","captain":{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"}}}
+message="fetched donation data" prev=1910.89 next=1910.89
+message="fetched donation data" prev=1910.89 next=1910.89
+message="fetched donation data" prev=1910.89 next=1910.89
+event=open id=92c41ca6-730e-4175-9107-11597ae480f7 connected_clients=4
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+event=open id=6d3cbddd-5fdd-4110-a9a7-267244e655b6 connected_clients=5
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+message={"mode":"control","type":"team.info.update","data":{"location":"away","players":[{"id":"cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d","forename":"Ciaran","surname":"McKee","number":1,"cards":[],"location":"away"},{"id":"b9f95965-c2af-4716-8825-3b1a64b926cc","forename":"John","surname":"Mahon","number":13,"cards":[],"location":"away"},{"id":"84cbd624-d399-4406-b902-e9c61a7e3f09","forename":"Darren","surname":"Doherty","number":17,"cards":[],"location":"away"},{"id":"e4fa8c38-38e4-4d26-9434-d90e5bfc0479","forename":"Eoghan","surname":"O'Donnell","number":4,"cards":[],"location":"away"},{"id":"4ddc7913-1c11-4596-be89-32108c476101","forename":"Michael","surname":"McLaughlin","number":0,"cards":[],"location":"away"},{"id":"39c09ef3-609d-48aa-9919-2a78b0843162","forename":"Haaris","surname":"Sattar","number":11,"cards":[],"location":"away"},{"id":"3dbcb9f3-9106-4516-ad65-6c788a95105f","forename":"Joe","surname":"Donnelly","number":35,"cards":[],"location":"away"},{"id":"33944913-b2db-4012-ade4-38fae96c969a","forename":"Glory","surname":"Edewede","number":16,"cards":[],"location":"away"},{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"},{"id":"323d18b3-97b3-4381-803c-2df65a13d4e5","forename":"Stephen","surname":"Gallagher","number":7,"cards":[],"location":"away"},{"id":"222bda56-3584-404b-b7b2-b3fa9f57349d","forename":"Gerry","surname":"Morrin","number":10,"cards":[],"location":"away"}],"substitutes":[{"id":"f5b34f3b-f3a4-4ea3-8f87-fcb50b750361","forename":"Thomas","surname":"Scott","number":18,"cards":[],"location":"away"},{"id":"d53bf826-2cb7-4d15-8675-d0a17abab03e","forename":"John","surname":"Crilley","number":9,"cards":[],"location":"away"},{"id":"eb73634d-6664-4de1-b6f3-41adf0071614","forename":"Katie","surname":"Keaney","number":8,"cards":[],"location":"away"},{"id":"ca82ac5d-5221-48ca-bd09-6f90f97bf078","forename":"Aidan","surname":"Rafferty","number":8,"cards":[],"location":"away"},{"id":"f2a0d680-03cf-4a31-88bf-78deabea514c","forename":"Dominic","surname":"McCullagh","number":15,"cards":[],"location":"away"},{"id":"5d8cd745-a930-45e4-8944-e9052fbf0137","forename":"Andy","surname":"McGraw","number":26,"cards":[],"location":"away"}],"manager":"Jamie Dunn","captain":{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"}}}
+event=close id=92c41ca6-730e-4175-9107-11597ae480f7 code=1006 connected_clients=4
+event=close id=6d3cbddd-5fdd-4110-a9a7-267244e655b6 code=1006 connected_clients=3
+event=open id=973e7dc5-ed89-45ff-83a0-7573b14b0711 connected_clients=4
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+event=open id=e8efa090-d49d-4713-9232-4f800a32bbb9 connected_clients=5
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+message={"mode":"control","type":"team.info.update","data":{"location":"home","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":27,"cards":[],"location":"home"},{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":10,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":22,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"}],"substitutes":[{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"3d648f26-7338-4d32-9854-2bac7bf4dae7","forename":"Brendon","surname":"MacDonald","number":15,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":11,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"}],"manager":"Anthony Collins","captain":{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"}}}
+message="fetched donation data" prev=1910.89 next=1910.89
+message="fetched donation data" prev=1910.89 next=1910.89
+event=close id=06083173-1b8e-4c1a-ae75-37744c3de9f7 code=1006 connected_clients=4
+message={"mode":"control","type":"startingSoon.show"}
+message={"mode":"control","type":"startingSoon.hide"}
+message={"mode":"control","type":"startingSoon.show"}
+message="fetched donation data" prev=1910.89 next=1910.89
+message={"mode":"control","type":"startingSoon.hide"}
+message={"mode":"control","type":"startingSoon.show"}
+message={"mode":"control","type":"startingSoon.hide"}
+message={"mode":"control","type":"teamFormation.show","data":{"location":"home"}}
+message={"mode":"control","type":"teamFormation.hide","data":{"location":"home"}}
+message={"mode":"control","type":"startingSoon.show"}
+message="fetched donation data" prev=1910.89 next=1910.89
+message="fetched donation data" prev=1910.89 next=1910.89
+message={"mode":"control","type":"startingSoon.hide"}
+message="fetched donation data" prev=1910.89 next=1910.89
+message="fetched donation data" prev=1910.89 next=1910.89
+message="fetched donation data" prev=1910.89 next=1910.89
+event=open id=3d647df2-7e06-48c1-8bd7-95aeb8645ace connected_clients=5
+message={"mode":"control","type":"session.register"}
+message={"mode":"control","type":"team.info.update","data":{"location":"away","players":[{"id":"cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d","forename":"Ciaran","surname":"McKee","number":1,"cards":[],"location":"away"},{"id":"b9f95965-c2af-4716-8825-3b1a64b926cc","forename":"John","surname":"Mahon","number":13,"cards":[],"location":"away"},{"id":"84cbd624-d399-4406-b902-e9c61a7e3f09","forename":"Darren","surname":"Doherty","number":17,"cards":[],"location":"away"},{"id":"e4fa8c38-38e4-4d26-9434-d90e5bfc0479","forename":"Eoghan","surname":"O'Donnell","number":4,"cards":[],"location":"away"},{"id":"4ddc7913-1c11-4596-be89-32108c476101","forename":"Michael","surname":"McLaughlin","number":12,"cards":[],"location":"away"},{"id":"39c09ef3-609d-48aa-9919-2a78b0843162","forename":"Haaris","surname":"Sattar","number":11,"cards":[],"location":"away"},{"id":"3dbcb9f3-9106-4516-ad65-6c788a95105f","forename":"Joe","surname":"Donnelly","number":35,"cards":[],"location":"away"},{"id":"33944913-b2db-4012-ade4-38fae96c969a","forename":"Glory","surname":"Edewede","number":16,"cards":[],"location":"away"},{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"},{"id":"323d18b3-97b3-4381-803c-2df65a13d4e5","forename":"Stephen","surname":"Gallagher","number":7,"cards":[],"location":"away"},{"id":"222bda56-3584-404b-b7b2-b3fa9f57349d","forename":"Gerry","surname":"Morrin","number":10,"cards":[],"location":"away"}],"substitutes":[{"id":"f5b34f3b-f3a4-4ea3-8f87-fcb50b750361","forename":"Thomas","surname":"Scott","number":18,"cards":[],"location":"away"},{"id":"d53bf826-2cb7-4d15-8675-d0a17abab03e","forename":"John","surname":"Crilley","number":9,"cards":[],"location":"away"},{"id":"eb73634d-6664-4de1-b6f3-41adf0071614","forename":"Katie","surname":"Keaney","number":8,"cards":[],"location":"away"},{"id":"ca82ac5d-5221-48ca-bd09-6f90f97bf078","forename":"Aidan","surname":"Rafferty","number":2,"cards":[],"location":"away"},{"id":"f2a0d680-03cf-4a31-88bf-78deabea514c","forename":"Dominic","surname":"McCullagh","number":5,"cards":[],"location":"away"},{"id":"5d8cd745-a930-45e4-8944-e9052fbf0137","forename":"Andy","surname":"McGraw","number":26,"cards":[],"location":"away"}],"manager":"Jamie Dunn","captain":{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"}}}
+message="fetched donation data" prev=1930.89 next=1930.89
+message="fetched donation data" prev=1930.89 next=1930.89
+message="fetched donation data" prev=1930.89 next=1930.89
+message={"mode":"control","type":"team.info.update","data":{"location":"away","players":[{"id":"cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d","forename":"Ciaran","surname":"McKee","number":1,"cards":[],"location":"away"},{"id":"b9f95965-c2af-4716-8825-3b1a64b926cc","forename":"John","surname":"Mahon","number":13,"cards":[],"location":"away"},{"id":"84cbd624-d399-4406-b902-e9c61a7e3f09","forename":"Darren","surname":"Doherty","number":17,"cards":[],"location":"away"},{"id":"e4fa8c38-38e4-4d26-9434-d90e5bfc0479","forename":"Eoghan","surname":"O'Donnell","number":4,"cards":[],"location":"away"},{"id":"4ddc7913-1c11-4596-be89-32108c476101","forename":"Michael","surname":"McLaughlin","number":12,"cards":[],"location":"away"},{"id":"39c09ef3-609d-48aa-9919-2a78b0843162","forename":"Haaris","surname":"Sattar","number":11,"cards":[],"location":"away"},{"id":"3dbcb9f3-9106-4516-ad65-6c788a95105f","forename":"Joe","surname":"Donnelly","number":35,"cards":[],"location":"away"},{"id":"33944913-b2db-4012-ade4-38fae96c969a","forename":"Glory","surname":"Edewede","number":16,"cards":[],"location":"away"},{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"},{"id":"323d18b3-97b3-4381-803c-2df65a13d4e5","forename":"Stephen","surname":"Gallagher","number":7,"cards":[],"location":"away"},{"id":"222bda56-3584-404b-b7b2-b3fa9f57349d","forename":"Gerry","surname":"Morrin","number":10,"cards":[],"location":"away"}],"substitutes":[{"id":"f5b34f3b-f3a4-4ea3-8f87-fcb50b750361","forename":"Thomas","surname":"Scott","number":18,"cards":[],"location":"away"},{"id":"d53bf826-2cb7-4d15-8675-d0a17abab03e","forename":"John","surname":"Crilley","number":9,"cards":[],"location":"away"},{"id":"eb73634d-6664-4de1-b6f3-41adf0071614","forename":"Katie","surname":"Keaney","number":8,"cards":[],"location":"away"},{"id":"ca82ac5d-5221-48ca-bd09-6f90f97bf078","forename":"Aidan","surname":"Rafferty","number":2,"cards":[],"location":"away"},{"id":"f2a0d680-03cf-4a31-88bf-78deabea514c","forename":"Dominic","surname":"McCullagh","number":5,"cards":[],"location":"away"},{"id":"5d8cd745-a930-45e4-8944-e9052fbf0137","forename":"Andy","surname":"McGraw","number":26,"cards":[],"location":"away"}],"manager":"Jamie Dunn","captain":{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"}}}
+message={"mode":"control","type":"team.info.update","data":{"location":"home","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"},{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":10,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":22,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"}],"substitutes":[{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"3d648f26-7338-4d32-9854-2bac7bf4dae7","forename":"Brendon","surname":"MacDonald","number":15,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":11,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"}],"manager":"Anthony Collins","captain":{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"}}}
+message="fetched donation data" prev=1930.89 next=1930.89
+message="fetched donation data" prev=1950.89 next=1950.89
+message="fetched donation data" prev=1950.89 next=1950.89
+message="fetched donation data" prev=1950.89 next=1950.89
+event=open id=d09cbd98-1981-4772-91a6-1f5cad62ba00 connected_clients=6
+message={"mode":"control","type":"team.info.update","data":{"location":"home","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"},{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":42,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":9,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"}],"substitutes":[{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"3d648f26-7338-4d32-9854-2bac7bf4dae7","forename":"Brendon","surname":"MacDonald","number":15,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":11,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"}],"manager":"Anthony Collins","captain":{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"}}}
+message={"mode":"control","type":"team.info.update","data":{"location":"home","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"},{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":42,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":9,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"}],"substitutes":[{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"3d648f26-7338-4d32-9854-2bac7bf4dae7","forename":"Brendon","surname":"MacDonald","number":15,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":11,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"}],"manager":"Anthony Collins","captain":{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"}}}
+message={"mode":"control","type":"session.register"}
+event=close id=3d647df2-7e06-48c1-8bd7-95aeb8645ace code=1006 connected_clients=5
+message="fetched donation data" prev=1950.89 next=1950.89
+message="fetched donation data" prev=1950.89 next=1950.89
+message="fetched donation data" prev=1950.89 next=1950.89
+message="fetched donation data" prev=1950.89 next=1950.89
+message="fetched donation data" prev=1950.89 next=1950.89
+message="fetched donation data" prev=1950.89 next=1950.89
+message={"mode":"control","type":"teamFormation.show","data":{"location":"home"}}
+message={"mode":"control","type":"teamFormation.hide","data":{"location":"home"}}
+message={"mode":"control","type":"startingSoon.show"}
+message={"mode":"control","type":"startingSoon.hide"}
+message="fetched donation data" prev=1950.89 next=1950.89
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=1950.89 next=1950.89
+event=close id=9a269a74-8b58-4e9c-9c17-778f89a10fd8 code=1000 connected_clients=4
+event=open id=1eabfb2a-5c42-4855-966d-57def1034f52 connected_clients=5
+message={"mode":"control","type":"session.register"}
+event=open id=c9242775-7c56-46b8-9e4c-357206d5559e connected_clients=6
+message={"mode":"control","type":"team.info.update","data":{"location":"home","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"},{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":42,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":9,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"}],"substitutes":[{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"3d648f26-7338-4d32-9854-2bac7bf4dae7","forename":"Brendon","surname":"MacDonald","number":15,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":11,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"}],"manager":"Anthony Collins","captain":{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"}}}
+message={"mode":"control","type":"session.register"}
+event=close id=973e7dc5-ed89-45ff-83a0-7573b14b0711 code=1000 connected_clients=5
+message="fetched donation data" prev=1950.89 next=1950.89
+event=open id=d3610601-e8bd-45f4-ac64-e239726b41ef connected_clients=6
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+event=close id=e8efa090-d49d-4713-9232-4f800a32bbb9 code=1000 connected_clients=5
+event=open id=993ce885-1523-45d4-96e1-6f3b58c2b476 connected_clients=6
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+event=close id=d09cbd98-1981-4772-91a6-1f5cad62ba00 code=1006 connected_clients=5
+message="fetched donation data" prev=1950.89 next=1950.89
+message={"mode":"control","type":"startingSoon.show"}
+message={"mode":"control","type":"startingSoon.hide"}
+message="fetched donation data" prev=1950.89 next=1950.89
+message="fetched donation data" prev=1970.89 next=1970.89
+message="fetched donation data" prev=1970.89 next=1970.89
+event=close id=d3610601-e8bd-45f4-ac64-e239726b41ef code=1000 connected_clients=4
+event=close id=c9242775-7c56-46b8-9e4c-357206d5559e code=1006 connected_clients=3
+message={"mode":"control","type":"startingSoon.show"}
+event=open id=5a287a39-9ee5-4d18-b536-e2fb0bcb99e8 connected_clients=4
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+event=close id=993ce885-1523-45d4-96e1-6f3b58c2b476 code=1000 connected_clients=3
+event=open id=0b4c9644-6c49-4ef8-bcdb-cb5ffb63a53c connected_clients=4
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+message="fetched donation data" prev=1970.89 next=1970.89
+message="fetched donation data" prev=1975.89 next=1975.89
+message="fetched donation data" prev=1995.89 next=1995.89
+message={"mode":"control","type":"activeFormation.update","data":{"location":"home","activeFormation":"4-4-2","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"},{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":42,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":9,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"}]}}
+event=open id=f8c6b859-c7fd-4f81-821d-2faba6b120b8 connected_clients=5
+message={"mode":"control","type":"session.register"}
+message={"mode":"control","type":"team.info.update","data":{"location":"away","players":[{"id":"cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d","forename":"Ciaran","surname":"McKee","number":1,"cards":[],"location":"away"},{"id":"b9f95965-c2af-4716-8825-3b1a64b926cc","forename":"John","surname":"Mahon","number":13,"cards":[],"location":"away"},{"id":"84cbd624-d399-4406-b902-e9c61a7e3f09","forename":"Darren","surname":"Doherty","number":17,"cards":[],"location":"away"},{"id":"e4fa8c38-38e4-4d26-9434-d90e5bfc0479","forename":"Eoghan","surname":"O'Donnell","number":4,"cards":[],"location":"away"},{"id":"4ddc7913-1c11-4596-be89-32108c476101","forename":"Michael","surname":"McLaughlin","number":12,"cards":[],"location":"away"},{"id":"39c09ef3-609d-48aa-9919-2a78b0843162","forename":"Haaris","surname":"Sattar","number":11,"cards":[],"location":"away"},{"id":"3dbcb9f3-9106-4516-ad65-6c788a95105f","forename":"Joe","surname":"Donnelly","number":35,"cards":[],"location":"away"},{"id":"d53bf826-2cb7-4d15-8675-d0a17abab03e","forename":"John","surname":"Crilley","number":9,"cards":[],"location":"away"},{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"},{"id":"323d18b3-97b3-4381-803c-2df65a13d4e5","forename":"Stephen","surname":"Gallagher","number":7,"cards":[],"location":"away"},{"id":"222bda56-3584-404b-b7b2-b3fa9f57349d","forename":"Gerry","surname":"Morrin","number":10,"cards":[],"location":"away"}],"substitutes":[{"id":"f5b34f3b-f3a4-4ea3-8f87-fcb50b750361","forename":"Thomas","surname":"Scott","number":18,"cards":[],"location":"away"},{"id":"eb73634d-6664-4de1-b6f3-41adf0071614","forename":"Katie","surname":"Keaney","number":8,"cards":[],"location":"away"},{"id":"ca82ac5d-5221-48ca-bd09-6f90f97bf078","forename":"Aidan","surname":"Rafferty","number":2,"cards":[],"location":"away"},{"id":"f2a0d680-03cf-4a31-88bf-78deabea514c","forename":"Dominic","surname":"McCullagh","number":5,"cards":[],"location":"away"},{"id":"5d8cd745-a930-45e4-8944-e9052fbf0137","forename":"Andy","surname":"McGraw","number":26,"cards":[],"location":"away"},{"id":"33944913-b2db-4012-ade4-38fae96c969a","forename":"Glory","surname":"Edewede","number":16,"cards":[],"location":"away"}],"manager":"Jamie Dunn","captain":{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"}}}
+message="fetched donation data" prev=1995.89 next=1995.89
+message="fetched donation data" prev=1995.89 next=1995.89
+message={"mode":"control","type":"team.info.update","data":{"location":"home","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":9,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"}],"substitutes":[{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":42,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"3d648f26-7338-4d32-9854-2bac7bf4dae7","forename":"Brendon","surname":"MacDonald","number":15,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":11,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"}],"manager":"Anthony Collins","captain":{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"}}}
+event=close id=5a287a39-9ee5-4d18-b536-e2fb0bcb99e8 code=1000 connected_clients=4
+event=open id=ee2fb537-36b4-4e8f-8683-2e210aeb9199 connected_clients=5
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+message={"mode":"control","type":"team.info.update","data":{"location":"home","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":9,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"}],"substitutes":[{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":42,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"3d648f26-7338-4d32-9854-2bac7bf4dae7","forename":"Brendon","surname":"MacDonald","number":15,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":11,"cards":[],"location":"home"}],"manager":"Anthony Collins","captain":{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"}}}
+message="fetched donation data" prev=2000.89 next=2000.89
+message={"mode":"control","type":"team.info.update","data":{"location":"away","players":[{"id":"cd3efec2-3a94-4f3a-9ff6-aee4fafa7c7d","forename":"Ciaran","surname":"McKee","number":1,"cards":[],"location":"away"},{"id":"b9f95965-c2af-4716-8825-3b1a64b926cc","forename":"John","surname":"Mahon","number":13,"cards":[],"location":"away"},{"id":"84cbd624-d399-4406-b902-e9c61a7e3f09","forename":"Darren","surname":"Doherty","number":17,"cards":[],"location":"away"},{"id":"e4fa8c38-38e4-4d26-9434-d90e5bfc0479","forename":"Eoghan","surname":"O'Donnell","number":4,"cards":[],"location":"away"},{"id":"4ddc7913-1c11-4596-be89-32108c476101","forename":"Michael","surname":"McLaughlin","number":12,"cards":[],"location":"away"},{"id":"39c09ef3-609d-48aa-9919-2a78b0843162","forename":"Haaris","surname":"Sattar","number":11,"cards":[],"location":"away"},{"id":"3dbcb9f3-9106-4516-ad65-6c788a95105f","forename":"Joe","surname":"Donnelly","number":35,"cards":[],"location":"away"},{"id":"d53bf826-2cb7-4d15-8675-d0a17abab03e","forename":"John","surname":"Crilley","number":9,"cards":[],"location":"away"},{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"},{"id":"323d18b3-97b3-4381-803c-2df65a13d4e5","forename":"Stephen","surname":"Gallagher","number":7,"cards":[],"location":"away"},{"id":"222bda56-3584-404b-b7b2-b3fa9f57349d","forename":"Gerry","surname":"Morrin","number":10,"cards":[],"location":"away"}],"substitutes":[{"id":"f5b34f3b-f3a4-4ea3-8f87-fcb50b750361","forename":"Thomas","surname":"Scott","number":18,"cards":[],"location":"away"},{"id":"eb73634d-6664-4de1-b6f3-41adf0071614","forename":"Katie","surname":"Keaney","number":8,"cards":[],"location":"away"},{"id":"ca82ac5d-5221-48ca-bd09-6f90f97bf078","forename":"Aidan","surname":"Rafferty","number":2,"cards":[],"location":"away"},{"id":"f2a0d680-03cf-4a31-88bf-78deabea514c","forename":"Dominic","surname":"McCullagh","number":5,"cards":[],"location":"away"},{"id":"5d8cd745-a930-45e4-8944-e9052fbf0137","forename":"Andy","surname":"McGraw","number":26,"cards":[],"location":"away"},{"id":"33944913-b2db-4012-ade4-38fae96c969a","forename":"Glory","surname":"Edewede","number":16,"cards":[],"location":"away"}],"manager":"Jamie Dunn","captain":{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"}}}
+message={"mode":"control","type":"team.info.update","data":{"location":"home","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":9,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"}],"substitutes":[{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":42,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"3d648f26-7338-4d32-9854-2bac7bf4dae7","forename":"Brendon","surname":"MacDonald","number":15,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":11,"cards":[],"location":"home"}],"manager":"Anthony Collins","captain":{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"}}}
+message="fetched donation data" prev=2000.89 next=2000.89
+event=open id=11ae87a3-668c-40dd-be4c-9e63d7f297e5 connected_clients=6
+message={"mode":"control","type":"session.register"}
+event=close id=11ae87a3-668c-40dd-be4c-9e63d7f297e5 code=1000 connected_clients=5
+event=open id=5cd5c407-248a-40e3-825f-0fe940d4bee3 connected_clients=6
+message={"mode":"output","type":"session.register"}
+event=close id=5cd5c407-248a-40e3-825f-0fe940d4bee3 code=1006 connected_clients=5
+event=open id=bd82df6c-91c7-41fb-98cc-00d95ba2015b connected_clients=6
+message={"mode":"output","type":"session.register"}
+event=close id=bd82df6c-91c7-41fb-98cc-00d95ba2015b code=1000 connected_clients=5
+event=open id=f1a0b214-88f9-4491-804c-8a5edd041e96 connected_clients=6
+message={"mode":"output","type":"session.register"}
+event=close id=f1a0b214-88f9-4491-804c-8a5edd041e96 code=1006 connected_clients=5
+event=open id=7b69ae3c-2643-4d71-825b-abacf366c499 connected_clients=6
+message={"mode":"output","type":"session.register"}
+event=close id=7b69ae3c-2643-4d71-825b-abacf366c499 code=1006 connected_clients=5
+message="fetched donation data" prev=2000.89 next=2000.89
+message={"mode":"control","type":"startingSoon.hide"}
+message="fetched donation data" prev=2000.89 next=2000.89
+message="fetched donation data" prev=2000.89 next=2000.89
+event=close id=f8c6b859-c7fd-4f81-821d-2faba6b120b8 code=1006 connected_clients=4
+message={"mode":"control","type":"teamFormation.show","data":{"location":"home"}}
+message="fetched donation data" prev=2000.89 next=2000.89
+message={"mode":"control","type":"teamFormation.hide","data":{"location":"home"}}
+message={"mode":"control","type":"teamFormation.show","data":{"location":"away"}}
+message={"mode":"control","type":"teamFormation.hide","data":{"location":"away"}}
+message="fetched donation data" prev=2000.89 next=2000.89
+message="fetched donation data" prev=2000.89 next=2000.89
+message="fetched donation data" prev=2000.89 next=2000.89
+message={"mode":"control","type":"donationUpdate.show"}
+message={"mode":"control","type":"match.timer.start"}
+message="fetched donation data" prev=2000.89 next=2000.89
+message="fetched donation data" prev=2000.89 next=2000.89
+message="fetched donation data" prev=2000.89 next=2000.89
+message={"mode":"control","type":"match.goalScored","data":{"player":{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"},"matchTime":{"paused":false,"ms":189000,"formatted":"03:09"}}}
+message="fetched donation data" prev=2000.89 next=2000.89
+message="fetched donation data" prev=2000.89 next=2000.89
+message="fetched donation data" prev=2000.89 next=2000.89
+message="fetched donation data" prev=2020.89 next=2020.89
+message="fetched donation data" prev=2020.89 next=2020.89
+message="fetched donation data" prev=2020.89 next=2020.89
+message="fetched donation data" prev=2020.89 next=2020.89
+message="fetched donation data" prev=2020.89 next=2020.89
+message="fetched donation data" prev=2020.89 next=2020.89
+message="fetched donation data" prev=2020.89 next=2020.89
+message={"mode":"control","type":"bigMatchScorecard.show"}
+message={"mode":"control","type":"bigMatchScorecard.hide"}
+message="fetched donation data" prev=2020.89 next=2020.89
+message="fetched donation data" prev=2020.89 next=2020.89
+message="fetched donation data" prev=2020.89 next=2020.89
+message="fetched donation data" prev=2020.89 next=2020.89
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"}],[{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":42,"cards":[],"location":"home"},{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"}]]}}
+message="fetched donation data" prev=2020.89 next=2020.89
+message={"mode":"control","type":"substitution.show","data":{"location":"away","subs":[[{"id":"33944913-b2db-4012-ade4-38fae96c969a","forename":"Glory","surname":"Edewede","number":16,"cards":[],"location":"away"},{"id":"222bda56-3584-404b-b7b2-b3fa9f57349d","forename":"Gerry","surname":"Morrin","number":10,"cards":[],"location":"away"}]]}}
+message="fetched donation data" prev=2045.89 next=2045.89
+message="fetched donation data" prev=2045.89 next=2045.89
+message="fetched donation data" prev=2045.89 next=2045.89
+message="fetched donation data" prev=2055.89 next=2055.89
+message={"mode":"control","type":"donationUpdate.show"}
+message={"mode":"control","type":"substitution.show","data":{"location":"away","subs":[[{"id":"ca82ac5d-5221-48ca-bd09-6f90f97bf078","forename":"Aidan","surname":"Rafferty","number":2,"cards":[],"location":"away"},{"id":"323d18b3-97b3-4381-803c-2df65a13d4e5","forename":"Stephen","surname":"Gallagher","number":7,"cards":[],"location":"away"}]]}}
+message="fetched donation data" prev=2055.89 next=2055.89
+message={"mode":"control","type":"match.goalScored","data":{"player":{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"},"matchTime":{"paused":false,"ms":1368000,"formatted":"22:48"}}}
+message={"mode":"control","type":"hydrationBreak.show"}
+message="fetched donation data" prev=2055.89 next=2055.89
+message="fetched donation data" prev=2061.89 next=2061.89
+message={"mode":"control","type":"hydrationBreak.hide"}
+message="fetched donation data" prev=2061.89 next=2061.89
+message={"mode":"control","type":"substitution.show","data":{"location":"away","subs":[[{"id":"f5b34f3b-f3a4-4ea3-8f87-fcb50b750361","forename":"Thomas","surname":"Scott","number":18,"cards":[],"location":"away"},{"id":"3dbcb9f3-9106-4516-ad65-6c788a95105f","forename":"Joe","surname":"Donnelly","number":35,"cards":[],"location":"away"}]]}}
+message="fetched donation data" prev=2061.89 next=2061.89
+message="fetched donation data" prev=2061.89 next=2061.89
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=2061.89 next=2061.89
+message="fetched donation data" prev=2061.89 next=2061.89
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":9,"cards":[],"location":"home"}]]}}
+message="fetched donation data" prev=2061.89 next=2061.89
+message="fetched donation data" prev=2067.89 next=2067.89
+message={"mode":"control","type":"bigMatchScorecard.show"}
+message="fetched donation data" prev=2067.89 next=2067.89
+message={"mode":"control","type":"bigMatchScorecard.hide"}
+message="fetched donation data" prev=2083.90 next=2083.90
+message="fetched donation data" prev=2083.90 next=2083.90
+message="fetched donation data" prev=2083.90 next=2083.90
+event=close id=ee2fb537-36b4-4e8f-8683-2e210aeb9199 code=1000 connected_clients=3
+event=open id=ea871cac-c538-4467-85a3-c1a23ab62dfc connected_clients=4
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+message="fetched donation data" prev=2083.90 next=2083.90
+message="fetched donation data" prev=2083.90 next=2083.90
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":11,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"}]]}}
+message={"mode":"control","type":"team.info.update","data":{"location":"home","players":[{"id":"59192b96-09c6-4418-86b0-5c65c8e79d37","forename":"Cammy","surname":"Hay","number":1,"cards":[],"location":"home"},{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"5d91cf9b-3d2a-4276-963b-711725ec0c5d","forename":"Matthew","surname":"Blyth","number":5,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"},{"id":"6f93466d-933a-4053-8788-d76e65ea2279","forename":"Colin","surname":"Young","number":42,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":7,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"b126d1b1-eb56-4944-9088-171845e61df8","forename":"Mark","surname":"Harty","number":21,"cards":[],"location":"home"},{"id":"5eff02e2-04f0-41c4-974f-7f9c64e0c53f","forename":"Callum","surname":"Holmes","number":6,"cards":[],"location":"home"}],"substitutes":[{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":9,"cards":[],"location":"home"},{"id":"3d648f26-7338-4d32-9854-2bac7bf4dae7","forename":"Brendon","surname":"MacDonald","number":15,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"}],"manager":"Anthony Collins","captain":{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"}}}
+message="fetched donation data" prev=2103.90 next=2103.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message={"mode":"control","type":"match.timer.stop"}
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=2123.90 next=2123.90
+message={"mode":"control","type":"match.timer.halfTime"}
+message="fetched donation data" prev=2123.90 next=2123.90
+message={"mode":"control","type":"substitution.show","data":{"location":"away","subs":[[{"id":"eb73634d-6664-4de1-b6f3-41adf0071614","forename":"Katie","surname":"Keaney","number":8,"cards":[],"location":"away"},{"id":"f5b34f3b-f3a4-4ea3-8f87-fcb50b750361","forename":"Thomas","surname":"Scott","number":18,"cards":[],"location":"away"}]]}}
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message="fetched donation data" prev=2123.90 next=2123.90
+message={"mode":"control","type":"substitution.show","data":{"location":"away","subs":[[{"id":"323d18b3-97b3-4381-803c-2df65a13d4e5","forename":"Stephen","surname":"Gallagher","number":7,"cards":[],"location":"away"},{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"}]]}}
+message={"mode":"control","type":"substitution.show","data":{"location":"away","subs":[[{"id":"f2a0d680-03cf-4a31-88bf-78deabea514c","forename":"Dominic","surname":"McCullagh","number":5,"cards":[],"location":"away"},{"id":"eb73634d-6664-4de1-b6f3-41adf0071614","forename":"Katie","surname":"Keaney","number":8,"cards":[],"location":"away"}]]}}
+message="fetched donation data" prev=2123.90 next=2123.90
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"},{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"}]]}}
+message={"mode":"control","type":"match.goalScored","data":{"player":{"id":"b9f95965-c2af-4716-8825-3b1a64b926cc","forename":"John","surname":"Mahon","number":13,"cards":[],"location":"away"},"matchTime":{"paused":false,"ms":3426000,"formatted":"57:06"}}}
+message="fetched donation data" prev=2123.90 next=2123.90
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=2149.90 next=2149.90
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"40f62868-47cc-4b98-96d9-065f0d18b997","forename":"Alex","surname":"Moran","number":19,"cards":[],"location":"home"},{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"}]]}}
+message="fetched donation data" prev=2149.90 next=2149.90
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"5dd336f2-f576-4534-a0ea-ffe651256ac7","forename":"Dominic","surname":"Collins","number":12,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":7,"cards":[],"location":"home"}]]}}
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":7,"cards":[],"location":"home"},{"id":"bb4ef152-efcb-472e-aead-a1ed0c10b921","forename":"Nghuala","surname":"Docherty","number":18,"cards":[],"location":"home"}]]}}
+message="fetched donation data" prev=2149.90 next=2149.90
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"19bb70de-26ad-48cb-9a98-86ee02214aec","forename":"Ben","surname":"Grant","number":9,"cards":[],"location":"home"},{"id":"bc1f4a08-dd46-46ef-bcf9-4d63e107227d","forename":"Calvin","surname":"Drouet","number":3,"cards":[],"location":"home"}]]}}
+message="fetched donation data" prev=2149.90 next=2149.90
+message="fetched donation data" prev=2149.90 next=2149.90
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"84a92695-b1d3-4324-b18a-aa477c798ffa","forename":"Jack","surname":"McGinty","number":4,"cards":[],"location":"home"},{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"}]]}}
+message="fetched donation data" prev=2149.90 next=2149.90
+message="fetched donation data" prev=2149.90 next=2149.90
+message="fetched donation data" prev=2149.90 next=2149.90
+message={"mode":"control","type":"bigMatchScorecard.show"}
+message={"mode":"control","type":"bigMatchScorecard.hide"}
+message="fetched donation data" prev=2149.90 next=2149.90
+message={"mode":"control","type":"hydrationBreak.show"}
+message="fetched donation data" prev=2149.90 next=2149.90
+message="fetched donation data" prev=2149.90 next=2149.90
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=2149.90 next=2149.90
+message={"mode":"control","type":"hydrationBreak.hide"}
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"47ef94c8-14a6-43c8-b181-50d4f908106b","forename":"Harrison","surname":"Gillespie","number":14,"cards":[],"location":"home"},{"id":"b0a636b4-bc29-410c-9e1d-611805ef7ec9","forename":"Alex","surname":"O'Donnell","number":27,"cards":[],"location":"home"}]]}}
+message="fetched donation data" prev=2149.90 next=2149.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=2169.90 next=2169.90
+message={"mode":"control","type":"bigMatchScorecard.show"}
+message={"mode":"control","type":"bigMatchScorecard.hide"}
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+event=close id=ea871cac-c538-4467-85a3-c1a23ab62dfc code=1006 connected_clients=3
+event=close id=0b4c9644-6c49-4ef8-bcdb-cb5ffb63a53c code=1006 connected_clients=2
+event=open id=c4541598-0d59-4286-9c0e-1972a8ca2c9b connected_clients=3
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+event=open id=5306cead-ee35-4260-8529-5729a4762a12 connected_clients=4
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+event=close id=c4541598-0d59-4286-9c0e-1972a8ca2c9b code=1006 connected_clients=3
+event=close id=5306cead-ee35-4260-8529-5729a4762a12 code=1006 connected_clients=2
+event=open id=96592251-fb81-44fd-b079-ce35cd3a7f68 connected_clients=3
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+event=open id=d9bc3009-695c-42b1-8c07-e26968a99c53 connected_clients=4
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+event=close id=96592251-fb81-44fd-b079-ce35cd3a7f68 code=1006 connected_clients=3
+event=close id=d9bc3009-695c-42b1-8c07-e26968a99c53 code=1006 connected_clients=2
+message={"mode":"control","type":"match.goalScored","data":{"player":{"id":"4ddc7913-1c11-4596-be89-32108c476101","forename":"Michael","surname":"McLaughlin","number":12,"cards":[],"location":"away"},"matchTime":{"paused":false,"ms":4691000,"formatted":"78:11"}}}
+event=open id=520f8a99-6dbc-47a1-8d58-e32df2ea873f connected_clients=3
+event=open id=172e8d87-3634-4f2d-97ba-7056d77a3c74 connected_clients=4
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+message={"mode":"output","type":"session.register"}
+message={"mode":"donations","type":"session.register"}
+message="fetched donation data" prev=2169.90 next=2169.90
+message={"mode":"control","type":"substitution.show","data":{"location":"home","subs":[[{"id":"e468c2f7-d374-4940-a175-38fea4114d9e","forename":"Jacob","surname":"Anderson","number":2,"cards":[],"location":"home"},{"id":"3f769c5c-50c6-4ce7-8f51-633f11e9e748","forename":"Reece","surname":"Sinclair","number":7,"cards":[],"location":"home"}]]}}
+message="fetched donation data" prev=2169.90 next=2169.90
+message={"mode":"control","type":"match.goalScored","data":{"player":{"id":"b9f95965-c2af-4716-8825-3b1a64b926cc","forename":"John","surname":"Mahon","number":13,"cards":[],"location":"away"},"matchTime":{"paused":false,"ms":4808000,"formatted":"80:08"}}}
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message={"mode":"control","type":"substitution.show","data":{"location":"away","subs":[[{"id":"432ab771-3f25-43fc-bebf-3fd61e5be9cc","forename":"Paul","surname":"Doherty","number":21,"cards":[],"location":"away"},{"id":"ca82ac5d-5221-48ca-bd09-6f90f97bf078","forename":"Aidan","surname":"Rafferty","number":2,"cards":[],"location":"away"}]]}}
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message={"mode":"control","type":"donationUpdate.show"}
+message="fetched donation data" prev=2169.90 next=2169.90
+message="fetched donation data" prev=2169.90 next=2169.90
+message={"mode":"control","type":"match.timer.stop"}
